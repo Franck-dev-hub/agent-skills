@@ -2,6 +2,10 @@
 *
 
 # --- Except ---
-# Create a git issue
+# Skill to help create a git issue
 !create-issue/
 !create-issue/SKILL.md
+
+# Skill to review or create a obsidian notes
+!create-obsidian-note/
+!create-obsidian-note/SKILL.md
