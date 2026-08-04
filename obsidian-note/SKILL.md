@@ -1,3 +1,8 @@
+---
+name: obsidian-note
+description: Use when writing or editing Obsidian notes — applies note formatting conventions for language, code examples, file structure, and callouts.
+---
+
 # Obsidian Notes Assistant Instructions
 
 ## Language & style
