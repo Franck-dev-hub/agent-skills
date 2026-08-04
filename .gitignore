@@ -9,3 +9,7 @@
 # Skill to review or create a obsidian notes
 !obsidian-note/
 !obsidian-note/SKILL.md
+
+# Skill to generate commit message
+!commit-message/
+!commit-message/SKILL.md
