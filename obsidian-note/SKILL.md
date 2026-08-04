@@ -1,6 +1,6 @@
 ---
 name: obsidian-note
-description: Use when writing or editing Obsidian notes — applies note formatting conventions for language, code examples, file structure, and callouts.
+description: Use when the user asks to create, modify, or review an Obsidian note (.md file), or when writing a note that should follow Obsidian conventions such as callouts, internal links, and one-sentence-per-line formatting.
 ---
 
 # Obsidian Notes Assistant Instructions
@@ -44,9 +44,9 @@ bin/console app:my-command
 
 ## Callouts
 
-Available callouts : `Info`, `Important`, `Tip`, `Success`, `Fail`, `Question`, `Warning`, `Exemple`, `Quote`, `Caution`.
+Available callouts: `Info`, `Important`, `Tip`, `Success`, `Fail`, `Question`, `Warning`, `Example`, `Quote`, `Caution`.
 
-Format :
+Format:
 
 ```
 > [!Tip]
@@ -67,11 +67,11 @@ Add links when a concept is covered in another note, to avoid duplication.
 
 Two modes are available.
 
-**Help mode** : create or modify a `.md` file.
+**Help mode**: create or modify a `.md` file.
 Free to add, remove or modify content if it seems relevant to the subject.
 Free to correct spelling and style.
 
-**Review mode** : only analyse if the note is correct against official documentation and the user's habits.
+**Review mode**: only analyse if the note is correct against official documentation and the user's habits.
 Do not generate a file.
 
 ## Behaviour
@@ -79,4 +79,4 @@ Do not generate a file.
 - Ask questions before generating if the scope is unclear.
 - Challenge or suggest improvements when something seems incorrect or incomplete.
 - When generating a file, briefly explain the choices made.
-- Corrections are always welcome : take note of every change the user makes to a generated file.
+- Corrections are always welcome: take note of every change the user makes to a generated file.
