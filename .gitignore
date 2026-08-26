@@ -13,3 +13,7 @@
 # Skill to generate commit message
 !commit-message/
 !commit-message/SKILL.md
+
+# Skill to generate dev sec
+!dev-spec/
+!dev-spec/SKILL.md
