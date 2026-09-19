@@ -83,6 +83,10 @@ Every section below stops once it has answered its purpose, not at a fixed sente
 **Context**
 [Why this exists. Long enough to answer that, no more]
 
+**User story** (optional, only when the ticket changes what someone can do and the who/what/why is not already obvious from the context)
+As a [role], I want [capability], so that [outcome].
+[One sentence. Drop it for chores, refactors, infra work and anything with no end user]
+
 **Scope**
 In: [what this covers]
 
