@@ -1,15 +1,4 @@
-# Ignore all
-*
-
-# --- Except ---
-
-# Plugin manifests
-!.claude-plugin/
-!.claude-plugin/**
-
-# Skills
-!skills/
-!skills/**
-
-# Docs
-!README.md
+# OS / editor noise
+.DS_Store
+*.swp
+*~
