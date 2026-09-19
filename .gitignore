@@ -2,18 +2,14 @@
 *
 
 # --- Except ---
-# Skill to help create a git issue
-!create-issue/
-!create-issue/SKILL.md
 
-# Skill to review or create a obsidian notes
-!obsidian-note/
-!obsidian-note/SKILL.md
+# Plugin manifests
+!.claude-plugin/
+!.claude-plugin/**
 
-# Skill to generate commit message
-!commit-message/
-!commit-message/SKILL.md
+# Skills
+!skills/
+!skills/**
 
-# Skill to generate dev sec
-!dev-spec/
-!dev-spec/SKILL.md
+# Docs
+!README.md
