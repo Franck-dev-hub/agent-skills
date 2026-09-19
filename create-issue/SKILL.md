@@ -31,14 +31,31 @@ Infer everything you can from their request, the project's AGENTS.md, CLAUDE.md,
 
 Only ask the user when you genuinely cannot determine something.
 
-### 2. Check for duplicates (always)
+### 2. Enforce single-layer scope (always)
+
+This tracker is **horizontal**, not vertical: one ticket touches exactly one `Layer` (backend, frontend, ml, infra, proxy, or whatever the project's `Layer` field defines), never a slice spanning several. This is a deliberate choice, the opposite of a "vertical slice"/tracer-bullet ticket that would cut through every layer at once, because `Layer` is a single-select field: forcing two layers into one ticket makes the field meaningless and the board unfilterable.
+
+Before drafting the issue body, decide the `Layer` first. If the requested work genuinely needs more than one layer to be done (e.g. "add a DTO field and show it in the UI"), split it into one ticket per layer instead of writing a single multi-layer ticket:
+- Create one issue per layer touched.
+- Link them with the native relationship: the layer that must land first (usually backend/schema) blocks the others (`gh issue edit <downstream> --add-blocked-by <upstream>`).
+- Each ticket's Acceptance Criteria stay scoped to its own layer only, never reference "and then update the frontend" inside a backend ticket.
+- If the project uses sub-issues and the split tickets are naturally children of one umbrella issue, link them as sub-issues instead of (or in addition to) blocked-by.
+
+Also split, regardless of layer, when a single-layer ticket is too large to be one unambiguous unit of work:
+- **Size would land on `xl`** (or the project's largest bucket): break it into smaller same-layer tickets by sub-concern (e.g. one endpoint each, one migration batch each), chained with `blocked-by` in the order they must land.
+- **Acceptance Criteria can't be made binary without listing more than ~5-6 checks**: that volume is itself a signal the ticket bundles unrelated done-conditions; split along the natural seams between them.
+- A **wide mechanical change** (rename a column/symbol across the codebase): sequence as expand → migrate (one ticket per batch, sized by blast radius) → contract, same-layer, each batch blocked by the expand ticket.
+
+Never split just to pad a ticket count: a small ticket that's genuinely one layer and one unit of work stays one ticket.
+
+### 3. Check for duplicates (always)
 Before creating, always search existing open issues for similar titles/keywords.
 - **GitHub**: `gh issue list --search "<keywords>"`
 - **GitLab**: `glab issue list --search "<keywords>"`
 If a title seems to cover the same topic, read the full issue.
 If it turns out to be a duplicate, present it and ask if they still want to proceed.
 
-### 3. Detect dependencies/relationships (always)
+### 4. Detect dependencies/relationships (always)
 Search for issues the user's request might relate to.
 Offer to link them.
 Only link genuinely obvious pairs (explicit prerequisite mentioned in the body, unmistakable technical dependency), never force a link to pad a count.
@@ -46,7 +63,7 @@ Use the platform's native relationship feature, never free text in the body:
 - **GitHub**: use `gh issue edit <n> --add-blocked-by <m>` / `--add-blocking <m>` (native sidebar relationship, not a body mention). Set one direction per pair, GitHub shows the inverse automatically. Other types: relates to / duplicates
 - **GitLab**: blocks / is blocked by / relates to
 
-### 4. Build the command
+### 5. Build the command
 Construct the CLI command with only relevant flags.
 Never include optional fields the user didn't mention.
 Let the platform prompt for anything missing.
