@@ -101,6 +101,9 @@ Rules for the plan:
 - One block per commit, each self-contained and copy-pasteable as a whole.
 - List file paths explicitly, never globs or `git add .`.
 - Every file in the diff lands in exactly one commit. If one is left out, say why.
-- If a file must be split *within itself* (same file, two concerns), say so plainly and point to `git add -p <file>` for that one. Do not pretend `git add <file>` isolates it.
+- If a file must be split *within itself* (same file, two concerns), pipe the `git add -p` answers so the block stays copy-pasteable: `printf 's\ny\nn\n' | git add -p <file>` (`s` split, `y` stage, `n` skip, one answer per hunk in order). Read `git diff <file>` first: `s` only splits where unchanged lines separate the changes. Never pretend `git add <file>` isolates it.
+- An untracked file is one hunk that `add -p` cannot split. Stage a trimmed copy without touching the working tree: `git update-index --add --cacheinfo 100644,"$(sed '<from>,<to>d' <file> | git hash-object -w --stdin)",<file>`; a later block's `git add <file>` brings the rest.
+- No shell variable shared across lines: write full paths on every line, since the user may paste one line at a time.
+- Before handing off a split plan, replay it on a throwaway index (`cp .git/index /tmp/x.index; GIT_INDEX_FILE=/tmp/x.index …`) and check each `git diff --cached --stat`.
 
 Add a one-line rationale under the plan only when the grouping is not obvious from the messages.
