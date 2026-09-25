@@ -73,9 +73,16 @@ Append it to the plan the work came from. With no plan, propose a git-ignored fo
 
 1. A summary table: `#`, message, why (one per commit).
 2. One section per commit, headed `### N/M: <message>`, holding:
-   - **Code**: a table of production files, each with its why.
-   - **Tests**: a table of test files, each with what it checks.
+   - `#### Code`: one `-` item per production file: its full path in code, ending with `\`, then its why on the next line.
+   - `#### Tests`: the same for test files, with what each one checks.
    - A `⚠️` line per *commit check* that fails (below), if any.
+
+```markdown
+#### Code
+
+- `src/Resolver/UniqueSlugResolver.php`\
+  Skips the row itself and slugs already reserved in the batch, so no duplicate and no false `-1`.
+```
 
 Whys are the reviewer's conformity checklist: plain language, what the change does for the product or the reader, one line (three at most).
 
@@ -83,7 +90,7 @@ Show the summary table once in the chat, then start the loop. Done when every fi
 
 ### 2. One commit per approval
 
-For commit N, present its Code table, its Tests table, the exact message, a one-line why and any `⚠️` line, then wait. On the user's approval of that commit: stage exactly its files, commit, report the hash, present commit N+1. On a requested change: revise, re-present, wait again. Done when the working tree holds nothing the series planned.
+For commit N, present its Code and Tests sections, the exact message, a one-line why and any `⚠️` line, then wait. On the user's approval of that commit: stage exactly its files, commit, report the hash, present commit N+1. On a requested change: revise, re-present, wait again. Done when the working tree holds nothing the series planned.
 
 ### Commit checks
 
