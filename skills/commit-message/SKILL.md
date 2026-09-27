@@ -1,6 +1,6 @@
 ---
 name: commit-message
-description: Use when writing or suggesting a git commit message, before running git commit, or when a diff must be split into a series of commits. Applies the [Type] message format with optional ticket ID.
+description: Use when writing or suggesting a git commit message, or when splitting a mixed diff into several ordered commits, before running git commit. Covers the [Type] format, ticket IDs, and commit split plans.
 ---
 
 # Suggest Commit Message
@@ -43,23 +43,24 @@ When work is tracked in an external system, the ticket ID must appear in both th
 [Feature] #9234 Add cancel button to order summary
 ```
 
-The ticket ID ties history to its originating task without opening the tracker. Only skip it for untracked work (internal chores, exploratory spikes).
+The ticket ID ties history to its originating task without opening the tracker.
+Only skip it for untracked work (internal chores, exploratory spikes).
 
 ## Message rules
 
 - Start with a verb.
-- Keep it short, max ~70 characters.
+- Keep it short, max 70 characters.
 - Describe *what* changed, not *how*.
-- Pick the type from the table above — don't invent new ones.
+- Pick the type from the table above, don't invent new ones.
 
 ## Workflow
 
-1. Run `git diff --staged` (or `git diff` if nothing staged) — this diff is the required basis for the message. Never guess the message from the user's description of the change alone.
+1. Run `git diff --staged` (or `git diff` if nothing staged): this diff is the required basis for the message. Never guess the message from the user's description of the change alone.
 2. Check whether the diff holds more than one concern. If it does, run a *Commit series* (below) instead of steps 3-6.
 3. Pick the Type that matches the change's nature, as shown in the diff.
 4. Check if the branch name carries a ticket ID (`feature/1234-...`); if so, include `#1234`.
 5. Compose one line following the rules above and present it to the user as a suggestion.
-6. Only run `git commit` if the user confirms that exact suggestion. If they ask for changes, revise and present again — do not commit until they explicitly approve.
+6. Only run `git commit` if the user confirms that exact suggestion. If they ask for changes, revise and present again, do not commit until they explicitly approve.
 
 ## Commit series
 

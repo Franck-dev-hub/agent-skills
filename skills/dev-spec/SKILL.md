@@ -1,6 +1,6 @@
 ---
 name: dev-spec
-description: Use when asked to investigate a bug/feature request and turn it into a technical spec written outside Notion (the user handles Notion themselves) — "pose la spec", "fais-moi un rapport de spec", "spécifie ce ticket", "write the spec", "spec this out", "investigate and write a spec/report", a raw ticket description (Contexte/User story/AC, or Context/User story/AC) pasted with a request to fill it in, or "comment spécifier ça" / "how would you spec this".
+description: Use when asked to investigate a bug/feature request and turn it into a technical spec written outside Notion (the user handles Notion themselves), triggered by "pose la spec", "fais-moi un rapport de spec", "spécifie ce ticket", "write the spec", "spec this out", "investigate and write a spec/report", a raw ticket description (Contexte/User story/AC, or Context/User story/AC) pasted with a request to fill it in, or "comment spécifier ça" / "how would you spec this".
 ---
 
 # Dev spec (investigation → report)
@@ -13,7 +13,7 @@ conversation (or as a file if asked), in the exact section order below.
 **The report itself is always written in French**, regardless of the language the
 request came in.
 
-## Method — "comment spécifier en tant que dev"
+## Method: comment spécifier en tant que dev
 
 Before writing anything, run this loop **at least 3 times**, each pass sharpening the
 one before it. Do not skip straight to a report after one pass: the first read of a
@@ -118,7 +118,7 @@ The goal is to state **what** must work and **why**, not **how**. Keep this spli
   user-visible identifier is fine when it *is* the acceptance check (e.g. "un seul panel
   `id="no-price"` par page" is something QA can literally inspect). What does **not**
   belong in an AC is which file, hook, or config entry to change, or a justification
-  phrased as "après avoir fait X" — that names the fix, not the requirement. That
+  phrased as "après avoir fait X", that names the fix, not the requirement. That
   reasoning goes in "Solution proposée".
 - If in doubt whether a line is an AC or a solution note, ask: can this be verified by
   clicking around the site without reading the diff? If yes, it is an AC. If it only
