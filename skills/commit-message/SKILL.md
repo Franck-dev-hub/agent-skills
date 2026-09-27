@@ -27,6 +27,7 @@ With a tracked ticket:
 | Type | Usage |
 |---|---|
 | **Feature** | New functionality |
+| **Chore** | Maintenance with no behaviour change: tooling, CI, dependencies, config |
 | **Fix** | Bug fix |
 | **Hotfix** | Bug fix directly on a production branch |
 | **Refactor** | Code restructuring, no functional change |
