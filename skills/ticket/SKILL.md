@@ -40,6 +40,7 @@ Give a summary of five lines at most: ticket, status, branch, commits, PR.
 Propose the next step, then wait for the user.
 A draft PR means step 9, the user's review pending.
 A merged PR means step 10.
+Step 5 resumes at the first unticked task of the plan.
 
 ## Steps
 
@@ -72,9 +73,14 @@ The linked issues (blocking, blocked, parent, sub-issues), the plan if one exist
 Invoke `mattpocock-skills:grilling` and `mattpocock-skills:domain-modeling` on the issue.
 
 Done when the user confirms the shared understanding.
-Then rewrite the issue body with `franck-dev-skills:create-issue`, and create or update the plan: context, decisions, files touched, `Current step`.
+Then rewrite the issue body with `franck-dev-skills:create-issue`, and create or update the plan: context, decisions, files touched, tasks, `Current step`.
+Tasks are a `- [ ]` list; each one is small enough to review alone.
 
 ### 5. Write the code
+
+One plan task at a time, each one a gate.
+After a task, tick it in the plan, set `Current step` to `5, task <i>/<total>`, report the files touched and what they now do, then stop.
+The next task starts only on the user's go.
 
 Done when every acceptance criterion that can be met before merge is implemented.
 
