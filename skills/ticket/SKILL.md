@@ -43,8 +43,9 @@ A merged PR means step 10.
 
 ## Steps
 
-Each step ends on its criterion.
-After each step, update the plan's `Current step` line once the plan exists.
+Every step is a **gate**: once its criterion is met, stop.
+Before stopping, update the plan's `Current step` line once the plan exists, then report in five lines at most: what was done, its evidence, the next step.
+Start the next step only on the user's explicit go; a go covers one step, never the rest of the list.
 
 ### 1. Read the issue
 
@@ -93,7 +94,7 @@ Done when each of them is updated, or the summary states "no doc impact".
 
 ### 8. Commit
 
-This step is a **gate**: each commit waits for the user's explicit approval of both its code and its message.
+Inside this step, each commit also waits for the user's explicit approval of both its code and its message.
 
 Run `franck-dev-skills:commit-message`.
 Its commit series writes every commit and its why into the plan first, then commits one at a time on approval.
