@@ -1,6 +1,6 @@
 {
   "name": "franck-dev-skills",
-  "description": "Personal skills: commit messages, issue creation, Obsidian notes, dev specs, skill reviews",
+  "description": "Personal skills: commit messages, issue creation, Obsidian notes, dev specs, skill reviews, ticket workflow",
   "version": "1.2.0",
   "author": {
     "name": "Franck"
