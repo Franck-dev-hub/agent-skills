@@ -37,6 +37,7 @@ When they disagree, the environment wins: fix the line.
 
 Give a summary of five lines at most: ticket, status, branch, commits, PR.
 Propose the next step, then wait for the user.
+A draft PR means step 9, the user's review pending.
 A merged PR means step 10.
 
 ## Steps
@@ -100,11 +101,21 @@ Done when the working tree holds nothing the series planned, and the plan lists 
 
 ### 9. Open the PR
 
-- Push once the user approves it, then open the PR against the base branch with the repo's PR template.
-- Add `Closes #<n>` only when the branch is not linked to the issue.
-- Status In progress to In review.
+Give the user one command to copy; it pushes and opens a draft PR with no body.
 
-Done when the PR is open and the status reads In review.
+| Commits in `git log --oneline <base>..HEAD` | Command |
+|---|---|
+| 1 | `ghpr`: the commit message becomes the title |
+| 2 or more | `ghprt '<title>'` |
+
+- The title follows the `franck-dev-skills:commit-message` format and sums up the whole branch: `[Type] #<n> Description`.
+- A branch not linked to the issue needs `gh pr edit --body 'Closes #<n>'` once the PR is open.
+- When the user says the PR is open, check it with `gh pr view`.
+
+The draft is for the user's own review; the status stays In progress.
+Once they approve it, give them `gh pr ready <pr>`, which starts the CI, then set the status In progress to In review.
+
+Done when the PR is ready for review and the status reads In review.
 
 ### 10. After the merge
 
