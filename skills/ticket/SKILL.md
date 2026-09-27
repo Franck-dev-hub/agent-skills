@@ -129,5 +129,6 @@ Done when the PR is ready for review, the status reads In review, and every pre-
 ### 10. After the merge
 
 Run every post-merge acceptance criterion and tick each one once green, then check the issue is closed and its status reads Done.
+Delete the plan's tasks section, which is of no use once merged, and set `Current step` to `10, done`.
 
-Done when every criterion is ticked in the issue body.
+Done when every criterion is ticked in the issue body and the plan holds no tasks.
