@@ -98,6 +98,14 @@ Check the repo's issue templates (`gh issue list --template`) and AGENTS.md firs
 - Default: **British English** (colour, behaviour, initialise, centre, etc.)
 - Never use em dashes. Use commas, semicolons, colons, or full stops instead.
 
+## Readability
+
+Write for someone who has not opened the code: product owner, tester, newcomer.
+- Describe behaviour and business rules, not the implementation.
+- Name a file or a feature only when the reader cannot act without it, in plain text.
+- Never cite variables, classes, functions, or inline code.
+- Exceptions: the check command an Acceptance Criterion allows, and a bug report's short logs and versions.
+
 ## Requirements
 
 - **GitHub**: `gh` CLI authenticated
@@ -126,7 +134,7 @@ In: [what this covers]
 [What it explicitly excludes]
 
 **Acceptance Criteria**
-- [ ] [Binary, verifiable condition, no unquantified adjectives like "better"/"faster" without a number or a check command]
+- [ ] [Binary condition, phrased as behaviour someone can observe. A check command only when nothing is visible (infra, migration). No "better"/"faster" without a number]
 [as many items as needed to make the ticket done/not-done unambiguous, never padded]
 
 **Alternatives** (optional, only if a real trade-off was considered)
