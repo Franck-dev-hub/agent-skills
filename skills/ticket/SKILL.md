@@ -14,6 +14,7 @@ Every id or command below comes from it.
 If the section is missing, ask for the values once and propose adding the section.
 
 A status change is `gh project item-edit --id <item> --project-id <board> --field-id <status> --single-select-option-id <option>`.
+Ticking a criterion is `gh issue view <n> --json body -q .body`, `- [ ]` to `- [x]` on its line, then `gh issue edit <n> --body-file -`.
 
 ## 0. Route
 
@@ -114,11 +115,12 @@ Give the user one command to copy; it pushes and opens a draft PR with no body.
 
 The draft is for the user's own review; the status stays In progress.
 Once they approve it, give them `gh pr ready <pr>`, which starts the CI, then set the status In progress to In review.
+Tick every pre-merge criterion that has its step 6 evidence.
 
-Done when the PR is ready for review and the status reads In review.
+Done when the PR is ready for review, the status reads In review, and every pre-merge criterion is ticked.
 
 ### 10. After the merge
 
-Run every post-merge acceptance criterion, then check the issue is closed and its status reads Done.
+Run every post-merge acceptance criterion and tick each one once green, then check the issue is closed and its status reads Done.
 
 Done when every criterion is ticked in the issue body.
