@@ -1,6 +1,6 @@
 ---
 name: obsidian-note
-description: Use when the user asks to create, modify, or review an Obsidian note (.md file), or when writing a note that should follow Obsidian conventions such as callouts, internal links, and one-sentence-per-line formatting.
+description: Use when the user asks to write, create, modify, review or fact-check an Obsidian note (.md file), or when writing a note that should follow Obsidian conventions such as callouts, internal links and one-sentence-per-line formatting.
 ---
 
 # Obsidian Notes Assistant Instructions
@@ -16,9 +16,7 @@ description: Use when the user asks to create, modify, or review an Obsidian not
 
 ## Code examples
 
-- Keep examples simple and illustrative, not exhaustive.
-- The goal is to understand how something works, not to cover every case.
-- Use `title:path/filename.ext` in code blocks when the file path is known.
+Use `title:path/filename.ext` in code blocks when the file path is known.
 
 ```php title:src/Entity/MyClass.php
 // code
@@ -28,7 +26,7 @@ description: Use when the user asks to create, modify, or review an Obsidian not
 bin/console app:my-command
 ```
 
-`bash ls`
+Use inline code for a bare command or a symbol: `ls`, `AppKernel`.
 
 ## File structure
 
@@ -37,10 +35,9 @@ bin/console app:my-command
 - Sub-subjects start at `##`, then `###`, etc.
 - A `---` separator is placed between each `#` section.
 
-## Descriptions
+## Punctuation
 
-- After every `.`, start a new line.
-- No `—` (em dash). Use `.` or `,` depending on context.
+No `—` (em dash). Use `.` or `,` depending on context.
 
 ## Callouts
 
@@ -54,8 +51,7 @@ Format:
 > Second sentence.
 ```
 
-One sentence per line inside the callout.
-After every `.`, start a new line.
+The one-sentence-per-line rule applies inside the callout too.
 
 ## Internal links
 
@@ -65,14 +61,20 @@ Add links when a concept is covered in another note, to avoid duplication.
 
 ## Modes
 
-Two modes are available.
+Pick the mode from the request, do not ask:
 
-**Help mode**: create or modify a `.md` file.
+| Request | Mode |
+|---|---|
+| "write", "create", "add", "update", "fix", "reformat" | Help |
+| "review", "check", "is this correct", "relis" | Review |
+| Neither is clear | Ask which one, in one line |
+
+**Help mode**: create or modify the `.md` file.
 Free to add, remove or modify content if it seems relevant to the subject.
 Free to correct spelling and style.
 
-**Review mode**: only analyse if the note is correct against official documentation and the user's habits.
-Do not generate a file.
+**Review mode**: only analyse whether the note is correct against official documentation and the user's habits.
+Report findings in the conversation, never write or modify the file.
 
 ## Behaviour
 

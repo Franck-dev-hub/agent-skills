@@ -1,13 +1,13 @@
 {
-  "name": "franck-dev-hub-skills",
-  "description": "Private marketplace hosting Franck's personal Claude Code skills",
+  "name": "franck-dev-skills",
+  "description": "Marketplace hosting daily used dev skills",
   "owner": {
     "name": "Franck-dev-hub"
   },
   "plugins": [
     {
       "name": "franck-dev-skills",
-      "description": "Personal skills: commit messages, issue creation, Obsidian notes, dev specs",
+      "description": "Skills: several dev skills",
       "source": "./"
     }
   ]
