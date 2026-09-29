@@ -18,7 +18,7 @@ Ticking a criterion is `gh issue view <n> --json body -q .body`, `- [ ]` to `- [
 
 ## 0. Route
 
-- The `origin` remote is on GitLab: stop, and tell the user to run the emagma skills (`/emagma-agents-knowledge:assist`).
+- The `origin` remote is on GitLab: stop, and point the user to `/franck-dev-skills:ticket-pro`.
 - A branch is linked to the issue (`gh issue develop <n> --list`), or a PR references it (`gh issue view <n> --json closedByPullRequestsReferences`): this is a **resume**, go to *Resume*.
   Both are needed: the repo may delete a branch once its PR is merged.
 - Otherwise start at step 1.
