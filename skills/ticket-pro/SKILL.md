@@ -83,7 +83,7 @@ Step 6 resumes at the first failing check or unticked recette box.
 
 ## Steps
 
-Every step but step 3 is a **gate**: once its criterion is met, stop.
+Every step but steps 1 and 3 is a **gate**: once its criterion is met, stop.
 Before stopping, update the plan's `Current step` line once the plan exists, then report in five lines at most: what was done, its evidence, the next step, then the *To report in the ticket* block when there is one.
 Start the next step only on the user's explicit go; a go covers one step, never the rest of the list.
 
@@ -92,7 +92,8 @@ Start the next step only on the user's explicit go; a go covers one step, never 
 The ticket is the text the user pasted.
 Never fetch it or a linked ticket from a tracker (`glab issue view`, Notion tools, Redmine) unless the user asks in so many words; a URL in the text is not that ask.
 
-Done when the user confirms the ticket is ready to start: report its status and blockers as read, never assume them.
+A ticket the user asks to work on is ready: never ask.
+Not a gate: name in one line any blocker the text lists, then go straight to step 2.
 
 ### 2. Create the branch
 
