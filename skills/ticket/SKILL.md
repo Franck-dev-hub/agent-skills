@@ -48,8 +48,22 @@ Find the plan folder before anything else, and never propose a new one while an 
 The ticket folder holds the ticket's only working files: the plan, and a visual ticket's captures.
 What the steps or their skills would write elsewhere goes in a section of the plan.
 
-The plan header is a list under the title: `- Ticket:`, `- Tracker:`, `- Base branch:`, `- Test command:`, `- App URL:`, `- Current step:`.
-The roadmap hook reads the `- Current step:` line: keep it in English and starting with the step number.
+The plan header is a table under the title; `-` marks a value still unknown, such as the PR before step 9; the `PR` key is `MR` on GitLab:
+
+```markdown
+| Key          | Value                       |
+|--------------|-----------------------------|
+| Ticket       | <ticket URL>                |
+| Tracker      | <tracker>                   |
+| Base branch  | `<base>`                    |
+| Branch       | `<type>/<ticket-id>-<slug>` |
+| PR           | <PR URL>                    |
+| Test command | `<test command>`            |
+| App URL      | <app URL>                   |
+| Current step | <n>, <progress>             |
+```
+
+The roadmap hook reads the `Current step` row: keep its key in English and its value starting with the step number.
 Take each value from the local profile, the **Ticket workflow** section of `AGENTS.md`, then `CLAUDE.md`, the `Makefile` or the project's config files; ask only for what is still missing, once, and write it in the header.
 The app URL found in config (`.env`, compose, `/etc/hosts`) is often a default such as `http://localhost`: propose it, never use it unconfirmed.
 
@@ -118,8 +132,8 @@ Take the ticket id from the argument: an id, a URL, or the pasted text; with non
 
 ## Resume
 
-Derive the state from the environment, then read the plan's `Current step` line.
-When they disagree, the environment wins: fix the line.
+Derive the state from the environment, then read the plan's `Current step` row.
+When they disagree, the environment wins: fix the row.
 
 | Signal | Where |
 |---|---|
@@ -139,7 +153,7 @@ Step 6 resumes at the first failing check, then the skill's recette, then the fi
 ## Steps
 
 Every step but step 3, and step 1 for a pasted ticket, is a **gate**: once its criterion is met, stop.
-Keep the plan's `Current step` line true at all times, once the plan exists: `<n>` when a step starts, `<n>, <progress>` while it runs (`5, task 2/4`, `8, commit 1/3`), `<n>, done` at its gate.
+Keep the plan's `Current step` row true at all times, once the plan exists: `<n>` when a step starts, `<n>, <progress>` while it runs (`5, task 2/4`, `8, commit 1/3`), `<n>, done` at its gate.
 Before stopping, report in five lines at most: what was done, its evidence, then the tracker changes to apply.
 Start the next step only on the user's explicit go; a go covers one step, never the rest of the list.
 
