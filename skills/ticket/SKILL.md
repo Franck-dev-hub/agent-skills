@@ -120,8 +120,22 @@ Step 6 resumes at the first failing check or unticked recette box.
 ## Steps
 
 Every step but step 3, and step 1 for a pasted ticket, is a **gate**: once its criterion is met, stop.
-Before stopping, update the plan's `Current step` line once the plan exists, then report in five lines at most: what was done, its evidence, the next step, then the tracker changes to apply.
+Before stopping, update the plan's `Current step` line once the plan exists, then report in five lines at most: what was done, its evidence, then the tracker changes to apply.
 Start the next step only on the user's explicit go; a go covers one step, never the rest of the list.
+
+End every message of the skill with two status lines, in the user's language, the step names being the headings below:
+
+```
+Step <n>: done, <what it produced, one sentence>
+Step <n+1>: <name>
+```
+
+or, while the step waits on the user:
+
+```
+Step <n>: in progress, <what the user must do>
+Step <n+1>: <name>, once step <n> is done
+```
 
 ### 1. Read the ticket
 
