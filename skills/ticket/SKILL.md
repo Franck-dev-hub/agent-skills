@@ -115,7 +115,7 @@ Propose the next step, then wait for the user.
 A draft PR means step 9, the user's review pending.
 A merged PR means step 10.
 Step 5 resumes at the first unticked task of the plan.
-Step 6 resumes at the first failing check or unticked recette box.
+Step 6 resumes at the first failing check, then the skill's recette, then the first box the user has not ticked.
 
 ## Steps
 
@@ -198,13 +198,13 @@ Report the files touched and what they now do, in short sentences.
 
 ### 6. Recette and test
 
-The user runs the recette while the checks run, in this order:
+The skill runs and fixes everything first, so the user runs a single final recette:
 
-1. The Review slot first: it may fix code, so the recette must start after it.
-2. Write the plan's `Recette` section, hand it to the user, and tell them to start.
-   For a visual ticket, replay every `Captures` entry into `after/` under the same file name, and add the pairs to the recette.
-3. Meanwhile, both in the background: the Lint slot, and the test command in full, so the user can report recette results while it runs.
-4. Once the user is done, when a criterion is a user journey in the browser, offer the E2E slot, with the recette as its test plan and its findings in the plan's `E2E` section, not in the skill's own output folder; run it only on the user's yes.
+1. The Review slot: it may fix code.
+2. In the background: the Lint slot, and the test command in full.
+3. Write the plan's `Recette` section, then run it yourself, box by box, with the E2E slot or a real-browser tool; for a visual ticket, replay every `Captures` entry into `after/` under the same file name.
+4. A failing check or box: fix it, as a new task in the plan, then rerun what it touches.
+5. Once everything passes, hand the recette to the user for the final run, with the `before/` and `after/` pairs.
 
 The recette holds one block per acceptance criterion, in the ticket's order, then the non-regressions and edge cases; for a bug, the plan's `Reproduction` comes first, now expecting the fixed result:
 
@@ -217,12 +217,13 @@ The recette holds one block per acceptance criterion, in the ticket's order, the
 
 - Steps are what a tester without the code can do and see: URL, button, field, message; never a class or a command.
 - Post-merge criteria go in a `Post-merge` subsection, run at step 10.
-- Only the user ticks the boxes; a box they report failing sends the fix back to step 5.
+- The skill's own run goes in the plan's `Evidence`, one line per box; a box it cannot check (no browser tool, a real email, a third-party service) is marked for the user.
+- Only the user ticks the boxes; a box they report failing gets fixed, then the skill reruns its recette before handing it back.
 
 Skip a skill that is not installed or does not fit the stack, and say so.
 Keep each check's evidence in the plan: command, output line.
 
-Done when every check is green, every pre-merge criterion has its evidence, and the user ticked every pre-merge box.
+Done when every check is green, the skill's recette passes, and the user ticked every pre-merge box.
 
 ### 7. Update the docs
 
