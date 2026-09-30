@@ -48,7 +48,8 @@ Find the plan folder before anything else, and never propose a new one while an 
 The ticket folder holds the ticket's only working files: the plan, and a visual ticket's captures.
 What the steps or their skills would write elsewhere goes in a section of the plan.
 
-The plan header holds: ticket link, tracker, base branch, test command, `Current step`.
+The plan header is a list under the title: `- Ticket:`, `- Tracker:`, `- Base branch:`, `- Test command:`, `- Current step:`.
+The roadmap hook reads the `- Current step:` line: keep it in English and starting with the step number.
 Take each value from the local profile, the **Ticket workflow** section of `AGENTS.md`, then `CLAUDE.md`, the `Makefile` or the project's config files; ask only for what is still missing, once, and write it in the header.
 
 Write the plan in short sentences that go to the point, in the user's language.
