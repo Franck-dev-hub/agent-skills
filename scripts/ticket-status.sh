@@ -39,15 +39,18 @@ num=$(printf '%s' "$current" | sed -nE 's/^([0-9]+).*/\1/p')
 detail=$(printf '%s' "$current" | sed -E 's/^[0-9]+,? *//' | tr -d '"\\')
 
 names=(Read Branch Context Grill Code Recette Docs Commit PR Merge)
-line="#$id"
+# Claude Code greys the message: the reset after the current step leaves the next steps in full colour.
+cur='\u001b[1;32m' off='\u001b[0m'
+line=""
 for i in "${!names[@]}"; do
     k=$((i + 1))
     if [ "$k" = "$num" ]; then
-        line="$line · [$k ${names[$i]}${detail:+: $detail}]"
+        line="$line  $cur$k ${names[$i]}${detail:+: $detail}$off"
     else
-        line="$line · $k ${names[$i]}"
+        line="$line  $k ${names[$i]}"
     fi
 done
-[ -n "$num" ] || line="$line · ${detail}"
+[ -n "$num" ] || line="$line  ${detail}"
+line=${line#  }
 
 printf '{"systemMessage": "%s"}\n' "$line"
