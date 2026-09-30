@@ -16,8 +16,7 @@ Private agent marketplace hosting personal skills.
 | `dev-spec`       | Turn a bug or feature request into a technical spec                  |
 | `obsidian-note`  | Write or review Obsidian notes following vault conventions           |
 | `skill-reviewer` | Review a skill against the Agent Skills spec and authoring practices |
-| `ticket`         | Drive an issue from branch to merged PR, or resume it                |
-| `ticket-pro`     | Drive a pasted work ticket to a merged GitLab MR, tracker read only  |
+| `ticket`         | Drive a ticket from branch to merged PR or MR, or resume it          |
 
 
 ## Installation with claude code
