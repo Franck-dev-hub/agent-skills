@@ -13,6 +13,7 @@ The status map holds the board, the Status field id, and one option id per statu
 | Linked PRs | `gh issue view <n> --json closedByPullRequestsReferences` |
 | PR state | `gh pr view <pr>` |
 | Mark the draft ready, which starts the CI | `gh pr ready <pr>` |
+| Pipeline state | `gh pr checks <pr>` |
 
 Open PR, pushing and opening a draft with no body:
 

@@ -88,6 +88,22 @@ The brief is self-contained: skill, plan path, ticket id, branch, `<base>..HEAD`
 Write the report's evidence and findings in the plan, and bring its questions to the user.
 Every other skill runs in the session: it talks to the user.
 Plain commands, such as lint commands, run in the background with Bash, not in an agent.
+Reads that do not depend on each other (tracker, blockers, context files, resume signals) go out in one batch of parallel tool calls.
+
+While the session waits on the user, agents prepare the next work in the background:
+
+| When | Agent | Prepares |
+|---|---|---|
+| Step 4, during the grilling | `franck-dev-skills:debug-investigate` | a bug's root cause, from the `Reproduction` section |
+| Step 4, during the grilling | `Explore` | the files and flows the ticket touches, for `Files touched` |
+| Step 4, during the grilling | `franck-dev-skills:ticket-review` | a visual ticket's `before/` captures |
+| Step 6, after the review | `franck-dev-skills:ticket-review` | the skill's recette and the `after/` captures, while lint and tests run |
+| Step 6, during the final recette | `Explore` | the passages of `docs/` and `README.md` the diff changes, for step 7 |
+| Step 9, after the PR is ready | `franck-dev-skills:ci-investigate` | the cause of a failed pipeline |
+
+- A background agent only prepares: it never advances a step, and its report waits for the step that uses it.
+- Read only, except the captures, written in `before/` and `after/`.
+- One agent at a time drives the browser: they share it, and the dev database.
 
 ## 0. Route
 
@@ -168,7 +184,7 @@ Not a gate: once the standards are loaded, list them in one line and go straight
 For a bug, get the reproduction first: URL, account and data, steps, observed versus expected result.
 Take what the ticket gives, ask the user for the rest, and write it in the plan's `Reproduction` section.
 
-For a visual ticket, when a real-browser tool is available (Playwright MCP or CLI, or any browser capture tool), capture the pages it touches into `before/`, before any code change:
+For a visual ticket, when a real-browser tool is available (Playwright MCP or CLI, or any browser capture tool), capture the pages it touches into `before/`, before any code change, through the background agent:
 
 - A bug: its reproduction, showing the fault. A feature: the page as it is today.
 - One file per page and viewport, `<nn>-<page>-<viewport>.png`; desktop and mobile unless the ticket names one.
@@ -176,10 +192,10 @@ For a visual ticket, when a real-browser tool is available (Playwright MCP or CL
 
 With no such tool, say so in one line and go on.
 
-Invoke `mattpocock-skills:grilling` and `mattpocock-skills:domain-modeling` on the ticket.
+Start the step 4 background agents (*Delegation*), then invoke `mattpocock-skills:grilling` and `mattpocock-skills:domain-modeling` on the ticket.
 Domain-modeling writes no file: its glossary goes in the plan's `Glossary` section, its ADRs in `Decisions`.
 
-Once the user confirms the shared understanding, run the Spec slot on the ticket.
+Once the user confirms the shared understanding, merge the background reports into the plan, then run the Spec slot on the ticket.
 Then fill the plan: context, glossary, decisions, files touched, tasks, `Current step`.
 Tasks are a `- [ ]` list in execution order, never numbered: the order is the numbering. Each one is small enough to review alone.
 
@@ -201,11 +217,11 @@ Report the files touched and what they now do, in short sentences.
 
 The skill runs and fixes everything first, so the user runs a single final recette:
 
-1. The Review slot: it may fix code.
-2. In the background: the Lint slot, and the test command in full.
-3. Write the plan's `Recette` section, then run it yourself, box by box, with the E2E slot or a real-browser tool; for a visual ticket, replay every `Captures` entry into `after/` under the same file name.
+1. The Review slot: it may fix code, so it runs alone.
+2. Write the plan's `Recette` section.
+3. Then in parallel: the Lint slot and the full test command in the background, and `ticket-review` running the recette box by box, with the E2E slot or a real-browser tool, and replaying every `Captures` entry into `after/` under the same file name.
 4. A failing check or box: fix it, as a new task in the plan, then rerun what it touches.
-5. Once everything passes, hand the recette to the user for the final run, with the `before/` and `after/` pairs.
+5. Once everything passes, hand the recette to the user for the final run, with the `before/` and `after/` pairs; meanwhile, the docs scan for step 7 runs in the background.
 
 The recette holds one block per acceptance criterion, in the ticket's order, then the non-regressions and edge cases; for a bug, the plan's `Reproduction` comes first, now expecting the fixed result:
 
@@ -228,7 +244,7 @@ Done when every check is green, the skill's recette passes, and the user ticked 
 
 ### 7. Update the docs
 
-Read every file under `docs/` but the plan folder, and the `README.md`, and find the passages that describe what the diff changed.
+Start from the passages the step 6 docs scan found, checked against the final diff; without that scan, read every file under `docs/` but the plan folder, and the `README.md`.
 
 Done when each of them is updated, or the summary states "no doc impact".
 
@@ -249,7 +265,7 @@ Give the user the Open PR slot's command to copy; it pushes and opens a draft PR
 - When the user says the PR is open, check it with the forge reference's command.
 
 The draft is for the user's own review.
-Once they approve it, give them the forge reference's ready command.
+Once they approve it, give them the forge reference's ready command, then follow the pipeline (forge reference); a failure goes to `ci-investigate`.
 
 Done when the PR is ready for review.
 Tracker: status to In review, the PR link, every pre-merge criterion ticked with its step 6 evidence, the recette, the `before/` and `after/` pairs, uploaded when the tracker reference gives a way, else in the *To report* block.
