@@ -21,6 +21,7 @@ The user applies it by hand.
 ## Values
 
 The plan is `<plan folder>/<ticket-id>-<slug>.md`, the slug being the branch's.
+A visual ticket, one that changes what a page shows, gets a folder instead: `<plan folder>/<ticket-id>-<slug>/` holding `plan.md`, `before/` and `after/`.
 Find the plan folder before anything else, and never propose a new one while an existing one fits:
 
 1. The folder `AGENTS.md` or `CLAUDE.md` names.
@@ -29,7 +30,7 @@ Find the plan folder before anything else, and never propose a new one while an 
    One found: use it without asking. Several: ask once which one.
 3. Else propose `docs/plans/`, or `.plans/` when `git ls-files docs/plans` lists tracked files; add it to `.git/info/exclude` on the user's yes, never to the team's `.gitignore`.
 
-The plan is the ticket's only working file: what the steps or their skills would write elsewhere goes in a section of it.
+The plan, with a visual ticket's captures, is the ticket's only working file: what the steps or their skills would write elsewhere goes in a section of it.
 
 The plan header holds: ticket link, tracker, base branch, test command, `Current step`.
 Take each value from `AGENTS.md`, `CLAUDE.md`, the `Makefile` or the project's config files; ask only for what is still missing, once, and write it in the header.
@@ -59,7 +60,7 @@ Write the report's evidence and findings in the plan, and bring its questions to
 
 Take the ticket id from the argument, a pasted ticket or a bare id; with none, ask the user for one.
 
-- A plan matches the ticket (`<plan folder>/<ticket-id>-*.md`), a branch matches it (`git branch -a --list '*/<ticket-id>-*'`), or an MR comes from that branch (`glab mr list --all --source-branch <branch>`): this is a **resume**, go to *Resume*.
+- A plan matches the ticket (`<plan folder>/<ticket-id>-*.md` or `<plan folder>/<ticket-id>-*/plan.md`), a branch matches it (`git branch -a --list '*/<ticket-id>-*'`), or an MR comes from that branch (`glab mr list --all --source-branch <branch>`): this is a **resume**, go to *Resume*.
 - Otherwise start at step 1; a bare id there means asking the user to paste the ticket.
 
 ## Resume
@@ -72,7 +73,7 @@ When they disagree, the environment wins: fix the line.
 | Branch, checked out? | `git branch -a --list '*/<ticket-id>-*'`, `git branch --show-current` |
 | Commits on the branch | `git log --oneline <base>..HEAD` |
 | MR and its state | `glab mr view <branch>` |
-| Plan | `<plan folder>/<ticket-id>-*.md` |
+| Plan | `<plan folder>/<ticket-id>-*.md` or `<plan folder>/<ticket-id>-*/plan.md` |
 
 Give a summary of five lines at most: ticket, branch, commits, MR, plan step.
 Propose the next step, then wait for the user.
@@ -98,7 +99,7 @@ Not a gate: name in one line any blocker the text lists, then go straight to ste
 ### 2. Create the branch
 
 - Name: `<type>/<ticket-id>-<slug>`, type from the ticket's nature (`fix`, `feature`, `chore`...), slug from its title in short kebab case.
-- Create the plan with its header.
+- Create the plan with its header; decide from the ticket whether it is visual, which gives the folder layout.
 - `git fetch origin`, then `git switch -c <branch> origin/<base>`.
 - Tell the user the session name to set: `/rename <branch>`.
 
@@ -116,6 +117,14 @@ Not a gate: once the standards are loaded, list them in one line and go straight
 
 For a bug, get the reproduction first: URL, account and data, steps, observed versus expected result.
 Take what the ticket gives, ask the user for the rest, and write it in the plan's `Reproduction` section.
+
+For a visual ticket, when a real-browser tool is available (Playwright MCP or CLI, or any browser capture tool), capture the pages it touches into `before/`, before any code change:
+
+- A bug: its reproduction, showing the fault. A feature: the page as it is today.
+- One file per page and viewport, `<nn>-<page>-<viewport>.png`; desktop and mobile unless the ticket names one.
+- List each capture, with its URL, account and viewport, in the plan's `Captures` section, so step 6 can replay it.
+
+With no such tool, say so in one line and go on.
 
 Invoke `mattpocock-skills:grilling` and the Modeling slot on the ticket.
 The modeling skill writes no file: its glossary goes in the plan's `Glossary` section, its ADRs in `Decisions`.
@@ -143,6 +152,7 @@ The user runs the recette while the checks run, in this order:
 
 1. The Review slot first: it may fix code, so the recette must start after it.
 2. Write the plan's `Recette` section, hand it to the user, and tell them to start.
+   For a visual ticket, replay every `Captures` entry into `after/` under the same file name, and add the pairs to the recette.
 3. Meanwhile, both in the background: the Lint slot, and the test command in full, so the user can report recette results while it runs.
 4. Once the user is done, when a criterion is a user journey in the browser, offer the E2E slot, with the recette as its test plan and its findings in the plan's `E2E` section, not in the skill's own output folder; run it only on the user's yes.
 
@@ -190,7 +200,7 @@ The draft is for the user's own review.
 Once they approve it, give them `glab mr update <mr> --ready`.
 
 Done when the MR is ready for review.
-To report: status to in review, the MR link, every pre-merge criterion with its step 6 evidence, the recette.
+To report: status to in review, the MR link, every pre-merge criterion with its step 6 evidence, the recette, the `before/` and `after/` pairs to attach.
 
 ### 10. After the merge
 
