@@ -21,10 +21,6 @@ Also read `.project.ini` for the base branch and the test command.
 
 Run `<plugin>:load-standards`, and load the standards the ticket touches.
 
-## Spec
-
-`franck-dev-skills:dev-spec`, whatever the tracker.
-
 ## Task skills
 
 | Task | Skill |

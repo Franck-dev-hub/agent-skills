@@ -23,4 +23,3 @@ The MR never carries `Closes #<n>`: merging would close the issue without the us
 | Read | `glab issue view <n>`; blockers through `glab api "projects/:fullpath/issues/<n>/links"` |
 | Set the status | `glab issue update <n> -l "status::<value>"`, the value from the status map: a scoped label replaces the previous one |
 | Tick a criterion or rewrite the body | `glab issue view <n> -F json`, edit the description, then `glab issue update <n> -d "<body>"` |
-| Attach a capture | `glab api -X POST "projects/:fullpath/uploads" -F file=@<path>` returns the Markdown to put in a note or the body |

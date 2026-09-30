@@ -1,6 +1,6 @@
 ---
 name: ticket-investigate
-description: Dispatched by the ticket skill only. Runs dev-spec on a grilled ticket, investigating the code, and returns the spec report to paste in the ticket.
+description: Dispatched by the ticket skill only. Runs dev-spec on a grilled ticket, investigating the code, and returns the spec report for the plan.
 model: opus
 effort: high
 disallowedTools: Edit, Write, NotebookEdit
