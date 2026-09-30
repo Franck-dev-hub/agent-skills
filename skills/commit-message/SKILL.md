@@ -50,8 +50,9 @@ Only skip it for untracked work (internal chores, exploratory spikes).
 ## Message rules
 
 - Start with a verb.
-- Keep it short, max 70 characters.
+- Default to the shortest message that still says explicitly what changed.
 - Describe *what* changed, not *how*.
+- Max 70 characters, type and ticket ID included.
 - Pick the type from the table above, don't invent new ones.
 
 ## Workflow
