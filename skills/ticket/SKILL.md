@@ -25,8 +25,18 @@ Without write access, it goes in a **To report in the ticket** block for the use
 
 ## Values
 
-Every ticket gets a folder, `<plan folder>/<ticket-id>-<slug>/`, the slug being the branch's, holding `plan.md`.
+Every ticket gets a folder, `<plan folder>/<buckets>/<ticket-id>-<slug>/`, the slug being the branch's, holding `plan.md`.
 A visual ticket, one that changes what a page shows, adds `before/` and `after/`.
+
+The buckets come from the id alone, so a folder never moves: one `<start>-<end>` folder per power of ten, from the id's own magnitude down to 100; an id under 100 goes in `0-99`; an id that is not a number goes in `other`.
+
+| Id | Folder |
+|---|---|
+| 42 | `0-99/42-<slug>/` |
+| 675 | `600-699/675-<slug>/` |
+| 1234 | `1000-1999/1200-1299/1234-<slug>/` |
+| none | `other/<date>-<slug>/` |
+
 Find the plan folder before anything else, and never propose a new one while an existing one fits:
 
 1. The folder `AGENTS.md` or `CLAUDE.md` names.
@@ -83,7 +93,7 @@ Plain commands, such as lint commands, run in the background with Bash, not in a
 
 Take the ticket id from the argument: an id, a URL, or the pasted text; with none, ask the user for one.
 
-- A plan matches the ticket (`<plan folder>/<ticket-id>-*/plan.md`, or an older flat `<plan folder>/<ticket-id>-*.md` to move into its folder), a branch matches it (`git branch -a --list '*/<ticket-id>-*'`), or a PR links to it (forge reference): this is a **resume**, go to *Resume*.
+- A plan matches the ticket at its bucket path, or elsewhere in the plan folder (`find <plan folder> -regextype posix-extended -name '<ticket-id>-*' ! -regex '.*/[0-9]+-[0-9]+'`, buckets excluded) to move to its bucket path, a branch matches it (`git branch -a --list '*/<ticket-id>-*'`), or a PR links to it (forge reference): this is a **resume**, go to *Resume*.
   All are needed: the repo may delete a branch once its PR is merged.
 - Otherwise start at step 1.
 
@@ -98,7 +108,7 @@ When they disagree, the environment wins: fix the line.
 | Commits on the branch | `git log --oneline <base>..HEAD` |
 | PR and its state | forge reference |
 | Ticket status | tracker, when readable |
-| Plan | `<plan folder>/<ticket-id>-*/plan.md` |
+| Plan | `<plan folder>/<buckets>/<ticket-id>-*/plan.md` |
 
 Give a summary of five lines at most: ticket, status, branch, commits, PR.
 Propose the next step, then wait for the user.
@@ -124,7 +134,7 @@ An id or URL whose tracker this session cannot read: ask the user to paste the t
 ### 2. Create the branch
 
 - Name: `<type>/<ticket-id>-<slug>`, type from the ticket's nature or title prefix in lowercase (`[Fix]` gives `fix`), slug from its title in short kebab case.
-- Create the ticket folder and its plan with the header; a visual ticket also gets `before/` and `after/`.
+- Create the ticket folder at its bucket path and its plan with the header; a visual ticket also gets `before/` and `after/`.
 - Create the branch from `<base>` with the forge reference's command.
 - Tell the user the session name to set: `/rename <branch>`.
 
