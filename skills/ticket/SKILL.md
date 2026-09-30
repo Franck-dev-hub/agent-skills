@@ -25,8 +25,8 @@ Without write access, it goes in a **To report in the ticket** block for the use
 
 ## Values
 
-The plan is `<plan folder>/<ticket-id>-<slug>.md`, the slug being the branch's.
-A visual ticket, one that changes what a page shows, gets a folder instead: `<plan folder>/<ticket-id>-<slug>/` holding `plan.md`, `before/` and `after/`.
+Every ticket gets a folder, `<plan folder>/<ticket-id>-<slug>/`, the slug being the branch's, holding `plan.md`.
+A visual ticket, one that changes what a page shows, adds `before/` and `after/`.
 Find the plan folder before anything else, and never propose a new one while an existing one fits:
 
 1. The folder `AGENTS.md` or `CLAUDE.md` names.
@@ -35,10 +35,15 @@ Find the plan folder before anything else, and never propose a new one while an 
    One found: use it without asking. Several: ask once which one.
 3. Else propose `docs/plans/`, or `.plans/` when `git ls-files docs/plans` lists tracked files; add it to `.git/info/exclude` on the user's yes, never to the team's `.gitignore`.
 
-The plan, with a visual ticket's captures, is the ticket's only working file: what the steps or their skills would write elsewhere goes in a section of it.
+The ticket folder holds the ticket's only working files: the plan, and a visual ticket's captures.
+What the steps or their skills would write elsewhere goes in a section of the plan.
 
 The plan header holds: ticket link, tracker, base branch, test command, `Current step`.
 Take each value from the local profile, the **Ticket workflow** section of `AGENTS.md`, then `CLAUDE.md`, the `Makefile` or the project's config files; ask only for what is still missing, once, and write it in the header.
+
+Write the plan in short sentences that go to the point, in the user's language.
+Name a file, function or command only when it saves a search: files touched, the evidence of a criterion, the reproduction.
+Keep the section names: the resume looks them up.
 
 Project values, the same for every ticket, live in the Ticket workflow section or the local profile: tracker, base branch, test command, lint commands, and the status map.
 The status map gives the tracker's own value for Ready, In progress, In review and Done, plus the ids the tracker reference needs.
@@ -78,7 +83,7 @@ Plain commands, such as lint commands, run in the background with Bash, not in a
 
 Take the ticket id from the argument: an id, a URL, or the pasted text; with none, ask the user for one.
 
-- A plan matches the ticket (`<plan folder>/<ticket-id>-*.md` or `<plan folder>/<ticket-id>-*/plan.md`), a branch matches it (`git branch -a --list '*/<ticket-id>-*'`), or a PR links to it (forge reference): this is a **resume**, go to *Resume*.
+- A plan matches the ticket (`<plan folder>/<ticket-id>-*/plan.md`, or an older flat `<plan folder>/<ticket-id>-*.md` to move into its folder), a branch matches it (`git branch -a --list '*/<ticket-id>-*'`), or a PR links to it (forge reference): this is a **resume**, go to *Resume*.
   All are needed: the repo may delete a branch once its PR is merged.
 - Otherwise start at step 1.
 
@@ -93,7 +98,7 @@ When they disagree, the environment wins: fix the line.
 | Commits on the branch | `git log --oneline <base>..HEAD` |
 | PR and its state | forge reference |
 | Ticket status | tracker, when readable |
-| Plan | `<plan folder>/<ticket-id>-*.md` or `<plan folder>/<ticket-id>-*/plan.md` |
+| Plan | `<plan folder>/<ticket-id>-*/plan.md` |
 
 Give a summary of five lines at most: ticket, status, branch, commits, PR.
 Propose the next step, then wait for the user.
@@ -119,7 +124,7 @@ An id or URL whose tracker this session cannot read: ask the user to paste the t
 ### 2. Create the branch
 
 - Name: `<type>/<ticket-id>-<slug>`, type from the ticket's nature or title prefix in lowercase (`[Fix]` gives `fix`), slug from its title in short kebab case.
-- Create the plan with its header; decide from the ticket whether it is visual, which gives the folder layout.
+- Create the ticket folder and its plan with the header; a visual ticket also gets `before/` and `after/`.
 - Create the branch from `<base>` with the forge reference's command.
 - Tell the user the session name to set: `/rename <branch>`.
 
