@@ -163,13 +163,14 @@ Tracker: the ticket body rewritten from the spec.
 
 ### 5. Write the code
 
-One plan task at a time, each one a gate.
+Run every plan task in order, without stopping between them.
 A task that matches the Task skills slot runs that skill instead of writing the code by hand.
+After each task, tick it in the plan and set `Current step` to `5, task <i>/<total>`.
 
-After a task, tick it in the plan, set `Current step` to `5, task <i>/<total>`, report the files touched and what they now do, then stop.
-The next task starts only on the user's go.
+Stop before the end only when the user must decide: a task contradicts a plan decision, a test fails for a reason the plan did not foresee, or a skill asks a question.
 
 Done when every acceptance criterion that can be met before merge is implemented.
+Report the files touched and what they now do, in short sentences.
 
 ### 6. Recette and test
 
