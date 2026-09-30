@@ -10,33 +10,15 @@ id=$(printf '%s' "$branch" | sed -nE 's#^[^/]+/([0-9]+)-.*#\1#p')
 [ -n "$id" ] || exit 0
 root=$(git -C "$cwd" rev-parse --show-toplevel 2>/dev/null) || exit 0
 
-# Same bucket rule as the ticket skill: the path comes from the id alone.
-n=$((10#$id))
-if [ "$n" -lt 100 ]; then
-    buckets="0-99"
-else
-    buckets=""
-    p=1
-    for _ in $(seq 2 "${#n}"); do p=$((p * 10)); done
-    while [ "$p" -ge 100 ]; do
-        s=$((n / p * p))
-        buckets="$buckets/$s-$((s + p - 1))"
-        p=$((p / 10))
-    done
-    buckets=${buckets#/}
-fi
-
-plan=""
-for dir in docs/superpowers/plans docs/plans .plans plans; do
-    for f in "$root/$dir/$buckets/$id"-*/plan.md "$root/$dir/$id"-*/plan.md; do
-        [ -f "$f" ] && { plan=$f; break 2; }
-    done
-done
+# Matches the ticket folder, not a folder name: plans may live anywhere in the repo, bucketed or flat.
+plan=$(find "$root" -maxdepth 10 -type d \( -name node_modules -o -name vendor -o -name .git -o -name var \) -prune \
+    -o -type f -name plan.md -print 2>/dev/null | grep -m1 -E "/$id-[^/]*/plan\.md$")
 [ -n "$plan" ] || exit 0
 
-current=$(grep -m1 -E '^\|[[:space:]]*Current step[[:space:]]*\|' "$plan" | cut -d'|' -f3 | sed -E 's/^ +//; s/ +$//')
+# Accepts `- Current step: 5, task 2/4`, a bare line, bold or a table row.
+current=$(grep -m1 -E '^[-*| ]*\**Current step\**[ |:]+' "$plan" | sed -E 's/^[-*| ]*\**Current step\**[ |:]+//; s/[ |]+$//')
 num=$(printf '%s' "$current" | sed -nE 's/^([0-9]+).*/\1/p')
-detail=$(printf '%s' "$current" | sed -E 's/^[0-9]+,? *//' | tr -d '"\\')
+detail=$(printf '%s' "$current" | sed -E 's/^[0-9]+[.,:]? *//' | tr -d '"\\')
 
 names=(Read Branch Context Grill Code Recette Docs Commit PR Merge)
 # Claude Code greys the message: the reset after the current step leaves the next steps in full colour.
