@@ -33,5 +33,4 @@ With a tracker other than GitHub, the PR never carries `Closes #<n>`: it would t
 | Status | `gh project item-list` filtered on the issue |
 | Set the status | `gh project item-edit --id <item> --project-id <board> --field-id <status> --single-select-option-id <option>` |
 | Tick a criterion | `gh issue view <n> --json body -q .body`, `- [ ]` to `- [x]` on its line, then `gh issue edit <n> --body-file -` |
-| Rewrite the body | the Spec slot, `franck-dev-skills:create-issue` |
-| Attach a capture | no CLI upload: list it in the *To report* block, for drag and drop in the issue |
+| Rewrite the body | `franck-dev-skills:create-issue` |

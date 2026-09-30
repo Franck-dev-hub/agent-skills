@@ -20,7 +20,7 @@ The tracker holds the ticket: a GitHub or GitLab issue (the forge reference), No
 Pick it in this order: a tracker URL in the argument; else the `Tracker` value of the local profile, then of the Ticket workflow section; else the forge's issues.
 Read a tracker only through a tool this session has: `gh`, `glab`, the Notion or Redmine MCP.
 
-Every tracker change (status, body, tick, comment, link) is first shown as the exact change, then applied only on the user's yes.
+Every tracker change (status, tick, body) is first shown as the exact change, then applied only on the user's yes.
 Without write access, it goes in a **To report in the ticket** block for the user to apply.
 
 ## Values
@@ -84,7 +84,7 @@ An empty slot takes its default; a default of *none* skips the action and says s
 | Slot | Step | Default |
 |---|---|---|
 | Standards | 3 | none |
-| Spec | 4 | `franck-dev-skills:create-issue` for a GitHub or GitLab issue, `franck-dev-skills:dev-spec` otherwise |
+| Spec | 4 | `franck-dev-skills:dev-spec` |
 | Task skills | 5 | none |
 | Review | 6 | none |
 | Lint | 6 | the project's lint commands |
@@ -212,12 +212,13 @@ With no such tool, say so in one line and go on.
 Start the step 4 background agents (*Delegation*), then invoke `mattpocock-skills:grilling` and `mattpocock-skills:domain-modeling` on the ticket.
 Domain-modeling writes no file: its glossary goes in the plan's `Glossary` section, its ADRs in `Decisions`.
 
-Once the user confirms the shared understanding, merge the background reports into the plan, then run the Spec slot on the ticket.
-Then fill the plan: context, glossary, decisions, files touched, tasks, `Current step`.
+Once the user confirms the shared understanding, merge the background reports into the plan, then run the Spec slot on the ticket; its report goes in the plan's `Spec` section.
+Then fill the plan: context, glossary, decisions, spec, files touched, tasks, `Current step`.
 Tasks are a `- [ ]` list in execution order, never numbered: the order is the numbering. Each one is small enough to review alone.
 
 Done when the plan holds its tasks.
-Tracker: the ticket body rewritten from the spec.
+Tracker: nothing; the ticket leaves as it came in, only ticked and moved.
+Rewrite its body only when it breaks the tracker's standard outright (`create-issue`'s format for a GitHub or GitLab issue, the ticket format `dev-spec` reads for Notion); small gaps stay.
 
 ### 5. Write the code
 
@@ -285,7 +286,8 @@ The draft is for the user's own review.
 Once they approve it, give them the forge reference's ready command, then follow the pipeline (forge reference); a failure goes to `ci-investigate`.
 
 Done when the PR is ready for review.
-Tracker: status to In review, the PR link, every pre-merge criterion ticked with its step 6 evidence, the recette, the `before/` and `after/` pairs, uploaded when the tracker reference gives a way, else in the *To report* block.
+Tracker: status to In review, every pre-merge criterion ticked.
+Plan: the `PR` or `MR` row, the recette as the user ticked it, each criterion's evidence and the `before/` and `after/` pairs; never post them in the tracker.
 
 ### 10. After the merge
 
@@ -293,4 +295,5 @@ Run every post-merge acceptance criterion, and give the user the post-merge part
 Delete the plan's tasks section, which is of no use once merged, and set `Current step` to `10, done`.
 
 Done when every post-merge criterion is green, the user ticked the post-merge recette, and the plan holds no tasks.
-Tracker: every post-merge criterion ticked with its evidence, status to Done.
+Tracker: every post-merge criterion ticked, status to Done.
+Plan: the post-merge evidence.
