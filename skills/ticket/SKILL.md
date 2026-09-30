@@ -48,15 +48,17 @@ Find the plan folder before anything else, and never propose a new one while an 
 The ticket folder holds the ticket's only working files: the plan, and a visual ticket's captures.
 What the steps or their skills would write elsewhere goes in a section of the plan.
 
-The plan header is a list under the title: `- Ticket:`, `- Tracker:`, `- Base branch:`, `- Test command:`, `- Current step:`.
+The plan header is a list under the title: `- Ticket:`, `- Tracker:`, `- Base branch:`, `- Test command:`, `- App URL:`, `- Current step:`.
 The roadmap hook reads the `- Current step:` line: keep it in English and starting with the step number.
 Take each value from the local profile, the **Ticket workflow** section of `AGENTS.md`, then `CLAUDE.md`, the `Makefile` or the project's config files; ask only for what is still missing, once, and write it in the header.
+The app URL found in config (`.env`, compose, `/etc/hosts`) is often a default such as `http://localhost`: propose it, never use it unconfirmed.
 
 Write the plan in short sentences that go to the point, in the user's language.
 Name a file, function or command only when it saves a search: files touched, the evidence of a criterion, the reproduction.
 Keep the section names: the resume looks them up.
+Write every page as a full, bare URL on the app URL, followed by a space (`https://example.localhost/products`): a click in the IDE opens it.
 
-Project values, the same for every ticket, live in the Ticket workflow section or the local profile: tracker, base branch, test command, lint commands, and the status map.
+Project values, the same for every ticket, live in the Ticket workflow section or the local profile: tracker, base branch, test command, lint commands, app URL, and the status map.
 The status map gives the tracker's own value for Ready, In progress, In review and Done, plus the ids the tracker reference needs.
 One missing: ask once, then propose saving it, in the local profile when one matches, else in the Ticket workflow section.
 
