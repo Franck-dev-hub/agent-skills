@@ -30,6 +30,13 @@ Private agent marketplace hosting personal skills.
 | `debug-investigate`  | Find a bug's root cause before any fix; read only              |
 
 
+## Hooks
+
+| Event  | Effect                                                                                    |
+|--------|-------------------------------------------------------------------------------------------|
+| `Stop` | On a ticket branch with a plan, shows the step roadmap after each reply; silent otherwise |
+
+
 ## Installation with claude code
 
 ```bash
