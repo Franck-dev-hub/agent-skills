@@ -1,0 +1,15 @@
+{
+  "description": "Show the ticket step roadmap after each reply",
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/ticket-status.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
