@@ -126,7 +126,7 @@ While the session waits on the user, agents prepare the next work in the backgro
 
 Take the ticket id from the argument: an id, a URL, or the pasted text; with none, ask the user for one.
 
-- A plan matches the ticket at its bucket path, or elsewhere in the plan folder (`find <plan folder> -regextype posix-extended -name '<ticket-id>-*' ! -regex '.*/[0-9]+-[0-9]+'`, buckets excluded) to move to its bucket path, a branch matches it (`git branch -a --list '*/<ticket-id>-*'`), or a PR links to it (forge reference): this is a **resume**, go to *Resume*.
+- A plan matches the ticket at its bucket path, or elsewhere in the plan folder (`find <plan folder> -name '<ticket-id>-*' | grep -vE '/[0-9]+-[0-9]+$'`, buckets excluded) to move to its bucket path, a branch matches it (`git branch -a --list '*/<ticket-id>-*'`), or a PR links to it (forge reference): this is a **resume**, go to *Resume*.
   All are needed: the repo may delete a branch once its PR is merged.
 - Otherwise start at step 1.
 
