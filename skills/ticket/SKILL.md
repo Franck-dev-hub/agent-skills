@@ -89,7 +89,6 @@ An empty slot takes its default; a default of *none* skips the action and says s
 | Review | 6 | none |
 | Lint | 6 | the project's lint commands |
 | E2E | 6 | none |
-| Open PR | 9 | the forge reference's command |
 
 ## Delegation
 
@@ -116,7 +115,7 @@ While the session waits on the user, agents prepare the next work in the backgro
 | Step 4, during the grilling | `franck-dev-skills:ticket-review` | a visual ticket's `before/` captures |
 | Step 6, after the review | `franck-dev-skills:ticket-review` | the skill's recette and the `after/` captures, while lint and tests run |
 | Step 6, during the final recette | `Explore` | the passages of `docs/` and `README.md` the diff changes, for step 7 |
-| Step 9, after the PR is ready | `franck-dev-skills:ci-investigate` | the cause of a failed pipeline |
+| Step 9, after the PR is open | `franck-dev-skills:ci-investigate` | the cause of a failed pipeline |
 
 - A background agent only prepares: it never advances a step, and its report waits for the step that uses it.
 - Read only, except the captures, written in `before/` and `after/`.
@@ -145,7 +144,7 @@ When they disagree, the environment wins: fix the row.
 
 Give a summary of five lines at most: ticket, status, branch, commits, PR.
 Propose the next step, then wait for the user.
-A draft PR means step 9, the user's review pending.
+An open PR means step 9.
 A merged PR means step 10.
 Step 5 resumes at the first unticked task of the plan.
 Step 6 resumes at the first failing check, then the skill's recette, then the first box the user has not ticked.
@@ -277,15 +276,14 @@ Done when the working tree holds nothing the series planned, and the plan lists 
 
 ### 9. Open the PR
 
-Give the user the Open PR slot's command to copy; it pushes and opens a draft PR.
+Give the user the PR title to copy, never a command: they push and open the PR their own way.
 
-- The title follows the `franck-dev-skills:commit-message` format and sums up the whole branch: `[Type] #<ticket-id> Description`.
+- The title follows the `franck-dev-skills:commit-message` format and sums up the whole branch: `[Type] #<ticket-id> Description`; with a single commit, it is that commit's message.
 - When the user says the PR is open, check it with the forge reference's command.
 
-The draft is for the user's own review.
-Once they approve it, give them the forge reference's ready command, then follow the pipeline (forge reference); a failure goes to `ci-investigate`.
+Then follow the pipeline (forge reference); a failure goes to `ci-investigate`.
 
-Done when the PR is ready for review.
+Done when the PR is open.
 Tracker: status to In review, every pre-merge criterion ticked.
 Plan: the `PR` or `MR` row, the recette as the user ticked it, each criterion's evidence and the `before/` and `after/` pairs; never post them in the tracker.
 

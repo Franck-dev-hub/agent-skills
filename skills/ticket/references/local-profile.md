@@ -34,8 +34,4 @@ Run `<plugin>:load-standards`, and load the standards the ticket touches.
 | Review | `<plugin>:code-review` |
 | Lint | `make lint` |
 | E2E | `<plugin>:e2e-test` |
-
-## Open PR
-
-`glab mr create --fill --draft --yes -b <base>`
 ```
