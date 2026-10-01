@@ -12,15 +12,7 @@ The status map holds the board, the Status field id, and one option id per statu
 | Linked branches | `gh issue develop <n> --list` |
 | Linked PRs | `gh issue view <n> --json closedByPullRequestsReferences` |
 | PR state | `gh pr view <pr>` |
-| Mark the draft ready, which starts the CI | `gh pr ready <pr>` |
 | Pipeline state | `gh pr checks <pr>` |
-
-Open PR, pushing and opening a draft with no body:
-
-| Commits in `git log --oneline <base>..HEAD` | Command |
-|---|---|
-| 1 | `ghpr`: the commit message becomes the title |
-| 2 or more | `ghprt '<title>'` |
 
 A branch not linked to its GitHub issue needs `gh pr edit --body 'Closes #<n>'` once the PR is open.
 With a tracker other than GitHub, the PR never carries `Closes #<n>`: it would target an unrelated issue.

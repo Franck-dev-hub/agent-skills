@@ -9,10 +9,7 @@ Read this when `origin` is on GitLab.
 | Create the branch | `git fetch origin`, then `git switch -c <branch> origin/<base>` |
 | MRs from the branch | `glab mr list --all --source-branch <branch>` |
 | MR state | `glab mr view <branch>` |
-| Mark the draft ready | `glab mr update <mr> --ready` |
 | Pipeline state | `glab ci get -b <branch>` |
-
-Open MR: `glab mr create --fill --draft --yes -b <base>`, plus `-t '<title>'` from 2 commits.
 
 The MR never carries `Closes #<n>`: merging would close the issue without the user's yes.
 
