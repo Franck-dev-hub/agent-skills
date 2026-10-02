@@ -45,9 +45,9 @@ Find the plan folder before anything else, and never propose a new one while an 
    One found: use it without asking. Several: ask once which one.
 3. Else propose `docs/plans/`, or `.plans/` when `git ls-files docs/plans` lists tracked files; add it to `.git/info/exclude` on the user's yes, never to the team's `.gitignore`.
 
-The ticket folder holds the ticket's only working files: the plan, and a visual ticket's captures.
+The ticket folder holds the ticket's only working files: the plan, a visual ticket's captures, and the `metrics/` folder.
 What the steps or their skills would write elsewhere goes in a section of the plan.
-The metrics hook writes `metrics.json` there too, time and tokens per step: never read it, never edit it, never commit it.
+The metrics hook writes `metrics/summary.md` and `metrics/state.json`, time and tokens per step: never edit them, never commit them.
 
 The plan header is a table under the title; `-` marks a value still unknown, such as the PR before step 9; the `PR` key is `MR` on GitLab:
 
@@ -70,6 +70,7 @@ The app URL found in config (`.env`, compose, `/etc/hosts`) is often a default s
 
 Write the plan in short sentences that go to the point, in the user's language.
 In French, put a space before and after every colon ( : ) and semi-colon ( ; ).
+Align every table: pad each cell to the widest of its column, and the divider dashes to the column width plus two.
 Name a file, function or command only when it saves a search: files touched, the evidence of a criterion, the reproduction.
 Keep the section names: the resume looks them up.
 Write every page as a full, bare URL on the app URL, followed by a space (`https://example.localhost/products`): a click in the IDE opens it.
