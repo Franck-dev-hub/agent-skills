@@ -134,6 +134,7 @@ Take the ticket id from the argument: an id, a URL, or the pasted text; with non
 
 - A plan of this ticket's tracker matches the ticket at its bucket path, or elsewhere in the plan folder (`find <plan folder> -name '<ticket-id>-*' | grep -vE '/[0-9]+-[0-9]+$'`, buckets excluded, the `Tracker` row of its header checked) to move to its bucket path, a branch matches it (`git branch -a --list '*/<ticket-id>-*'`), or a PR links to it (forge reference): this is a **resume**, go to *Resume*.
   All are needed: the repo may delete a branch once its PR is merged.
+- A bare id matching plans of several trackers: take the plan whose `Branch` row is the current branch; with none, ask once which tracker.
 - Otherwise start at step 1.
 
 ## Resume
@@ -160,12 +161,12 @@ Step 6 resumes at the first failing check, then the skill's recette, then the fi
 
 Every step but step 3, and step 1 for a pasted ticket, is a **gate**: once its criterion is met, stop.
 Keep the plan's `Current step` row true at all times, once the plan exists: `<n>` when a step starts, `<n>, <progress>` while it runs (`5, task 2/4`, `8, commit 1/3`), `<n>, done` at its gate.
-Before stopping, report in five lines at most: what was done, its evidence, then the tracker changes to apply.
+Before stopping, report in five lines at most, commands and status lines excluded: what was done, its evidence, then the tracker changes to apply.
 Start the next step only on the user's explicit go; a go covers one step, never the rest of the list.
 
 Keep the context small: each token in it is read again at every call.
 
-- At the gate of step 2, 4 or 6, end the report with the three commands for a fresh session, one per line with the real branch and ticket id, for the user to run one at a time: `/clear`, `/rename <branch>`, `/ticket <ticket-id>`. The plan holds the state, and the next step starts clean.
+- At the gate of step 2, 4 or 6, give the three commands for a fresh session after the report and before the status lines, one per line with the real branch and ticket URL, for the user to run one at a time: `/clear`, `/rename <branch>`, `/franck-dev-skills:ticket <ticket URL>` (the plan's `Ticket` row; the id when it holds none). The plan holds the state, and the next step starts clean.
 - Advise it too after a pause of an hour or more: the cache has expired, the whole context would be paid again.
 - Never switch the model inside a session: the cache belongs to one model. Switch at the start of a fresh session.
 
