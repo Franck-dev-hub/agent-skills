@@ -20,7 +20,7 @@ The tracker holds the ticket: a GitHub or GitLab issue (the forge reference), No
 Pick it in this order: a tracker URL in the argument; else the `Tracker` value of the local profile, then of the Ticket workflow section; else the forge's issues.
 Read a tracker only through a tool this session has: `gh`, `glab`, the Notion or Redmine MCP.
 
-Every tracker change (status, tick, body) is first shown as the exact change, then applied only on the user's yes.
+Every tracker change (status, tick, body) is first shown as the exact change, then applied only on the user's yes; the one exception is the move to In progress at step 2, applied at once: running the skill is the user's go.
 Without write access, it goes in a **To report in the ticket** block for the user to apply.
 
 ## Values
@@ -199,7 +199,7 @@ An id or URL whose tracker this session cannot read: ask the user to paste the t
 - Create the branch from `<base>` with the forge reference's command.
 
 Done when the branch is checked out and the plan exists.
-Tracker: status to In progress.
+Tracker: status to In progress, applied without asking.
 
 ### 3. Read the context
 
