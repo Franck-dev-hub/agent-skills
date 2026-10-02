@@ -159,6 +159,12 @@ Keep the plan's `Current step` row true at all times, once the plan exists: `<n>
 Before stopping, report in five lines at most: what was done, its evidence, then the tracker changes to apply.
 Start the next step only on the user's explicit go; a go covers one step, never the rest of the list.
 
+Keep the context small: each token in it is read again at every call.
+
+- At the gate of step 2, 4 or 6, add one line advising a fresh session: the plan holds the state, and the next step starts clean.
+- Advise it too after a pause of an hour or more: the cache has expired, the whole context would be paid again.
+- Never switch the model inside a session: the cache belongs to one model. Switch at the start of a fresh session.
+
 End every message of the skill with two status lines, in the user's language, the step names being the headings below:
 
 ```
