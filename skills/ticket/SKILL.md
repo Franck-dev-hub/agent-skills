@@ -105,7 +105,7 @@ A skill that never asks the user runs in a sub-agent, so its output stays out of
 |---|---|
 | `franck-dev-skills:ticket-investigate` | the Spec slot when it is `dev-spec` |
 | `franck-dev-skills:ticket-review` | the Review and E2E slots, and the conformance check |
-| `franck-dev-skills:ticket-check` | a Lint skill, and a Task skill that asks nothing |
+| `franck-dev-skills:ticket-check` | a Lint skill, on its Haiku default; a Task skill that asks nothing, with the `sonnet` model override |
 
 The brief is self-contained: skill, plan path, ticket id, branch, `<base>..HEAD`, and what the step needs.
 Write the report's evidence and findings in the plan, and bring its questions to the user.
@@ -290,6 +290,8 @@ Done when the working tree holds nothing the series planned, and the plan lists 
 
 ### 9. Open the PR
 
+When `<base>` moved and conflicts with the branch, show the user the conflicts, merge `<base>` into the branch (a rebase only on the user's yes), resolve each hunk keeping both intents, never abort, then rerun the test command; the merge commit waits for the user's yes like any commit.
+
 Give the user the PR title to copy, never a command: they push and open the PR their own way.
 
 - The title follows the `franck-dev-skills:commit-message` format and sums up the whole branch: `[Type] #<ticket-id> Description`; with a single commit, it is that commit's message.
@@ -303,6 +305,7 @@ Plan: the `PR` or `MR` row, the recette as the user ticked it, each criterion's 
 
 ### 10. After the merge
 
+Switch to `<base>` and pull it; offer to delete the local branch, never without the user's yes.
 Run every post-merge acceptance criterion, and give the user the post-merge part of the recette.
 Delete the plan's tasks section, which is of no use once merged, and set `Current step` to `10, done`.
 
