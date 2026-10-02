@@ -24,17 +24,21 @@ def epoch(value):
     return datetime.fromisoformat(value.replace("Z", "+00:00")).timestamp()
 
 
-def find_plan(root, ticket_id):
+def find_plan(root, ticket_id, branch):
     pattern = re.compile(rf"/{ticket_id}-[^/]*/plan\.md$")
     depth = root.count(os.sep)
+    found = []
     for base, dirs, files in os.walk(root):
         dirs[:] = [d for d in dirs if d not in PRUNED]
         if base.count(os.sep) - depth >= 10:
             dirs[:] = []
         path = os.path.join(base, "plan.md")
         if "plan.md" in files and pattern.search(path):
-            return path
-    return None
+            found.append(path)
+    if len(found) > 1:
+        # Two trackers can share an id: the plan whose Branch row names this branch wins.
+        found = [p for p in found if f"`{branch}`" in open(p, encoding="utf-8").read()]
+    return found[0] if found else None
 
 
 def current_step(plan):
@@ -202,7 +206,7 @@ def main():
     ).stdout.strip()
     if not m or not root:
         return
-    plan = find_plan(root, m.group(1))
+    plan = find_plan(root, m.group(1), branch)
     step = plan and current_step(plan)
     if not step:
         return

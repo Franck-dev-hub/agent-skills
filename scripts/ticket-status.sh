@@ -11,8 +11,15 @@ id=$(printf '%s' "$branch" | sed -nE 's#^[^/]+/([0-9]+)-.*#\1#p')
 root=$(git -C "$cwd" rev-parse --show-toplevel 2>/dev/null) || exit 0
 
 # Matches the ticket folder, not a folder name: plans may live anywhere in the repo, bucketed or flat.
-plan=$(find "$root" -maxdepth 10 -type d \( -name node_modules -o -name vendor -o -name .git -o -name var \) -prune \
-    -o -type f -name plan.md -print 2>/dev/null | grep -m1 -E "/$id-[^/]*/plan\.md$")
+# Two trackers can share an id: the plan whose Branch row names this branch wins.
+plan="" first="" count=0
+while IFS= read -r f; do
+    count=$((count + 1))
+    [ -n "$first" ] || first=$f
+    grep -qF "\`$branch\`" "$f" && plan=$f
+done < <(find "$root" -maxdepth 10 -type d \( -name node_modules -o -name vendor -o -name .git -o -name var \) -prune \
+    -o -type f -name plan.md -print 2>/dev/null | grep -E "/$id-[^/]*/plan\.md$")
+[ "$count" -eq 1 ] && plan=$first
 [ -n "$plan" ] || exit 0
 
 # Accepts `- Current step: 5, task 2/4`, a bare line, bold or a table row.

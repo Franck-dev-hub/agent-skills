@@ -37,6 +37,10 @@ The buckets come from the id alone, so a folder never moves: one `<start>-<end>`
 | 1234 | `1000-1999/1200-1299/1234-<slug>/` |
 | none | `other/<date>-<slug>/` |
 
+Two trackers number their tickets alike: `667` can name two tickets.
+A repo with more than one tracker keeps one folder per tracker, `<plan folder>/<tracker>/<buckets>/<ticket-id>-<slug>/`, the tracker's name in lowercase (`notion`, `redmine`).
+A ticket whose tracker differs from the one of the plans already there opens its own tracker folder; offer to move the existing plans into theirs, and never move one without the user's yes.
+
 Find the plan folder before anything else, and never propose a new one while an existing one fits:
 
 1. The folder `AGENTS.md` or `CLAUDE.md` names.
@@ -128,7 +132,7 @@ While the session waits on the user, agents prepare the next work in the backgro
 
 Take the ticket id from the argument: an id, a URL, or the pasted text; with none, ask the user for one.
 
-- A plan matches the ticket at its bucket path, or elsewhere in the plan folder (`find <plan folder> -name '<ticket-id>-*' | grep -vE '/[0-9]+-[0-9]+$'`, buckets excluded) to move to its bucket path, a branch matches it (`git branch -a --list '*/<ticket-id>-*'`), or a PR links to it (forge reference): this is a **resume**, go to *Resume*.
+- A plan of this ticket's tracker matches the ticket at its bucket path, or elsewhere in the plan folder (`find <plan folder> -name '<ticket-id>-*' | grep -vE '/[0-9]+-[0-9]+$'`, buckets excluded, the `Tracker` row of its header checked) to move to its bucket path, a branch matches it (`git branch -a --list '*/<ticket-id>-*'`), or a PR links to it (forge reference): this is a **resume**, go to *Resume*.
   All are needed: the repo may delete a branch once its PR is merged.
 - Otherwise start at step 1.
 
@@ -143,7 +147,7 @@ When they disagree, the environment wins: fix the row.
 | Commits on the branch | `git log --oneline <base>..HEAD` |
 | PR and its state | forge reference |
 | Ticket status | tracker, when readable |
-| Plan | `<plan folder>/<buckets>/<ticket-id>-*/plan.md` |
+| Plan | `<plan folder>/[<tracker>/]<buckets>/<ticket-id>-*/plan.md` |
 
 Give a summary of five lines at most: ticket, status, branch, commits, PR.
 Propose the next step, then wait for the user.
