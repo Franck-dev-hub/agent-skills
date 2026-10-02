@@ -7,7 +7,18 @@ Interview the user relentlessly until you reach a shared understanding. Map this
 
 Work the tree in **rounds**. The **frontier** is every decision whose prerequisites are already settled: the questions you can ask _now_ without guessing at answers you haven't heard yet. Ask the whole frontier in one round: number each question and give your recommended answer. Then wait for the user's answers before the next round.
 
-Format a round like so:
+Open each round with a table that previews it, one short line per question:
+
+```markdown
+| #  | Question                 | Recommended               |
+|----|--------------------------|---------------------------|
+| Q1 | <question, a few words>  | <answer, a few words>     |
+| Q2 | <question, a few words>  | <answer, a few words>     |
+```
+
+Then ask the round with the question tool (`AskUserQuestion`), at most 4 questions per call, in table order: a short header, 2 to 4 options each, the recommended one first and marked recommended; the tool adds a free-text answer itself. A frontier of more than 4 questions takes several calls.
+
+Without a question tool, write each question under the table instead:
 
 ```
 ❓ **Q1** - **<question title>**: <question body, might be multiple paragraphs, including multiple choices>
