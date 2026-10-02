@@ -47,6 +47,7 @@ Find the plan folder before anything else, and never propose a new one while an 
 
 The ticket folder holds the ticket's only working files: the plan, and a visual ticket's captures.
 What the steps or their skills would write elsewhere goes in a section of the plan.
+The metrics hook writes `metrics.json` there too, time and tokens per step: never read it, never edit it, never commit it.
 
 The plan header is a table under the title; `-` marks a value still unknown, such as the PR before step 9; the `PR` key is `MR` on GitLab:
 
