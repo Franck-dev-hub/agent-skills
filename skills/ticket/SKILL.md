@@ -220,7 +220,7 @@ For a visual ticket, when a real-browser tool is available (Playwright MCP or CL
 
 With no such tool, say so in one line and go on.
 
-Start the step 4 background agents (*Delegation*), then invoke `mattpocock-skills:grilling` and `mattpocock-skills:domain-modeling` on the ticket.
+Start the step 4 background agents (*Delegation*), then invoke `franck-dev-skills:grilling` and `franck-dev-skills:domain-modeling` on the ticket.
 Domain-modeling writes no file: its glossary goes in the plan's `Glossary` section, its ADRs in `Decisions`.
 
 Once the user confirms the shared understanding, merge the background reports into the plan, then run the Spec slot on the ticket; its report goes in the plan's `Spec` section.
