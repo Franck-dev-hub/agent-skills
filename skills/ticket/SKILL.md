@@ -68,6 +68,7 @@ Take each value from the local profile, the **Ticket workflow** section of `AGEN
 The app URL found in config (`.env`, compose, `/etc/hosts`) is often a default such as `http://localhost`: propose it, never use it unconfirmed.
 
 Write the plan in short sentences that go to the point, in the user's language.
+In French, put a space before and after every colon ( : ) and semi-colon ( ; ).
 Name a file, function or command only when it saves a search: files touched, the evidence of a criterion, the reproduction.
 Keep the section names: the resume looks them up.
 Write every page as a full, bare URL on the app URL, followed by a space (`https://example.localhost/products`): a click in the IDE opens it.
