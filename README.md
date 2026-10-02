@@ -9,14 +9,16 @@ Private agent marketplace hosting personal skills.
 
 ## Skills
 
-| Skill            | Purpose                                                              |
-|------------------|----------------------------------------------------------------------|
-| `commit-message` | Suggest a `[Type] Description` commit message from the staged diff   |
-| `create-issue`   | Create single-layer tracked issues on GitHub or GitLab               |
-| `dev-spec`       | Turn a bug or feature request into a technical spec                  |
-| `obsidian-note`  | Write or review Obsidian notes following vault conventions           |
-| `skill-reviewer` | Review a skill against the Agent Skills spec and authoring practices |
-| `ticket`         | Drive a ticket from branch to merged PR or MR, or resume it          |
+| Skill             | Purpose                                                                                       |
+|-------------------|-----------------------------------------------------------------------------------------------|
+| `commit-message`  | Suggest a `[Type] Description` commit message from the staged diff                            |
+| `create-issue`    | Create single-layer tracked issues on GitHub or GitLab                                        |
+| `dev-spec`        | Turn a bug or feature request into a technical spec                                           |
+| `domain-modeling` | Build the domain glossary and ADRs; copied from mattpocock-skills                             |
+| `grilling`        | Interview the user until a plan reaches a shared understanding; copied from mattpocock-skills |
+| `obsidian-note`   | Write or review Obsidian notes following vault conventions                                    |
+| `skill-reviewer`  | Review a skill against the Agent Skills spec and authoring practices                          |
+| `ticket`          | Drive a ticket from branch to merged PR or MR, or resume it                                   |
 
 
 ## Agents
