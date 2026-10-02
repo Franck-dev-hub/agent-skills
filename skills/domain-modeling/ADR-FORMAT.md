@@ -3,6 +3,7 @@
 ADRs live in `docs/adr/` and use sequential numbering: `0001-slug.md`, `0002-slug.md`, etc.
 
 Create the `docs/adr/` directory lazily: only when the first ADR is needed.
+In a plan, an ADR is a `### {title}` entry under its `Decisions` section: no file, no number.
 
 ## Template
 
