@@ -168,9 +168,9 @@ Start the next step only on the user's explicit go; a go covers one step, never 
 
 Keep the context small: each token in it is read again at every call.
 
-- At the gate of step 4 or 6, give the three commands for a fresh session after the report and before the status lines, one per line with the real branch and ticket URL, for the user to run one at a time: `/clear`, `/rename <branch>`, `/franck-dev-skills:ticket <ticket URL>` (the plan's `Ticket` row; the id when it holds none). The plan holds the state, and the next step starts clean.
+- At the gate of step 4, 5 or 6, once the step is done and nothing waits on the user, give one command to run right away, with the real ticket URL, branch, plan path and `Current step`: `/compact Keep ticket <ticket URL>, branch <branch>, plan <plan path>, Current step <n>; the plan holds the rest.` The summary replaces the conversation: the next step starts light, in the same session. Never give it while the user still has work in the step, such as the final recette of step 6.
 - Advise it too after a pause of an hour or more: the cache has expired, the whole context would be paid again.
-- Never switch the model inside a session: the cache belongs to one model. Switch at the start of a fresh session.
+- Never switch the model inside a step: the cache belongs to one model. Switch right after a gate's `/compact`, when the context is small.
 
 End every message of the skill with two status lines, in the user's language, the step names being the headings below:
 
