@@ -160,7 +160,7 @@ Step 6 resumes at the first failing check, then the skill's recette, then the fi
 ## Steps
 
 Every step but step 3, and step 1 for a pasted ticket, is a **gate**: once its criterion is met, stop.
-Keep the plan's `Current step` row true at all times, once the plan exists: `<n>` when a step starts, `<n>, <progress>` while it runs (`5, task 2/4`, `8, commit 1/3`), `<n>, done` at its gate.
+Keep the plan's `Current step` row true at all times, once the plan exists: `<n>` when a step starts, `<n>, <progress>` while it runs (`5, task 2/4`, `8, commit 1/3`), `<n>, done` at its gate, once its tracker changes are applied; while one waits for the user's yes, `<n>, tracker pending`.
 Before stopping, report in five lines at most, commands and status lines excluded: what was done, its evidence, then the tracker changes to apply.
 Start the next step only on the user's explicit go; a go covers one step, never the rest of the list.
 
