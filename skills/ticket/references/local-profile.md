@@ -27,6 +27,13 @@ Run `<plugin>:load-standards`, and load the standards the ticket touches.
 |---|---|
 | New domain module | `<plugin>:scaffold-module` |
 
+## Grill, Domain
+
+| Slot | Skill |
+|---|---|
+| Grill | `superpowers:brainstorming` |
+| Domain | none |
+
 ## Review, Lint, E2E
 
 | Slot | Skill or commands |

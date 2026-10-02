@@ -92,11 +92,16 @@ An empty slot takes its default; a default of *none* skips the action and says s
 | Slot | Step | Default |
 |---|---|---|
 | Standards | 3 | none |
+| Grill | 4 | `franck-dev-skills:grilling` |
+| Domain | 4 | `franck-dev-skills:domain-modeling` |
 | Spec | 4 | `franck-dev-skills:dev-spec` |
 | Task skills | 5 | none |
 | Review | 6 | none |
 | Lint | 6 | the project's lint commands |
 | E2E | 6 | none |
+
+With no profile matching `origin`, before step 1, propose each slot once, in as few questions as possible: the installed skills that fit it, the `franck-dev-skills:` ones first and marked recommended. Save the answers as a new profile on the user's yes.
+A slot skill from another plugin keeps to its step: what it would write elsewhere (a design doc, a plan) goes in the plan section its slot fills, and it never chains to another skill; the ticket goes on with its own steps.
 
 ## Delegation
 
@@ -226,8 +231,8 @@ For a visual ticket, when a real-browser tool is available (Playwright MCP or CL
 
 With no such tool, say so in one line and go on.
 
-Start the step 4 background agents (*Delegation*), then invoke `franck-dev-skills:grilling` and `franck-dev-skills:domain-modeling` on the ticket.
-Give domain-modeling the plan path: it writes no file in the repo, its glossary goes in the plan's `Glossary` section, its ADRs in `Decisions`.
+Start the step 4 background agents (*Delegation*), then run the Grill slot, then the Domain slot, on the ticket.
+Give the Domain slot the plan path: it writes no file in the repo, its glossary goes in the plan's `Glossary` section, its ADRs in `Decisions`.
 
 Once the user confirms the shared understanding, merge the background reports into the plan, then run the Spec slot on the ticket; its report goes in the plan's `Spec` section.
 Then fill the plan: context, glossary, decisions, spec, files touched, tasks, `Current step`.
