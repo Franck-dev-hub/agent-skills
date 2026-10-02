@@ -70,6 +70,7 @@ The plan header is a table under the title; `-` marks a value still unknown, suc
 
 The roadmap hook reads the `Current step` row: keep its key in English and its value starting with the step number.
 Take each value from the local profile, the **Ticket workflow** section of `AGENTS.md`, then `CLAUDE.md`, the `Makefile` or the project's config files; ask only for what is still missing, once, and write it in the header.
+Another ticket's plan is no source: its value is at most proposed, and used once the user confirms.
 The app URL found in config (`.env`, compose, `/etc/hosts`) is often a default such as `http://localhost`: propose it, never use it unconfirmed.
 
 Write the plan in short sentences that go to the point, in the user's language.
