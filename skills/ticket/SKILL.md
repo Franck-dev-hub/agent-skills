@@ -165,7 +165,7 @@ Start the next step only on the user's explicit go; a go covers one step, never 
 
 Keep the context small: each token in it is read again at every call.
 
-- At the gate of step 2, 4 or 6, add one line advising a fresh session: the plan holds the state, and the next step starts clean.
+- At the gate of step 2, 4 or 6, end the report with the three commands for a fresh session, one per line with the real branch and ticket id, for the user to run one at a time: `/clear`, `/rename <branch>`, `/ticket <ticket-id>`. The plan holds the state, and the next step starts clean.
 - Advise it too after a pause of an hour or more: the cache has expired, the whole context would be paid again.
 - Never switch the model inside a session: the cache belongs to one model. Switch at the start of a fresh session.
 
@@ -196,7 +196,6 @@ An id or URL whose tracker this session cannot read: ask the user to paste the t
 - Name: `<type>/<ticket-id>-<slug>`, type from the ticket's nature or title prefix in lowercase (`[Fix]` gives `fix`), slug from its title in short kebab case.
 - Create the ticket folder at its bucket path and its plan with the header; a visual ticket also gets `before/` and `after/`.
 - Create the branch from `<base>` with the forge reference's command.
-- Tell the user the session name to set: `/rename <branch>`.
 
 Done when the branch is checked out and the plan exists.
 Tracker: status to In progress.
