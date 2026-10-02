@@ -215,6 +215,7 @@ Not a gate: once the standards are loaded, list them in one line and go straight
 
 For a bug, get the reproduction first: URL, account and data, steps, observed versus expected result.
 Reproduce on the local app (`App URL`) without asking which environment; ask for it only when the ticket names one, such as a bug on preprod that develop does not show, or when the bug does not reproduce locally.
+The reproduction stops at the observed fault: its cause goes to `debug-investigate` (*Delegation*), never to this session.
 Take what the ticket gives, ask the user for the rest, and write it in the plan's `Reproduction` section.
 
 For a visual ticket, when a real-browser tool is available (Playwright MCP or CLI, or any browser capture tool), capture the pages it touches into `before/`, before any code change, through the background agent:
