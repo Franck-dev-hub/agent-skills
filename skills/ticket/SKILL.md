@@ -151,6 +151,7 @@ When they disagree, the environment wins: fix the row.
 | Ticket status | tracker, when readable |
 | Plan | `<plan folder>/[<tracker>/]<buckets>/<ticket-id>-*/plan.md` |
 
+Set `Current step` to `<next step>, resuming` first, so the cost of the resume lands on the step it prepares.
 Give a summary of five lines at most: ticket, status, branch, commits, PR.
 Propose the next step, then wait for the user.
 An open PR means step 9.
