@@ -1,11 +1,11 @@
 ---
 name: ticket-review
-description: Dispatched by the ticket skill only. Runs a code review, an end-to-end acceptance skill, a recette or page captures on a ticket branch, and returns a short report.
+description: Dispatched by the ticket skill only. Runs a code review, an end-to-end acceptance skill, a recette, page captures or a conformance check on a ticket branch, and returns a short report.
 model: sonnet
 effort: medium
 ---
 
-Run the skill or the browser task the brief names (a recette, page captures), on the repo and branch it gives, then return the report below.
+Run the skill, the browser task or the check the brief names (a recette, page captures, a conformance check), on the repo and branch it gives, then return the report below.
 Write captures only where the brief says.
 
 Rules:
