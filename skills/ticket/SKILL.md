@@ -235,6 +235,7 @@ Start the step 4 background agents (*Delegation*), then run the Grill slot, then
 Give the Domain slot the plan path: it writes no file in the repo, its glossary goes in the plan's `Glossary` section, its ADRs in `Decisions`.
 
 Once the user confirms the shared understanding, merge the background reports into the plan, then run the Spec slot on the ticket; its report goes in the plan's `Spec` section.
+Whatever skill fills the slot, the `Spec` lists the edge cases, or `none` with the reason.
 Then fill the plan: context, glossary, decisions, spec, files touched, tasks, `Current step`.
 Tasks are a `- [ ]` list in execution order, never numbered: the order is the numbering. Each one is small enough to review alone.
 
@@ -247,6 +248,7 @@ Rewrite its body only when it breaks the tracker's standard outright (`create-is
 Run every plan task in order, without stopping between them.
 A task that matches the Task skills slot runs that skill instead of writing the code by hand.
 After each task, tick it in the plan and set `Current step` to `5, task <i>/<total>`.
+Each edge case of the `Spec` gets its test.
 
 Stop before the end only when the user must decide: a task contradicts a plan decision, a test fails for a reason the plan did not foresee, or a skill asks a question.
 
@@ -264,7 +266,7 @@ The skill runs and fixes everything first, so the user runs a single final recet
 5. A failing check or box: fix it, as a new task in the plan, then rerun what it touches.
 6. Once everything passes, hand the recette to the user for the final run, with the `before/` and `after/` pairs; meanwhile, the docs scan for step 7 runs in the background.
 
-The recette holds one block per acceptance criterion, in the ticket's order, then the non-regressions and edge cases; for a bug, the plan's `Reproduction` comes first, now expecting the fixed result:
+The recette holds one block per acceptance criterion, in the ticket's order, then the non-regressions and the `Spec`'s edge cases; for a bug, the plan's `Reproduction` comes first, now expecting the fixed result:
 
 ```markdown
 ### <criterion, as worded in the ticket>
