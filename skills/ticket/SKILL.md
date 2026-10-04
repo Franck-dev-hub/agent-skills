@@ -110,7 +110,7 @@ A skill that never asks the user runs in a sub-agent, so its output stays out of
 | Agent | Runs |
 |---|---|
 | `franck-dev-skills:ticket-investigate` | the Spec slot when it is `dev-spec` |
-| `franck-dev-skills:ticket-review` | the Review and E2E slots, and the conformance check |
+| `franck-dev-skills:ticket-review` | the Review and E2E slots, the conformance check, and the comment pass |
 | `franck-dev-skills:ticket-check` | a Lint skill, on its Haiku default; a Task skill that asks nothing, with the `sonnet` model override |
 
 The brief is self-contained: skill, plan path, ticket id, branch, `<base>..HEAD`, and what the step needs.
@@ -162,7 +162,7 @@ Propose the next step, then wait for the user.
 An open PR means step 9.
 A merged PR means step 10.
 Step 5 resumes at the first unticked task of the plan.
-Step 6 resumes at the first failing check, then the skill's recette, then the first box the user has not ticked.
+Step 6 resumes at the first failing check, then the comment pass when `Evidence` lacks it, then the skill's recette, then the first box the user has not ticked.
 
 ## Steps
 
@@ -261,10 +261,14 @@ The skill runs and fixes everything first, so the user runs a single final recet
 
 1. The Review slot: it may fix code, so it runs alone.
 2. Conformance: `ticket-review` compares `<base>..HEAD` with each acceptance criterion and the plan's `Spec` and `Decisions`; the brief carries the criteria's text. It reports each criterion as met, partly or not met, with the file and line, then lists the code the ticket did not ask for. A criterion not met or partly met becomes a new task in the plan, run as in step 5, then this check reruns.
-3. Write the plan's `Recette` section.
-4. Then in parallel: the Lint slot and the full test command in the background, and `ticket-review` running the recette box by box, with the E2E slot or a real-browser tool, and replaying every `Captures` entry into `after/` under the same file name.
-5. A failing check or box: fix it, as a new task in the plan, then rerun what it touches.
-6. Once everything passes, hand the recette to the user for the final run, with the `before/` and `after/` pairs; meanwhile, the docs scan for step 7 runs in the background.
+3. Comment pass, in the background: a fresh context, since the comment rule fades over a long step 5. `ticket-review` reads every comment the branch adds or changes, in every file type; it cuts those that restate the code, shortens the rest to a one-line why, and keeps a why in one file only.
+   The brief carries the comment rule of the project's `AGENTS.md` or `CLAUDE.md`, else the user's `CLAUDE.md`, and the diff: `git diff --merge-base <base>` plus `git ls-files --others --exclude-standard`.
+   It never touches a comment the branch did not write, nor one that carries function: linter or analyzer directive, docblock type, annotation, license, shebang.
+   Its changes go in `Evidence`, one line per file.
+4. Meanwhile, write the plan's `Recette` section.
+5. Once both are done, in parallel: the Lint slot and the full test command in the background, and `ticket-review` running the recette box by box, with the E2E slot or a real-browser tool, and replaying every `Captures` entry into `after/` under the same file name.
+6. A failing check or box: fix it, as a new task in the plan, then rerun what it touches, the comment pass included.
+7. Once everything passes, hand the recette to the user for the final run, with the `before/` and `after/` pairs; meanwhile, the docs scan for step 7 runs in the background.
 
 The recette holds one block per acceptance criterion, in the ticket's order, then the non-regressions and the `Spec`'s edge cases; for a bug, the plan's `Reproduction` comes first, now expecting the fixed result:
 
@@ -283,7 +287,7 @@ The recette holds one block per acceptance criterion, in the ticket's order, the
 Skip a skill that is not installed or does not fit the stack, and say so.
 Keep each check's evidence in the plan: command, output line.
 
-Done when every criterion is met, every check is green, the skill's recette passes, and the user ticked every pre-merge box.
+Done when every criterion is met, the comment pass is done, every check is green, the skill's recette passes, and the user ticked every pre-merge box.
 
 ### 7. Update the docs
 

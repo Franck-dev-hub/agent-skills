@@ -26,7 +26,7 @@ Private agent marketplace hosting personal skills.
 | Agent                | Purpose                                                        |
 |----------------------|----------------------------------------------------------------|
 | `ticket-check`       | Run a lint or maintenance skill for `ticket`, return a report  |
-| `ticket-review`      | Run a code review or e2e skill for `ticket`, return a report   |
+| `ticket-review`      | Run review, e2e or comment pass for `ticket`, return a report  |
 | `ticket-investigate` | Run `dev-spec` for `ticket`, read only                         |
 | `ci-investigate`     | Find why a CI pipeline failed: code, flaky or infra; read only |
 | `debug-investigate`  | Find a bug's root cause before any fix; read only              |
