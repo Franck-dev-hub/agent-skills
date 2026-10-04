@@ -200,7 +200,7 @@ def main():
         ["git", "-C", cwd, "--no-optional-locks", "branch", "--show-current"],
         capture_output=True, text=True,
     ).stdout.strip()
-    m = re.match(r"^[^/]+/(\d+)-", branch)
+    m = re.match(r"^[^/]+/((?:local-)?\d+)-", branch)
     root = subprocess.run(
         ["git", "-C", cwd, "rev-parse", "--show-toplevel"], capture_output=True, text=True
     ).stdout.strip()
