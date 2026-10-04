@@ -35,11 +35,15 @@ The buckets come from the id alone, so a folder never moves: one `<start>-<end>`
 | 42 | `0-99/42-<slug>/` |
 | 675 | `600-699/675-<slug>/` |
 | 1234 | `1000-1999/1200-1299/1234-<slug>/` |
-| none | `other/<date>-<slug>/` |
+| none, local 7 | `local/0-99/local-7-<slug>/` |
 
 Two trackers number their tickets alike: `667` can name two tickets.
 A repo with more than one tracker keeps one folder per tracker, `<plan folder>/<tracker>/<buckets>/<ticket-id>-<slug>/`, the tracker's name in lowercase (`notion`, `redmine`).
 A ticket whose tracker differs from the one of the plans already there opens its own tracker folder; offer to move the existing plans into theirs, and never move one without the user's yes.
+
+A ticket with no id gets a local one, `local-<n>`: `<n>` is the highest under `<plan folder>/local/` plus one, from 1, and gives the buckets.
+Its tracker is `local`, its folder always under `<plan folder>/local/`, whatever the other trackers: a tracker's `#7` and `local-7` never share a branch nor a folder.
+A local id never goes in a commit or the PR title: a `#7` would link to an unrelated issue.
 
 Find the plan folder before anything else, and never propose a new one while an existing one fits:
 
@@ -299,7 +303,7 @@ Done when each of them is updated, or the summary states "no doc impact".
 
 Inside this step, each commit also waits for the user's explicit approval of both its code and its message.
 
-Run `franck-dev-skills:commit-message`.
+Run `franck-dev-skills:commit-message`; for a local id, tell it the branch carries no ticket id.
 Its commit series writes every commit and its why into the plan first, then commits one at a time on approval.
 
 Done when the working tree holds nothing the series planned, and the plan lists every commit with its why.
@@ -310,7 +314,7 @@ When `<base>` moved and conflicts with the branch, show the user the conflicts, 
 
 Give the user the PR title to copy, never a command: they push and open the PR their own way.
 
-- The title follows the `franck-dev-skills:commit-message` format and sums up the whole branch: `[Type] #<ticket-id> Description`; with a single commit, it is that commit's message.
+- The title follows the `franck-dev-skills:commit-message` format and sums up the whole branch: `[Type] #<ticket-id> Description`, without `#<ticket-id>` for a local id; with a single commit, it is that commit's message.
 - When the user says the PR is open, check it with the forge reference's command.
 
 Then follow the pipeline (forge reference); a failure goes to `ci-investigate`.
