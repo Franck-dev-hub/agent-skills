@@ -117,7 +117,8 @@ A skill that never asks the user runs in a sub-agent, so its output stays out of
 | `franck-dev-skills:ticket-review` | the Review and E2E slots, the conformance check, and the comment pass |
 | `franck-dev-skills:ticket-check` | a Lint skill, on its Haiku default; a Task skill that asks nothing, with the `sonnet` model override |
 
-The brief is self-contained: skill, plan path, ticket id, branch, `<base>..HEAD`, and what the step needs.
+The brief is self-contained: skill, plan path, ticket id, branch, the diff, and what the step needs.
+The diff is `git diff --merge-base <base>` plus `git ls-files --others --exclude-standard`: nothing is committed before step 8, so `<base>..HEAD` would be empty.
 Write the report's evidence and findings in the plan, and bring its questions to the user.
 Every other skill runs in the session: it talks to the user.
 Plain commands, such as lint commands, run in the background with Bash, not in an agent.
@@ -264,9 +265,9 @@ Report the files touched and what they now do, in short sentences.
 The skill runs and fixes everything first, so the user runs a single final recette:
 
 1. The Review slot: it may fix code, so it runs alone.
-2. Conformance: `ticket-review` compares `<base>..HEAD` with each acceptance criterion and the plan's `Spec` and `Decisions`; the brief carries the criteria's text. It reports each criterion as met, partly or not met, with the file and line, then lists the code the ticket did not ask for. A criterion not met or partly met becomes a new task in the plan, run as in step 5, then this check reruns.
+2. Conformance: `ticket-review` compares the diff with each acceptance criterion and the plan's `Spec` and `Decisions`; the brief carries the criteria's text. It reports each criterion as met, partly or not met, with the file and line, then lists the code the ticket did not ask for. A criterion not met or partly met becomes a new task in the plan, run as in step 5, then this check reruns.
 3. Comment pass, in the background: a fresh context, since the comment rule fades over a long step 5. `ticket-review` reads every comment the branch adds or changes, in every file type; it cuts those that restate the code, shortens the rest to a one-line why, and keeps a why in one file only.
-   The brief carries the comment rule of the project's `AGENTS.md` or `CLAUDE.md`, else the user's `CLAUDE.md`, and the diff: `git diff --merge-base <base>` plus `git ls-files --others --exclude-standard`.
+   The brief carries the comment rule of the project's `AGENTS.md` or `CLAUDE.md`, else the user's `CLAUDE.md`.
    It never touches a comment the branch did not write, nor one that carries function: linter or analyzer directive, docblock type, annotation, license, shebang.
    Its changes go in `Evidence`, one line per file.
 4. Meanwhile, write the plan's `Recette` section.
