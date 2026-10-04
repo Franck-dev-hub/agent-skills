@@ -38,7 +38,8 @@ def find_plan(root, ticket_id, branch):
     if len(found) > 1:
         # Two trackers can share an id: the plan whose Branch row names this branch wins.
         found = [p for p in found if f"`{branch}`" in open(p, encoding="utf-8").read()]
-    return found[0] if found else None
+    # Several plans name the branch: counting on a guess would charge the wrong ticket.
+    return found[0] if len(found) == 1 else None
 
 
 def current_step(plan):

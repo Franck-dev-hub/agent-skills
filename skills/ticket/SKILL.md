@@ -144,7 +144,7 @@ Take the ticket id from the argument: an id, a URL, or the pasted text; with non
 
 - A plan of this ticket's tracker matches the ticket at its bucket path, or elsewhere in the plan folder (`find <plan folder> -name '<ticket-id>-*' | grep -vE '/[0-9]+-[0-9]+$'`, buckets excluded, the `Tracker` row of its header checked) to move to its bucket path, a branch matches it (`git branch -a --list '*/<ticket-id>-*'`), or a PR links to it (forge reference): this is a **resume**, go to *Resume*.
   All are needed: the repo may delete a branch once its PR is merged.
-- A bare id matching plans of several trackers: take the plan whose `Branch` row is the current branch; with none, ask once which tracker.
+- A bare id matching plans of several trackers: take the plan whose `Branch` row is the current branch; with none or several, ask once which plan.
 - Otherwise start at step 1.
 
 ## Resume

@@ -12,14 +12,19 @@ root=$(git -C "$cwd" rev-parse --show-toplevel 2>/dev/null) || exit 0
 
 # Matches the ticket folder, not a folder name: plans may live anywhere in the repo, bucketed or flat.
 # Two trackers can share an id: the plan whose Branch row names this branch wins.
-plan="" first="" count=0
+plan="" first="" count=0 named=0
 while IFS= read -r f; do
     count=$((count + 1))
     [ -n "$first" ] || first=$f
-    grep -qF "\`$branch\`" "$f" && plan=$f
+    grep -qF "\`$branch\`" "$f" && plan=$f && named=$((named + 1))
 done < <(find "$root" -maxdepth 10 -type d \( -name node_modules -o -name vendor -o -name .git -o -name var \) -prune \
     -o -type f -name plan.md -print 2>/dev/null | grep -E "/$id-[^/]*/plan\.md$")
 [ "$count" -eq 1 ] && plan=$first
+# A hook cannot ask: guessing would show one plan's step while the skill works on another.
+if [ "$named" -gt 1 ]; then
+    printf '{"systemMessage": "%s"}\n' "$named plans name $branch: run /ticket to pick one"
+    exit 0
+fi
 [ -n "$plan" ] || exit 0
 
 # Accepts `- Current step: 5, task 2/4`, a bare line, bold or a table row.
