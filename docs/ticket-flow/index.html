@@ -1,0 +1,669 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Flux du skill ticket</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="styles.css">
+<script src="main.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="label">franck-dev-skills 3.1.2 - skills/ticket</span>
+    <h1>Flux du skill ticket</h1>
+    <p class="lede">Ce que fait <code>/ticket &lt;arg&gt;</code>, du lancement au merge.</p>
+    <div class="legend">
+      <span><span class="pill gate">Gate</span> s'arrête et attend</span>
+      <span><span class="chip bg">agent</span> arrière-plan</span>
+      <span><span class="chip">agent</span> délégué</span>
+      <span><span class="who">Utilisateur</span> action humaine</span>
+      <span><span class="tag">Code</span> nom affiché dans le terminal</span>
+    </div>
+  </header>
+
+  <div class="layout">
+    <div>
+      <div class="flow" id="flow">
+        <article id="launch">
+          <button class="node" data-id="launch" aria-pressed="false">
+            <span class="num"><b>▶</b></span>
+            <span class="t">/ticket &lt;arg&gt;</span>
+            <span class="s">Commande manuelle</span>
+          </button>
+          <template>
+            <span class="label">Entrée</span>
+            <h2>/ticket &lt;arg&gt;</h2>
+            <p class="sub">Commande manuelle</p>
+            <h3>Exécute</h3>
+            <ul>
+              <li>Lancé uniquement par <code>/ticket</code>, jamais automatiquement.</li>
+              <li>Argument : id, URL ou texte du ticket.</li>
+              <li>Sans argument : demande un id.</li>
+            </ul>
+            <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/skills/ticket/SKILL.md">SKILL.md</a></p>
+          </template>
+        </article>
+        <div class="conn"><span class="pill plain">lit le profil puis les références</span></div>
+        <div class="group">
+          <span class="label">Bootstrap, avant tout step</span>
+          <div class="grid3">
+            <article id="profile">
+              <button class="node" data-id="profile" aria-pressed="false">
+                <span class="t">Profil local</span>
+                <span class="s">Valeurs et slots du projet</span>
+              </button>
+              <template>
+                <span class="label">Bootstrap</span>
+                <h2>Profil local</h2>
+                <p class="sub">Valeurs et slots du projet</p>
+                <h3>Décisions</h3>
+                <table class="dec">
+                  <tr><td>un <code>Remote:</code> correspond à <code>origin</code></td><td>le premier profil trouvé fournit valeurs et slots</td></tr>
+                  <tr><td>une ligne <code>per repo</code> correspond</td><td>elle remplace la valeur du profil</td></tr>
+                  <tr><td>aucun profil</td><td>slots proposés avant le step 1</td></tr>
+                </table>
+                <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/skills/ticket/references/local-profile.md">local-profile.md</a></p>
+              </template>
+            </article>
+            <article id="forge">
+              <button class="node" data-id="forge" aria-pressed="false">
+                <span class="t">Forge</span>
+                <span class="s">GitHub ou GitLab</span>
+              </button>
+              <template>
+                <span class="label">Bootstrap</span>
+                <h2>Forge</h2>
+                <p class="sub">GitHub ou GitLab</p>
+                <h3>Exécute</h3>
+                <ul>
+                  <li>Fournit les commandes de branche, de PR ou MR et de reprise.</li>
+                </ul>
+                <h3>Décisions</h3>
+                <table class="dec">
+                  <tr><td>GitHub</td><td>lit <code>references/github.md</code></td></tr>
+                  <tr><td>GitLab</td><td>lit <code>references/gitlab.md</code></td></tr>
+                </table>
+                <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/skills/ticket/SKILL.md#forge-and-tracker">SKILL.md › Forge and tracker</a></p>
+              </template>
+            </article>
+            <article id="tracker">
+              <button class="node" data-id="tracker" aria-pressed="false">
+                <span class="t">Tracker</span>
+                <span class="s">Source du ticket</span>
+              </button>
+              <template>
+                <span class="label">Bootstrap</span>
+                <h2>Tracker</h2>
+                <p class="sub">Source du ticket</p>
+                <h3>Exécute</h3>
+                <ul>
+                  <li>Chaque changement est affiché, puis appliqué sur accord, sauf In progress au step 2.</li>
+                </ul>
+                <h3>Décisions</h3>
+                <table class="dec">
+                  <tr><td>URL de tracker en argument</td><td>ce tracker</td></tr>
+                  <tr><td>sinon <code>Tracker</code> du profil ou de la section Ticket workflow</td><td>ce tracker</td></tr>
+                  <tr><td>sinon</td><td>issues de la forge</td></tr>
+                  <tr><td>texte collé sans id</td><td>tracker <code>local</code>, id <code>local-&lt;n&gt;</code></td></tr>
+                  <tr><td>tracker illisible</td><td>changements listés dans « To report in the ticket »</td></tr>
+                </table>
+                <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/skills/ticket/SKILL.md#forge-and-tracker">SKILL.md › Forge and tracker</a></p>
+              </template>
+            </article>
+            <article id="plans">
+              <button class="node" data-id="plans" aria-pressed="false">
+                <span class="t">Dossier des plans</span>
+                <span class="s">Un dossier par ticket</span>
+              </button>
+              <template>
+                <span class="label">Bootstrap</span>
+                <h2>Dossier des plans</h2>
+                <p class="sub">Un dossier par ticket</p>
+                <h3>Exécute</h3>
+                <ul>
+                  <li>Dossier du ticket : <code>&lt;buckets&gt;/&lt;id&gt;-&lt;slug&gt;/</code>, avec <code>plan.md</code>.</li>
+                  <li>Buckets selon l'id : <code>1234</code> → <code>1000-1999/1200-1299/</code>.</li>
+                  <li>Id local : <code>local/0-99/local-7-&lt;slug&gt;/</code>.</li>
+                  <li>Plusieurs trackers : un sous-dossier par tracker.</li>
+                </ul>
+                <h3>Décisions</h3>
+                <table class="dec">
+                  <tr><td><code>AGENTS.md</code> ou <code>CLAUDE.md</code> en nomme un</td><td>ce dossier</td></tr>
+                  <tr><td>un seul <code>plans</code> ou <code>.plans</code> ignoré par git</td><td>ce dossier</td></tr>
+                  <tr><td>plusieurs</td><td>question</td></tr>
+                  <tr><td>aucun</td><td>propose <code>docs/plans/</code> ou <code>.plans/</code>, exclu via <code>.git/info/exclude</code></td></tr>
+                </table>
+                <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/skills/ticket/SKILL.md#values">SKILL.md › Values</a></p>
+              </template>
+            </article>
+            <article id="values">
+              <button class="node" data-id="values" aria-pressed="false">
+                <span class="t">Valeurs projet</span>
+                <span class="s">Base, tests, lint, URL, statuts</span>
+              </button>
+              <template>
+                <span class="label">Bootstrap</span>
+                <h2>Valeurs projet</h2>
+                <p class="sub">Base, tests, lint, URL, statuts</p>
+                <h3>Décisions</h3>
+                <table class="dec">
+                  <tr><td>recherche</td><td>profil, Ticket workflow, <code>CLAUDE.md</code>, <code>Makefile</code>, config</td></tr>
+                  <tr><td>valeur d'un autre plan ou URL par défaut</td><td>proposée, jamais utilisée sans confirmation</td></tr>
+                  <tr><td>valeur manquante</td><td>question, puis proposition de l'enregistrer</td></tr>
+                </table>
+                <h3>Résultat</h3>
+                <dl class="kv">
+                  <dt>Plan</dt><dd>En-tête : Ticket, Tracker, Base branch, Branch, PR, Test command, App URL, Current step.</dd>
+                </dl>
+                <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/skills/ticket/SKILL.md#values">SKILL.md › Values</a></p>
+              </template>
+            </article>
+            <article id="slots">
+              <button class="node" data-id="slots" aria-pressed="false">
+                <span class="t">Slots</span>
+                <span class="s">Skills branchés par step</span>
+              </button>
+              <template>
+                <span class="label">Bootstrap</span>
+                <h2>Slots</h2>
+                <p class="sub">Skills branchés par step</p>
+                <h3>Exécute</h3>
+                <ul>
+                  <li>Défauts : Grill <code>grilling</code>, Domain <code>domain-modeling</code>, Spec <code>dev-spec</code>, Lint commandes du projet, autres <code>none</code>.</li>
+                  <li>Un skill de slot écrit dans le plan et ne lance aucun autre skill.</li>
+                </ul>
+                <h3>Décisions</h3>
+                <table class="dec">
+                  <tr><td>slot vide</td><td>valeur par défaut</td></tr>
+                  <tr><td>défaut <code>none</code></td><td>action sautée et signalée</td></tr>
+                  <tr><td>aucun profil</td><td>chaque slot proposé une fois, puis enregistré</td></tr>
+                </table>
+                <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/skills/ticket/SKILL.md#tooling">SKILL.md › Tooling</a></p>
+              </template>
+            </article>
+          </div>
+          <article id="rules">
+            <button class="node" data-id="rules" aria-pressed="false">
+              <span class="num"><b>≡</b></span>
+              <span class="t">Gates et état</span>
+              <span class="s">Communes à tous les steps</span>
+            </button>
+            <template>
+              <span class="label">Règles communes</span>
+              <h2>Gates et état</h2>
+              <p class="sub">Communes à tous les steps</p>
+              <h3>Exécute</h3>
+              <ul>
+                <li>Chaque step finit sur une gate, sauf le step 3 et le step 1 d'un ticket collé.</li>
+                <li>Une validation couvre un seul step.</li>
+                <li><code>Current step</code> du plan toujours à jour.</li>
+                <li>Chaque message finit par deux lignes de statut.</li>
+                <li>Gates 4, 5 et 6 : commande <code>/compact</code> proposée.</li>
+                <li>Skill sans question : exécuté dans un sous-agent, rapport dans le plan.</li>
+              </ul>
+              <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/skills/ticket/SKILL.md#steps">SKILL.md › Steps</a></p>
+            </template>
+          </article>
+        </div>
+        <div class="conn"><span class="pill plain">argument → id</span></div>
+        <div class="fork">
+          <div class="branch">
+            <article id="route">
+              <button class="node decision" data-id="route" aria-pressed="false">
+                <span class="num"><b>0</b></span>
+                <span class="t">Route</span>
+                <span class="s">Nouveau ticket ou reprise</span>
+              </button>
+              <template>
+                <span class="label">Décision</span>
+                <h2>Route</h2>
+                <p class="sub">Nouveau ticket ou reprise</p>
+                <h3>Décisions</h3>
+                <table class="dec">
+                  <tr><td>plan, branche <code>*/&lt;id&gt;-*</code> ou PR liée trouvé</td><td>Resume</td></tr>
+                  <tr><td>id présent dans plusieurs trackers</td><td>plan dont <code>Branch</code> est la branche courante</td></tr>
+                  <tr><td>aucun ou plusieurs plans pour la branche</td><td>question</td></tr>
+                  <tr><td>rien</td><td>step 1</td></tr>
+                </table>
+                <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/skills/ticket/SKILL.md#0-route">SKILL.md › 0. Route</a></p>
+              </template>
+            </article>
+            <span class="arrow">↓ rien trouvé : nouveau ticket</span>
+          </div>
+          <div class="branch">
+            <span class="arrow">→ plan, branche ou PR trouvés</span>
+            <article id="resume">
+              <button class="node side" data-id="resume" aria-pressed="false">
+                <span class="num"><b>↺</b></span>
+                <span class="t">Resume</span>
+                <span class="s">Ticket en cours</span>
+              </button>
+              <template>
+                <span class="label">Reprise</span>
+                <h2>Resume</h2>
+                <p class="sub">Ticket en cours</p>
+                <h3>Exécute</h3>
+                <ul>
+                  <li>Lit branche, commits, PR, statut et plan.</li>
+                  <li>En cas d'écart, git et la forge priment sur <code>Current step</code>.</li>
+                  <li>Résume en 5 lignes et propose le step suivant.</li>
+                </ul>
+                <h3>Reprend à</h3>
+                <ul>
+                  <li><button class="jump" data-id="step9">PR ouverte</button></li>
+                  <li><button class="jump" data-id="step10">PR mergée</button></li>
+                  <li><button class="jump" data-id="step5">Step 5 : première tâche non cochée</button></li>
+                  <li><button class="jump" data-id="step6">Step 6 : premier check en échec, puis recette</button></li>
+                </ul>
+                <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/skills/ticket/SKILL.md#resume">SKILL.md › Resume</a></p>
+              </template>
+            </article>
+          </div>
+        </div>
+        <div class="conn"><span class="pill plain">step 1</span></div>
+        <article id="step1">
+          <button class="node" data-id="step1" aria-pressed="false">
+            <span class="num"><b>1</b></span>
+            <span class="t">Lire le ticket<span class="tag">Read</span></span>
+            <span class="s">Statut et blockers</span>
+          </button>
+          <template>
+            <span class="label">Step</span>
+            <h2>Lire le ticket</h2>
+            <p class="sub">Statut et blockers</p>
+            <h3>Décisions</h3>
+            <table class="dec">
+              <tr><td>statut Ready, blockers fermés</td><td>step 2</td></tr>
+              <tr><td>sinon</td><td>arrêt, raison affichée</td></tr>
+              <tr><td>texte collé</td><td>pas de vérification, step 2</td></tr>
+              <tr><td>tracker illisible</td><td>demande le texte du ticket</td></tr>
+            </table>
+            <h3>Résultat</h3>
+            <dl class="kv">
+              <dt>Gate</dt><dd>Ticket Ready, blockers fermés</dd>
+            </dl>
+            <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/skills/ticket/SKILL.md#1-read-the-ticket">SKILL.md › 1. Read the ticket</a></p>
+          </template>
+        </article>
+        <div class="conn"><span class="pill gate">Gate, sauf ticket collé</span></div>
+        <article id="step2">
+          <button class="node" data-id="step2" aria-pressed="false">
+            <span class="num"><b>2</b></span>
+            <span class="t">Créer la branche<span class="tag">Branch</span></span>
+            <span class="s">Branche et plan</span>
+          </button>
+          <template>
+            <span class="label">Step</span>
+            <h2>Créer la branche</h2>
+            <p class="sub">Branche et plan</p>
+            <h3>Exécute</h3>
+            <ul>
+              <li>Branche <code>&lt;type&gt;/&lt;id&gt;-&lt;slug&gt;</code> depuis <code>&lt;base&gt;</code>, type tiré du ticket (<code>[Fix]</code> → <code>fix</code>).</li>
+              <li>Id local : <code>&lt;type&gt;/local-&lt;n&gt;-&lt;slug&gt;</code>.</li>
+              <li>Crée le dossier du ticket et <code>plan.md</code>, plus <code>before/</code> et <code>after/</code> pour un ticket visuel.</li>
+              <li>Propose <code>/rename &lt;branch&gt;</code>.</li>
+            </ul>
+            <h3>Résultat</h3>
+            <dl class="kv">
+              <dt>Gate</dt><dd>Branche et plan créés</dd>
+              <dt>Tracker</dt><dd>In progress, sans confirmation</dd>
+              <dt>Plan</dt><dd>En-tête.</dd>
+            </dl>
+            <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/skills/ticket/SKILL.md#2-create-the-branch">SKILL.md › 2. Create the branch</a></p>
+          </template>
+        </article>
+        <div class="conn"><span class="pill gate">Gate</span></div>
+        <article id="step3">
+          <button class="node" data-id="step3" aria-pressed="false">
+            <span class="num"><b>3</b></span>
+            <span class="t">Lire le contexte<span class="tag">Context</span></span>
+            <span class="s">Contexte et standards</span>
+          </button>
+          <template>
+            <span class="label">Step</span>
+            <h2>Lire le contexte</h2>
+            <p class="sub">Contexte et standards</p>
+            <h3>Exécute</h3>
+            <ul>
+              <li>Lit tickets liés, <code>AGENTS.md</code>, <code>CLAUDE.md</code>, <code>CONTRIBUTING.md</code>, <code>CONTEXT.md</code>, <code>docs/adr/</code>.</li>
+              <li>Lance le slot Standards.</li>
+              <li>Passe directement au step 4.</li>
+            </ul>
+            <h3>Résultat</h3>
+            <dl class="kv">
+              <dt>Gate</dt><dd>aucune</dd>
+            </dl>
+            <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/skills/ticket/SKILL.md#3-read-the-context">SKILL.md › 3. Read the context</a></p>
+          </template>
+        </article>
+        <div class="conn"></div>
+        <article id="step4">
+          <button class="node" data-id="step4" aria-pressed="false">
+            <span class="num"><b>4</b></span>
+            <span class="t">Spécifier<span class="tag">Grill</span><span class="who">Utilisateur</span></span>
+            <span class="s">Reproduction, spec et tâches</span>
+            <span class="chips"><span class="chip bg">debug-investigate</span><span class="chip bg">Explore</span><span class="chip bg">ticket-review</span><span class="chip">ticket-investigate</span></span>
+          </button>
+          <template>
+            <span class="label">Step</span>
+            <h2>Spécifier</h2>
+            <p class="sub">Reproduction, spec et tâches</p>
+            <h3>Exécute</h3>
+            <ul>
+              <li>Bug : reproduction sur l'app locale, cause cherchée en arrière-plan.</li>
+              <li>Ticket visuel : captures <code>before/</code>.</li>
+              <li>Slot Grill, puis slot Domain.</li>
+              <li>Après validation : slot Spec, avec les edge cases.</li>
+              <li>Découpe en tâches ordonnées.</li>
+            </ul>
+            <h3>Utilisateur</h3>
+            <ul>
+              <li>Fournit la reproduction si le ticket ne la donne pas.</li>
+              <li>Répond au grilling.</li>
+              <li>Valide la compréhension partagée avant le Spec.</li>
+            </ul>
+            <h3>Décisions</h3>
+            <table class="dec">
+              <tr><td>le ticket nomme un environnement, ou bug non reproductible en local</td><td>demande l'environnement</td></tr>
+              <tr><td>pas d'outil navigateur</td><td>captures sautées et signalées</td></tr>
+            </table>
+            <h3>Résultat</h3>
+            <dl class="kv">
+              <dt>Arrière-plan</dt><dd>debug-investigate, Explore, ticket-review</dd>
+              <dt>Délégué</dt><dd>ticket-investigate</dd>
+              <dt>Gate</dt><dd>Tâches écrites, puis <code>/compact</code></dd>
+              <dt>Tracker</dt><dd>aucun changement</dd>
+              <dt>Plan</dt><dd><code>Reproduction</code>, <code>Captures</code>, <code>Glossary</code>, <code>Decisions</code>, <code>Spec</code>, <code>Files touched</code>, tâches.</dd>
+            </dl>
+            <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/skills/ticket/SKILL.md#4-grill-and-spec">SKILL.md › 4. Grill and spec</a></p>
+          </template>
+        </article>
+        <div class="conn"><span class="pill gate">Gate</span></div>
+        <article id="step5">
+          <button class="node" data-id="step5" aria-pressed="false">
+            <span class="num"><b>5</b></span>
+            <span class="t">Écrire le code<span class="tag">Code</span></span>
+            <span class="s">Tâches du plan</span>
+            <span class="chips"><span class="chip">ticket-check</span></span>
+          </button>
+          <template>
+            <span class="label">Step</span>
+            <h2>Écrire le code</h2>
+            <p class="sub">Tâches du plan</p>
+            <h3>Exécute</h3>
+            <ul>
+              <li>Exécute les tâches dans l'ordre, sans pause.</li>
+              <li>Slot Task skills pour les tâches concernées.</li>
+              <li>Un test par edge case du Spec.</li>
+              <li>Coche chaque tâche.</li>
+            </ul>
+            <h3>Décisions</h3>
+            <table class="dec">
+              <tr><td>tâche contraire à une décision, échec de test imprévu ou question d'un skill</td><td>arrêt, question</td></tr>
+            </table>
+            <h3>Résultat</h3>
+            <dl class="kv">
+              <dt>Délégué</dt><dd>ticket-check</dd>
+              <dt>Gate</dt><dd>Critères pré-merge implémentés, puis <code>/compact</code></dd>
+              <dt>Plan</dt><dd>Tâches cochées.</dd>
+            </dl>
+            <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/skills/ticket/SKILL.md#5-write-the-code">SKILL.md › 5. Write the code</a></p>
+          </template>
+        </article>
+        <div class="conn"><span class="pill gate">Gate</span></div>
+        <article id="step6">
+          <button class="node" data-id="step6" aria-pressed="false">
+            <span class="num"><b>6</b></span>
+            <span class="t">Recetter<span class="tag">Recette</span><span class="who">Utilisateur</span></span>
+            <span class="s">Revue, tests et recette</span>
+            <span class="chips"><span class="chip bg">ticket-review</span><span class="chip bg">Explore</span><span class="chip">ticket-review</span><span class="chip">Lint</span></span>
+          </button>
+          <template>
+            <span class="label">Step</span>
+            <h2>Recetter</h2>
+            <p class="sub">Revue, tests et recette</p>
+            <h3>Exécute</h3>
+            <ul>
+              <li>1. Slot Review.</li>
+              <li>2. Conformance : diff comparé aux critères, au Spec et aux Decisions ; écart → nouvelle tâche.</li>
+              <li>3. Passe commentaires en arrière-plan, pendant l'écriture de la <code>Recette</code>.</li>
+              <li>4. En parallèle : lint, tests, recette automatique, captures <code>after/</code>.</li>
+              <li>5. Échec → nouvelle tâche, puis nouvelle vérification.</li>
+              <li>6. Recette finale par l'utilisateur, avec les captures avant et après.</li>
+            </ul>
+            <h3>Utilisateur</h3>
+            <ul>
+              <li>Fait la recette finale et coche chaque case.</li>
+            </ul>
+            <h3>Résultat</h3>
+            <dl class="kv">
+              <dt>Arrière-plan</dt><dd>ticket-review, Explore</dd>
+              <dt>Délégué</dt><dd>ticket-review, Lint</dd>
+              <dt>Gate</dt><dd>Tout vert, recette cochée, puis <code>/compact</code></dd>
+              <dt>Plan</dt><dd><code>Recette</code>, <code>Evidence</code>.</dd>
+            </dl>
+            <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/skills/ticket/SKILL.md#6-recette-and-test">SKILL.md › 6. Recette and test</a></p>
+          </template>
+        </article>
+        <div class="conn"><span class="pill gate">Gate</span></div>
+        <article id="step7">
+          <button class="node" data-id="step7" aria-pressed="false">
+            <span class="num"><b>7</b></span>
+            <span class="t">Mettre à jour les docs<span class="tag">Docs</span></span>
+            <span class="s">Docs touchées par le diff</span>
+          </button>
+          <template>
+            <span class="label">Step</span>
+            <h2>Mettre à jour les docs</h2>
+            <p class="sub">Docs touchées par le diff</p>
+            <h3>Décisions</h3>
+            <table class="dec">
+              <tr><td>scan du step 6 disponible</td><td>passages trouvés</td></tr>
+              <tr><td>sinon</td><td><code>docs/</code> et <code>README.md</code></td></tr>
+            </table>
+            <h3>Résultat</h3>
+            <dl class="kv">
+              <dt>Gate</dt><dd>Docs à jour, ou « no doc impact »</dd>
+            </dl>
+            <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/skills/ticket/SKILL.md#7-update-the-docs">SKILL.md › 7. Update the docs</a></p>
+          </template>
+        </article>
+        <div class="conn"><span class="pill gate">Gate</span></div>
+        <article id="step8">
+          <button class="node" data-id="step8" aria-pressed="false">
+            <span class="num"><b>8</b></span>
+            <span class="t">Commiter<span class="tag">Commit</span><span class="who">Utilisateur</span></span>
+            <span class="s">Série de commits</span>
+          </button>
+          <template>
+            <span class="label">Step</span>
+            <h2>Commiter</h2>
+            <p class="sub">Série de commits</p>
+            <h3>Exécute</h3>
+            <ul>
+              <li>Skill <code>commit-message</code> : série de commits écrite dans le plan.</li>
+              <li>Chaque commit attend la validation du code et du message.</li>
+              <li>Id local : aucun <code>#&lt;n&gt;</code> dans les messages.</li>
+            </ul>
+            <h3>Utilisateur</h3>
+            <ul>
+              <li>Valide le code et le message de chaque commit.</li>
+            </ul>
+            <h3>Résultat</h3>
+            <dl class="kv">
+              <dt>Gate</dt><dd>Tout est commité</dd>
+              <dt>Plan</dt><dd>Série de commits.</dd>
+            </dl>
+            <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/skills/ticket/SKILL.md#8-commit">SKILL.md › 8. Commit</a></p>
+          </template>
+        </article>
+        <div class="conn"><span class="pill gate">Gate</span></div>
+        <article id="step9">
+          <button class="node" data-id="step9" aria-pressed="false">
+            <span class="num"><b>9</b></span>
+            <span class="t">Ouvrir la PR<span class="tag">PR</span><span class="who">Utilisateur</span></span>
+            <span class="s">Titre, push et CI</span>
+            <span class="chips"><span class="chip bg">ci-investigate</span></span>
+          </button>
+          <template>
+            <span class="label">Step</span>
+            <h2>Ouvrir la PR</h2>
+            <p class="sub">Titre, push et CI</p>
+            <h3>Exécute</h3>
+            <ul>
+              <li>Fournit le titre : <code>[Type] #&lt;id&gt; Description</code>, sans <code>#&lt;id&gt;</code> pour un id local.</li>
+              <li>L'utilisateur pousse et ouvre la PR.</li>
+              <li>Vérifie la PR et suit la CI.</li>
+            </ul>
+            <h3>Utilisateur</h3>
+            <ul>
+              <li>Pousse la branche et ouvre la PR.</li>
+              <li>Merge la PR.</li>
+            </ul>
+            <h3>Décisions</h3>
+            <table class="dec">
+              <tr><td><code>&lt;base&gt;</code> en conflit</td><td>merge de <code>&lt;base&gt;</code> (rebase sur accord), puis tests</td></tr>
+              <tr><td>CI en échec</td><td>cause cherchée par <code>ci-investigate</code></td></tr>
+            </table>
+            <h3>Résultat</h3>
+            <dl class="kv">
+              <dt>Arrière-plan</dt><dd>ci-investigate</dd>
+              <dt>Gate</dt><dd>PR ouverte</dd>
+              <dt>Tracker</dt><dd>In review, critères pré-merge cochés</dd>
+              <dt>Plan</dt><dd>Lien de la PR, recette cochée, preuves.</dd>
+            </dl>
+            <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/skills/ticket/SKILL.md#9-open-the-pr">SKILL.md › 9. Open the PR</a></p>
+          </template>
+        </article>
+        <div class="conn"><span class="pill gate">Gate</span></div>
+        <article id="step10">
+          <button class="node" data-id="step10" aria-pressed="false">
+            <span class="num"><b>10</b></span>
+            <span class="t">Clore le ticket<span class="tag">Merge</span><span class="who">Utilisateur</span></span>
+            <span class="s">Post-merge et nettoyage</span>
+          </button>
+          <template>
+            <span class="label">Step</span>
+            <h2>Clore le ticket</h2>
+            <p class="sub">Post-merge et nettoyage</p>
+            <h3>Exécute</h3>
+            <ul>
+              <li>Retour sur <code>&lt;base&gt;</code> et pull, branche locale supprimée sur accord.</li>
+              <li>Vérifie les critères post-merge.</li>
+              <li>Supprime les tâches du plan.</li>
+            </ul>
+            <h3>Utilisateur</h3>
+            <ul>
+              <li>Coche la recette post-merge.</li>
+            </ul>
+            <h3>Résultat</h3>
+            <dl class="kv">
+              <dt>Gate</dt><dd>Post-merge vérifié</dd>
+              <dt>Tracker</dt><dd>Done</dd>
+              <dt>Plan</dt><dd>Preuves post-merge.</dd>
+            </dl>
+            <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/skills/ticket/SKILL.md#10-after-the-merge">SKILL.md › 10. After the merge</a></p>
+          </template>
+        </article>
+      </div>
+      <section class="after">
+        <span class="label">Hooks, après chaque réponse</span>
+        <div class="duo" id="hooks">
+          <article id="hookStatus">
+            <button class="node hook" data-id="hookStatus" aria-pressed="false">
+              <span class="num"><b>⚑</b></span>
+              <span class="t">Roadmap</span>
+              <span class="s">Step courant</span>
+            </button>
+            <template>
+              <span class="label">Hook</span>
+              <h2>Roadmap</h2>
+              <p class="sub">Step courant</p>
+              <h3>Exécute</h3>
+              <ul>
+                <li>Affiche les steps 1 à 10 et le step courant.</li>
+              </ul>
+              <h3>Décisions</h3>
+              <table class="dec">
+                <tr><td>branche sans id <code>&lt;n&gt;</code> ou <code>local-&lt;n&gt;</code></td><td>rien</td></tr>
+                <tr><td>plusieurs plans pour la branche</td><td>avertissement : lancer <code>/ticket</code></td></tr>
+              </table>
+              <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/scripts/ticket-status.sh">ticket-status.sh</a></p>
+            </template>
+          </article>
+          <article id="hookMetrics">
+            <button class="node hook" data-id="hookMetrics" aria-pressed="false">
+              <span class="num"><b>Σ</b></span>
+              <span class="t">Métriques</span>
+              <span class="s">Temps et tokens par step</span>
+            </button>
+            <template>
+              <span class="label">Hook</span>
+              <h2>Métriques</h2>
+              <p class="sub">Temps et tokens par step</p>
+              <h3>Exécute</h3>
+              <ul>
+                <li>Ajoute le temps et les tokens au step courant.</li>
+                <li>Écrit <code>metrics/summary.md</code> et <code>metrics/state.json</code>.</li>
+              </ul>
+              <h3>Décisions</h3>
+              <table class="dec">
+                <tr><td>branche sans id ou plan sans <code>Current step</code></td><td>rien</td></tr>
+                <tr><td>plusieurs plans pour la branche</td><td>rien</td></tr>
+              </table>
+              <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/scripts/ticket-metrics.py">ticket-metrics.py</a></p>
+            </template>
+          </article>
+        </div>
+      </section>
+      <section class="after">
+        <span class="label">Fichier du ticket</span>
+        <div class="duo">
+          <article id="plan">
+            <button class="node plan" data-id="plan" aria-pressed="false">
+              <span class="num"><b>¶</b></span>
+              <span class="t">Le plan</span>
+              <span class="s">Mémoire du ticket</span>
+            </button>
+            <template>
+              <span class="label">Fichier</span>
+              <h2>Le plan</h2>
+              <p class="sub">Mémoire du ticket</p>
+              <h3>Exécute</h3>
+              <ul>
+                <li>Un fichier <code>plan.md</code> par ticket, dans le dossier des plans, ignoré par git.</li>
+                <li>Relu à chaque step, à la reprise et par les hooks.</li>
+              </ul>
+              <h3>Sections</h3>
+              <table class="sections">
+                <tr><th>Section</th><th>Step</th></tr>
+                  <tr><td>En-tête</td><td>2, complété au fil des steps</td></tr>
+                  <tr><td>Contexte</td><td>4</td></tr>
+                  <tr><td>Reproduction</td><td>4, pour un bug</td></tr>
+                  <tr><td>Captures</td><td>4 (<code>before/</code>), 6 (<code>after/</code>)</td></tr>
+                  <tr><td>Glossary</td><td>4</td></tr>
+                  <tr><td>Decisions</td><td>4</td></tr>
+                  <tr><td>Spec</td><td>4</td></tr>
+                  <tr><td>Files touched</td><td>4</td></tr>
+                  <tr><td>Tâches</td><td>4 ; cochées au 5 ; supprimées au 10</td></tr>
+                  <tr><td>Recette</td><td>6 ; <code>Post-merge</code> au 10</td></tr>
+                  <tr><td>Evidence</td><td>6, 9 et 10</td></tr>
+                  <tr><td>Commits</td><td>8</td></tr>
+                  <tr><td>To report in the ticket</td><td>tout step, si le tracker est en lecture seule</td></tr>
+                  <tr><td><code>metrics/</code></td><td>hooks, après chaque réponse</td></tr>
+              </table>
+              <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/skills/ticket/SKILL.md#values">SKILL.md › Values</a></p>
+            </template>
+          </article>
+        </div>
+      </section>
+    </div>
+    <aside class="panel" id="panel" aria-live="polite"></aside>
+  </div>
+</div>
+</body>
+</html>
