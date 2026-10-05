@@ -239,7 +239,8 @@ With no such tool, say so in one line and go on.
 Start the step 4 background agents (*Delegation*), then run the Grill slot, then the Domain slot, on the ticket.
 Give the Domain slot the plan path: it writes no file in the repo, its glossary goes in the plan's `Glossary` section, its ADRs in `Decisions`.
 
-Once the user confirms the shared understanding, merge the background reports into the plan, then run the Spec slot on the ticket; its report goes in the plan's `Spec` section.
+Wait for the background reports before asking the user to confirm the shared understanding: a report that contradicts a decision reopens it in the Grill slot.
+Once the user confirms, merge the reports into the plan, then run the Spec slot on the ticket; its report goes in the plan's `Spec` section.
 Whatever skill fills the slot, the `Spec` lists the edge cases, or `none` with the reason.
 Then fill the plan: context, glossary, decisions, spec, files touched, tasks, `Current step`.
 Tasks are a `- [ ]` list in execution order, never numbered: the order is the numbering. Each one is small enough to review alone.
