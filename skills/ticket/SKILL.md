@@ -129,7 +129,7 @@ While the session waits on the user, agents prepare the next work in the backgro
 | When | Agent | Prepares |
 |---|---|---|
 | Step 4, during the grilling | `franck-dev-skills:debug-investigate` | a bug's root cause, from the `Reproduction` section |
-| Step 4, during the grilling | `Explore` | the files and flows the ticket touches, for `Files touched` |
+| Step 4, during the grilling | `Explore` | the files and flows the ticket touches, for `Files touched`, each fact with its `path:line` so the Spec slot does not re-read it |
 | Step 4, during the grilling | `franck-dev-skills:ticket-review` | a visual ticket's `before/` captures |
 | Step 6, after the review | `franck-dev-skills:ticket-review` | the skill's recette and the `after/` captures, while lint and tests run |
 | Step 6, during the final recette | `Explore` | the passages of `docs/` and `README.md` the diff changes, for step 7 |
