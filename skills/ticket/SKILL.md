@@ -117,6 +117,7 @@ A skill that never asks the user runs in a sub-agent, so its output stays out of
 |---|---|
 | `franck-dev-skills:ticket-investigate` | the Spec slot when it is `dev-spec` |
 | `franck-dev-skills:ticket-review` | each Review skill in its own agent, the E2E slot, the conformance check, and the comment pass |
+| `franck-dev-skills:ticket-implement` | each hand-written task of step 5, one agent per task |
 | `franck-dev-skills:ticket-check` | a Lint skill, on its Haiku default; a Task skill that asks nothing, with the `sonnet` model override |
 
 The brief is self-contained: skill, plan path, ticket id, branch, the diff, and what the step needs.
@@ -254,13 +255,15 @@ Rewrite its body only when it breaks the tracker's standard outright (`create-is
 
 ### 5. Write the code
 
-Run every plan task in order, without stopping between them.
+Run every plan task in order, one at a time, without stopping between them: tasks share the working tree and the dev database.
 A task that matches the Task skills slot runs that skill instead of writing the code by hand.
-Every other task follows the Method slot, with the plan's `Glossary` and `Decisions` in place of the glossary and ADR files the skill would read.
+Every other task runs in a fresh `ticket-implement` agent, which follows the Method slot.
+Its brief: the task and its answers, the `Spec` edge cases it covers, the plan's `Decisions` and `Glossary` in place of the glossary and ADR files the skill would read, `Files touched`, the test command, and the comment rule, as for the comment pass of step 6.
+Check each report against its task, on the diff of its `Files changed` only: nothing is committed before step 8, so the branch diff holds every earlier task. A gap goes back to the same agent, with what is missing.
 After each task, tick it in the plan and set `Current step` to `5, task <i>/<total>`.
 Each edge case of the `Spec` gets its test.
 
-Stop before the end only when the user must decide: a task contradicts a plan decision, a test fails for a reason the plan did not foresee, or a skill asks a question.
+Stop before the end only when the user must decide: a task contradicts a plan decision, a test fails for a reason the plan did not foresee, or a skill or an agent asks a question.
 
 Done when every acceptance criterion that can be met before merge is implemented.
 Report the files touched and what they now do, in short sentences.
