@@ -1,20 +1,41 @@
 ---
 name: obsidian-note
-description: Use when the user asks to write, create, modify, review or fact-check an Obsidian note (.md file), or when writing a note that should follow Obsidian conventions such as callouts, internal links and one-sentence-per-line formatting.
+description: Use when the user asks to write, create, update, reformat, review or fact-check a note in their Obsidian vault, in English or French ("écris une note", "fiche", "relis ma note", "vérifie cette note"). Not for README, CLAUDE.md, SKILL.md, plan.md or other repository Markdown.
 ---
 
-# Obsidian Notes Assistant Instructions
+# Obsidian notes
+
+## Scope
+
+- One idea per note.
+  Link to an existing note instead of repeating its content.
+- Before creating a note, search the vault for one that already covers the concept.
+- Tool and pattern notes stay generic: placeholders (`<project-dir>`), no project paths, bundle names or brand colours.
+- No note per ticket.
+  Tickets live in the tracker; the vault keeps reusable knowledge only.
 
 ## Language & style
 
-- All notes are written in British English.
-- Be concise, go straight to the point.
-- The goal is to find information quickly when in doubt.
-- One sentence = one line. After every `.`, start a new line.
-- Keep examples simple and illustrative, not exhaustive.
-- The goal is to understand how something works, not to cover every case.
+- British English, even when the existing file is in an other language.
+- Concept first: what happens and why.
+  Code only to illustrate it.
+- Default to the shortest version: no edge cases, examples or code unless asked.
+- One sentence per line.
+  Abbreviations (`e.g.`), versions and file names do not end a sentence.
+- No `—` (em dash).
+  Use `,`, or `.` depending on context.
+- No empty section.
 
-## Code examples
+## Structure
+
+- No title heading: Obsidian shows the file name.
+- Main sections use `#`, separated by `---`.
+  Subsections use `##` to `######`.
+- Numbered steps use a bold inline label, not a heading: `**1. Create the branch**`.
+  Text next to a step stays plain.
+- Tables are aligned: each cell padded to the column width, separator row stretched to match.
+
+## Code
 
 Use `title:path/filename.ext` in code blocks when the file path is known.
 
@@ -28,22 +49,17 @@ bin/console app:my-command
 
 Use inline code for a bare command or a symbol: `ls`, `AppKernel`.
 
-## File structure
+Comments in code blocks:
 
-- The file title is managed by Obsidian and never appears in the content.
-- The first heading `#` is the main subject (replaces the title).
-- Sub-subjects start at `##`, then `###`, etc.
-- A `---` separator is placed between each `#` section.
-
-## Punctuation
-
-No `—` (em dash). Use `.` or `,` depending on context.
+| Block                                         | Comment                    |
+|-----------------------------------------------|----------------------------|
+| Copy-paste, obvious commands                  | None                       |
+| Placeholder or flag whose name is not obvious | One line, on that line     |
+| Illustrative, not meant to be run             | Welcome                    |
 
 ## Callouts
 
-Available callouts: `Info`, `Important`, `Tip`, `Success`, `Fail`, `Question`, `Warning`, `Example`, `Quote`, `Caution`.
-
-Format:
+Types: `Note`, `Abstract`, `Info`, `Todo`, `Tip`, `Success`, `Question`, `Warning`, `Failure`, `Danger`, `Bug`, `Example`, `Quote`.
 
 ```
 > [!Tip]
@@ -51,34 +67,29 @@ Format:
 > Second sentence.
 ```
 
-The one-sentence-per-line rule applies inside the callout too.
-
 ## Internal links
 
-Use `[[FileName]]` to link to another note.
-Use `[[FileName#Section|Label]]` to link to a specific section with a custom label.
-Add links when a concept is covered in another note, to avoid duplication.
+Use `[[FileName]]`, or `[[FileName#Section|Label]]` for a section with a custom label.
+Link only where the reader would actually go check the concept, not at every mention.
 
 ## Modes
 
 Pick the mode from the request, do not ask:
 
-| Request | Mode |
-|---|---|
-| "write", "create", "add", "update", "fix", "reformat" | Help |
-| "review", "check", "is this correct", "relis" | Review |
-| Neither is clear | Ask which one, in one line |
+| Request                                                                       | Mode                       |
+|-------------------------------------------------------------------------------|----------------------------|
+| "write", "create", "add", "update", "fix", "reformat", "écris", "corrige"     | Help                       |
+| "review", "check", "fact-check", "is this correct", "relis", "vérifie"        | Review                     |
+| Neither is clear                                                              | Ask which one, in one line |
 
 **Help mode**: create or modify the `.md` file.
-Free to add, remove or modify content if it seems relevant to the subject.
-Free to correct spelling and style.
+Rewrite or remove what breaks these rules; add content only when asked.
 
-**Review mode**: only analyse whether the note is correct against official documentation and the user's habits.
-Report findings in the conversation, never write or modify the file.
+**Review mode**: check the note against official documentation and these rules.
+Report findings in the conversation with their line, never modify the file.
 
 ## Behaviour
 
-- Ask questions before generating if the scope is unclear.
-- Challenge or suggest improvements when something seems incorrect or incomplete.
-- When generating a file, briefly explain the choices made.
-- Corrections are always welcome: take note of every change the user makes to a generated file.
+- Ask before writing if the scope is unclear.
+- Challenge content that looks wrong or incomplete.
+- When the user corrects a generated note, propose the correction as a new rule for this skill at the end of the task.
