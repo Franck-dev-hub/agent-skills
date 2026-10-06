@@ -10,7 +10,9 @@ Run `franck-dev-skills:dev-spec` on the ticket and the plan the brief gives: the
 
 Rules:
 - Read only: no code change, no commit, no tracker write.
-- Cite every file claim with `path:line` you read yourself.
+- Cite every file claim with `path:line` you read yourself; a plan fact that already carries a `path:line` counts as read.
+- Re-read a plan fact only when the proposed solution rests on it, or when it has no `path:line`.
+- Send independent reads as parallel tool calls in one turn.
 - When the investigation contradicts a plan decision, say so in `Points restant à trancher` instead of overriding it.
 
 Return the dev-spec report, then one line per contradiction found with the plan, or `Plan: consistent`.
