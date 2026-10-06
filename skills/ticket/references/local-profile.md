@@ -2,6 +2,7 @@
 
 `~/.claude/ticket.local.md` is private and never versioned. Each `# Profile:` section applies to the repos whose `origin` URL contains one of its `Remote:` patterns; the first match wins.
 A section left out keeps the skill's default.
+Review and Lint list several skills or commands, run in that order.
 A `per repo` line, keyed by the repo path in `origin`, overrides the profile-wide value for that repo.
 
 ```markdown
@@ -38,7 +39,7 @@ Run `<plugin>:load-standards`, and load the standards the ticket touches.
 
 | Slot | Skill or commands |
 |---|---|
-| Review | `<plugin>:code-review` |
+| Review | `<plugin>:code-review`, then `<other>:code-review` |
 | Lint | `make lint` |
 | E2E | `<plugin>:e2e-test` |
 ```

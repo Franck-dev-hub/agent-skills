@@ -92,6 +92,7 @@ One missing: ask once, then propose saving it, in the local profile when one mat
 
 The local profile fills the slots below.
 An empty slot takes its default; a default of *none* skips the action and says so.
+Review and Lint take several skills, run in the listed order (`a`, then `b`); every other slot takes one.
 
 | Slot | Step | Default |
 |---|---|---|
@@ -104,7 +105,7 @@ An empty slot takes its default; a default of *none* skips the action and says s
 | Lint | 6 | the project's lint commands |
 | E2E | 6 | none |
 
-With no profile matching `origin`, before step 1, propose each slot once, in as few questions as possible: the installed skills that fit it, the `franck-dev-skills:` ones first and marked recommended. Save the answers as a new profile on the user's yes.
+With no profile matching `origin`, before step 1, propose each slot once, in as few questions as possible: the installed skills that fit it, the `franck-dev-skills:` ones first and marked recommended. Review and Lint are a multi-select; with two or more picked, propose an order, the skills that fix code first, and let the user confirm or retype it. Save the answers as a new profile on the user's yes.
 A slot skill from another plugin keeps to its step: what it would write elsewhere (a design doc, a plan) goes in the plan section its slot fills, and it never chains to another skill; the ticket goes on with its own steps.
 
 ## Delegation
@@ -114,7 +115,7 @@ A skill that never asks the user runs in a sub-agent, so its output stays out of
 | Agent | Runs |
 |---|---|
 | `franck-dev-skills:ticket-investigate` | the Spec slot when it is `dev-spec` |
-| `franck-dev-skills:ticket-review` | the Review and E2E slots, the conformance check, and the comment pass |
+| `franck-dev-skills:ticket-review` | each Review skill in its own agent, the E2E slot, the conformance check, and the comment pass |
 | `franck-dev-skills:ticket-check` | a Lint skill, on its Haiku default; a Task skill that asks nothing, with the `sonnet` model override |
 
 The brief is self-contained: skill, plan path, ticket id, branch, the diff, and what the step needs.
@@ -265,14 +266,14 @@ Report the files touched and what they now do, in short sentences.
 
 The skill runs and fixes everything first, so the user runs a single final recette:
 
-1. The Review slot: it may fix code, so it runs alone.
+1. The Review slot, one skill after the other in its order: each may fix code, so each runs alone, on the diff the previous one left.
 2. Conformance: `ticket-review` compares the diff with each acceptance criterion and the plan's `Spec` and `Decisions`; the brief carries the criteria's text. It reports each criterion as met, partly or not met, with the file and line, then lists the code the ticket did not ask for. A criterion not met or partly met becomes a new task in the plan, run as in step 5, then this check reruns.
 3. Comment pass, in the background: a fresh context, since the comment rule fades over a long step 5. `ticket-review` reads every comment the branch adds or changes, in every file type; it cuts those that restate the code, shortens the rest to a one-line why, and keeps a why in one file only.
    The brief carries the comment rule of the project's `AGENTS.md` or `CLAUDE.md`, else the user's `CLAUDE.md`.
    It never touches a comment the branch did not write, nor one that carries function: linter or analyzer directive, docblock type, annotation, license, shebang.
    Its changes go in `Evidence`, one line per file.
 4. Meanwhile, write the plan's `Recette` section.
-5. Once both are done, in parallel: the Lint slot and the full test command in the background, and `ticket-review` running the recette box by box, with the E2E slot or a real-browser tool, and replaying every `Captures` entry into `after/` under the same file name.
+5. Once both are done, in parallel: the Lint slot, in its order, and the full test command in the background, and `ticket-review` running the recette box by box, with the E2E slot or a real-browser tool, and replaying every `Captures` entry into `after/` under the same file name.
 6. A failing check or box: fix it, as a new task in the plan, then rerun what it touches, the comment pass included.
 7. Once everything passes, hand the recette to the user for the final run, with the `before/` and `after/` pairs; meanwhile, the docs scan for step 7 runs in the background.
 
