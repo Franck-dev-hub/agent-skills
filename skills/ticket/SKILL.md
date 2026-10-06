@@ -167,7 +167,7 @@ When they disagree, the environment wins: fix the row.
 Set `Current step` to `<next step>, resuming` first, so the cost of the resume lands on the step it prepares.
 Give a summary of five lines at most: ticket, status, branch, commits, PR.
 Propose the next step, then wait for the user.
-An open PR means step 9.
+An open PR means step 9; with unresolved review threads, its review comments.
 A merged PR means step 10.
 Step 5 resumes at the first unticked task of the plan.
 Step 6 resumes at the first failing check, then the comment pass when `Evidence` lacks it, then the skill's recette, then the first box the user has not ticked.
@@ -273,6 +273,7 @@ Report the files touched and what they now do, in short sentences.
 The skill runs and fixes everything first, so the user runs a single final recette:
 
 1. The Review slot, one skill after the other in its order: each may fix code, so each runs alone, on the diff the previous one left.
+   A finding it reports without fixing is a lead, not an order: check it against the code, the `Spec` and the `Decisions`, then make it a task, run as in step 5, or drop it with the reason in `Evidence`.
 2. Conformance: `ticket-review` compares the diff with each acceptance criterion and the plan's `Spec` and `Decisions`; the brief carries the criteria's text. It reports each criterion as met, partly or not met, with the file and line, then lists the code the ticket did not ask for. A criterion not met or partly met becomes a new task in the plan, run as in step 5, then this check reruns.
 3. Comment pass, in the background: a fresh context, since the comment rule fades over a long step 5. `ticket-review` reads every comment the branch adds or changes, in every file type; it cuts those that restate the code, shortens the rest to a one-line why, and keeps a why in one file only.
    The brief carries the comment rule of the project's `AGENTS.md` or `CLAUDE.md`, else the user's `CLAUDE.md`.
@@ -331,6 +332,18 @@ Then follow the pipeline (forge reference); a failure goes to `ci-investigate`.
 Done when the PR is open.
 Tracker: status to In review, every pre-merge criterion ticked.
 Plan: the `PR` or `MR` row, the recette as the user ticked it, each criterion's evidence and the `before/` and `after/` pairs; never post them in the tracker.
+
+When the user says the PR has review comments, read its unresolved threads with the forge reference's command.
+A comment is a lead, not an order: check each against the code, the `Spec` and the `Decisions`, then propose a verdict with its evidence.
+
+| Verdict | Then, on the user's ruling |
+|---|---|
+| Agree | a new task in the plan, run as in step 5, then what it touches in step 6, then a commit as in step 8 |
+| Disagree | a reply drafted with the reason, for the user to post |
+| Unclear | a question to the user, or to the reviewer through a drafted reply |
+
+Nothing changes before the user rules on every comment; the skill never posts a reply.
+Write each comment, its verdict and the ruling in the plan's `Review` section; set `Current step` to `9, review <i>/<total>`.
 
 ### 10. After the merge
 

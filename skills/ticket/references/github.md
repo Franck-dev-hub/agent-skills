@@ -13,6 +13,7 @@ The status map holds the board, the Status field id, and one option id per statu
 | Linked PRs | `gh issue view <n> --json closedByPullRequestsReferences` |
 | PR state | `gh pr view <pr>` |
 | Pipeline state | `gh pr checks <pr>` |
+| Review comments | `gh pr view <pr> --comments`, and inline ones with `gh api repos/{owner}/{repo}/pulls/<pr>/comments` |
 
 A branch not linked to its GitHub issue needs `gh pr edit --body 'Closes #<n>'` once the PR is open.
 With a tracker other than GitHub, the PR never carries `Closes #<n>`: it would target an unrelated issue.

@@ -10,6 +10,7 @@ Read this when `origin` is on GitLab.
 | MRs from the branch | `glab mr list --all --source-branch <branch>` |
 | MR state | `glab mr view <branch>` |
 | Pipeline state | `glab ci get -b <branch>` |
+| Review threads | `glab api "projects/:fullpath/merge_requests/<iid>/discussions"`, those with `resolvable` and not `resolved` |
 
 The MR never carries `Closes #<n>`: merging would close the issue without the user's yes.
 
