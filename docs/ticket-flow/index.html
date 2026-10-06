@@ -391,7 +391,7 @@
             <span class="num"><b>5</b></span>
             <span class="t">Écrire le code<span class="tag">Code</span></span>
             <span class="s">Tâches du plan</span>
-            <span class="chips"><span class="chip">ticket-check</span></span>
+            <span class="chips"><span class="chip">ticket-implement</span><span class="chip">ticket-check</span></span>
           </button>
           <template>
             <span class="label">Step</span>
@@ -399,18 +399,19 @@
             <p class="sub">Tâches du plan</p>
             <h3>Exécute</h3>
             <ul>
-              <li>Exécute les tâches dans l'ordre, sans pause.</li>
+              <li>Exécute les tâches dans l'ordre, une à la fois, sans pause.</li>
+              <li>Chaque tâche écrite à la main : un agent <code>ticket-implement</code> neuf, puis son diff vérifié contre la tâche.</li>
               <li>Slot Task skills pour les tâches concernées, slot Method pour les autres.</li>
               <li>Un test par edge case du Spec.</li>
               <li>Coche chaque tâche.</li>
             </ul>
             <h3>Décisions</h3>
             <table class="dec">
-              <tr><td>tâche contraire à une décision, échec de test imprévu ou question d'un skill</td><td>arrêt, question</td></tr>
+              <tr><td>tâche contraire à une décision, échec de test imprévu ou question d'un skill ou d'un agent</td><td>arrêt, question</td></tr>
             </table>
             <h3>Résultat</h3>
             <dl class="kv">
-              <dt>Délégué</dt><dd>ticket-check</dd>
+              <dt>Délégué</dt><dd>ticket-implement, ticket-check</dd>
               <dt>Gate</dt><dd>Critères pré-merge implémentés, puis <code>/compact</code></dd>
               <dt>Plan</dt><dd>Tâches cochées.</dd>
             </dl>
