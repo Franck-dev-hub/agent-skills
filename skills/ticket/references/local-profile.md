@@ -28,6 +28,10 @@ Run `<plugin>:load-standards`, and load the standards the ticket touches.
 |---|---|
 | New domain module | `<plugin>:scaffold-module` |
 
+## Method
+
+`<plugin>:tdd`
+
 ## Grill, Domain
 
 | Slot | Skill |
