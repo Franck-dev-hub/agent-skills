@@ -101,6 +101,7 @@ Review and Lint take several skills, run in the listed order (`a`, then `b`); ev
 | Domain | 4 | `franck-dev-skills:domain-modeling` |
 | Spec | 4 | `franck-dev-skills:dev-spec` |
 | Task skills | 5 | none |
+| Method | 5 | none |
 | Review | 6 | none |
 | Lint | 6 | the project's lint commands |
 | E2E | 6 | none |
@@ -245,6 +246,7 @@ Once the user confirms, merge the reports into the plan, then run the Spec slot 
 Whatever skill fills the slot, the `Spec` lists the edge cases, or `none` with the reason.
 Then fill the plan: context, glossary, decisions, spec, files touched, tasks, `Current step`.
 Tasks are a `- [ ]` list in execution order, never numbered: the order is the numbering. Each one is small enough to review alone.
+A Method skill that asks the user, such as the seams to test, asks now: each answer goes in its task, so step 5 never stops on it.
 
 Done when the plan holds its tasks.
 Tracker: nothing; the ticket leaves as it came in, only ticked and moved.
@@ -254,6 +256,7 @@ Rewrite its body only when it breaks the tracker's standard outright (`create-is
 
 Run every plan task in order, without stopping between them.
 A task that matches the Task skills slot runs that skill instead of writing the code by hand.
+Every other task follows the Method slot, with the plan's `Glossary` and `Decisions` in place of the glossary and ADR files the skill would read.
 After each task, tick it in the plan and set `Current step` to `5, task <i>/<total>`.
 Each edge case of the `Spec` gets its test.
 
