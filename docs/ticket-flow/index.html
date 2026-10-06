@@ -255,7 +255,7 @@
                 </ul>
                 <h3>Reprend à</h3>
                 <ul>
-                  <li><button class="jump" data-id="step9">PR ouverte</button></li>
+                  <li><button class="jump" data-id="step9">PR ouverte, ou ses commentaires de review</button></li>
                   <li><button class="jump" data-id="step10">PR mergée</button></li>
                   <li><button class="jump" data-id="step5">Step 5 : première tâche non cochée</button></li>
                   <li><button class="jump" data-id="step6">Step 6 : premier check en échec, puis recette</button></li>
@@ -522,23 +522,26 @@
               <li>Fournit le titre : <code>[Type] #&lt;id&gt; Description</code>, sans <code>#&lt;id&gt;</code> pour un id local.</li>
               <li>L'utilisateur pousse et ouvre la PR.</li>
               <li>Vérifie la PR et suit la CI.</li>
+              <li>Commentaires de review : chacun vérifié contre le code, le Spec et les Decisions ; verdict proposé, jamais appliqué tel quel.</li>
             </ul>
             <h3>Utilisateur</h3>
             <ul>
               <li>Pousse la branche et ouvre la PR.</li>
+              <li>Tranche chaque commentaire de review et poste les réponses.</li>
               <li>Merge la PR.</li>
             </ul>
             <h3>Décisions</h3>
             <table class="dec">
               <tr><td><code>&lt;base&gt;</code> en conflit</td><td>merge de <code>&lt;base&gt;</code> (rebase sur accord), puis tests</td></tr>
               <tr><td>CI en échec</td><td>cause cherchée par <code>ci-investigate</code></td></tr>
+              <tr><td>commentaire de review</td><td>d'accord : nouvelle tâche ; pas d'accord : réponse rédigée ; flou : question</td></tr>
             </table>
             <h3>Résultat</h3>
             <dl class="kv">
               <dt>Arrière-plan</dt><dd>ci-investigate</dd>
               <dt>Gate</dt><dd>PR ouverte</dd>
               <dt>Tracker</dt><dd>In review, critères pré-merge cochés</dd>
-              <dt>Plan</dt><dd>Lien de la PR, recette cochée, preuves.</dd>
+              <dt>Plan</dt><dd>Lien de la PR, recette cochée, preuves, section <code>Review</code>.</dd>
             </dl>
             <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/skills/ticket/SKILL.md#9-open-the-pr">SKILL.md › 9. Open the PR</a></p>
           </template>
