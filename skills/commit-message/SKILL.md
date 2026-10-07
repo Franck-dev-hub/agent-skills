@@ -100,6 +100,7 @@ For commit N, expand each file's one-line why into plain language, so the user l
 Checks at commit scope only; code quality and spec conformity belong to code review.
 
 - **Off-topic file**: a file the message does not cover, or that belongs to another commit.
+- **Off-topic line**: a hunk the message does not cover, often an IDE reformat.
 - **Not green alone**: the commit only compiles or passes its tests with a later commit.
 - **Leftover**: debug call, temporary, generated or local-only file.
 - **Message drift**: the message promises more, or other, than the diff.
@@ -110,4 +111,5 @@ Checks at commit scope only; code quality and spec conformity belong to code rev
 - List file paths explicitly, never globs or `git add .`.
 - To split a file *within itself*, pipe the `git add -p` answers: `printf 's\ny\nn\n' | git add -p <file>` (`s` split, `y` stage, `n` skip, one answer per hunk in order). Read `git diff <file>` first: `s` only splits where unchanged lines separate the changes; `git add <file>` stages the whole file.
 - An untracked file is one hunk that `add -p` cannot split. Stage a trimmed copy without touching the working tree: `git update-index --add --cacheinfo 100644,"$(sed '<from>,<to>d' <file> | git hash-object -w --stdin)",<file>`; a later commit's `git add <file>` brings the rest.
-- Before the first commit, replay the whole series on a throwaway index (`cp .git/index /tmp/x.index; GIT_INDEX_FILE=/tmp/x.index …`) and check each `git diff --cached --stat`.
+- Dry run: before the first commit, replay the whole series on a throwaway index (`cp .git/index /tmp/x.index; GIT_INDEX_FILE=/tmp/x.index …`) and keep each commit's `git diff --cached --numstat`.
+- After staging commit N, its `git diff --cached --numstat` must equal the dry run's; a gap means a file changed since, often an IDE reformat: unstage, show the extra hunk, ask before going on.
