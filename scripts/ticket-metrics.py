@@ -18,6 +18,7 @@ USAGE_KEYS = {
     "cache_creation": "cache_creation_input_tokens",
     "cache_read": "cache_read_input_tokens",
 }
+MODEL_TOKENS = ("input", "output", "cache_write_5m", "cache_write_1h", "cache_read")
 
 
 def epoch(value):
@@ -79,28 +80,56 @@ def is_prompt(entry):
     )
 
 
-def usage_by_id(entries):
+def messages_by_id(entries):
     # One message spans several lines with the same usage: keep one per id.
-    usage = {}
+    messages = {}
     for e in entries:
         m = e.get("message")
         if e.get("type") == "assistant" and isinstance(m, dict) and m.get("id") and m.get("usage"):
-            usage[m["id"]] = m["usage"]
-    return usage
+            messages[m["id"]] = m
+    return messages
 
 
-def count_tokens(usage):
+def count_tokens(messages):
     total = dict.fromkeys(TOKENS, 0)
-    for u in usage.values():
+    for m in messages.values():
         for key, field in USAGE_KEYS.items():
-            total[key] += u.get(field) or 0
+            total[key] += m["usage"].get(field) or 0
     return total
 
 
-def peak_context(usage):
+def peak_context(messages):
     """Largest context one call read: the cost driver, since each call rereads it."""
-    return max((sum(u.get(USAGE_KEYS[k]) or 0 for k in ("input", "cache_creation", "cache_read"))
-                for u in usage.values()), default=0)
+    return max((sum(m["usage"].get(USAGE_KEYS[k]) or 0 for k in ("input", "cache_creation", "cache_read"))
+                for m in messages.values()), default=0)
+
+
+def model_key(message):
+    # Fast mode bills the same model at another rate: its own row keeps one price per row.
+    model = message.get("model") or "unknown"
+    return f"{model} fast" if message["usage"].get("speed") == "fast" else model
+
+
+def split_tokens(usage):
+    # No TTL split in the usage means the API default, 5 min.
+    ttl = usage.get("cache_creation") or {"ephemeral_5m_input_tokens": usage.get("cache_creation_input_tokens")}
+    return {
+        "input": usage.get("input_tokens") or 0,
+        "output": usage.get("output_tokens") or 0,
+        "cache_write_5m": ttl.get("ephemeral_5m_input_tokens") or 0,
+        "cache_write_1h": ttl.get("ephemeral_1h_input_tokens") or 0,
+        "cache_read": usage.get("cache_read_input_tokens") or 0,
+    }
+
+
+def count_by_model(messages):
+    models = {}
+    for m in messages.values():
+        row = models.setdefault(model_key(m), dict.fromkeys(("calls", *MODEL_TOKENS), 0))
+        row["calls"] += 1
+        for key, n in split_tokens(m["usage"]).items():
+            row[key] += n
+    return models
 
 
 def model_seconds(entries, start):
@@ -163,6 +192,10 @@ def fmt_count(n):
 
 
 def render(steps):
+    return render_steps(steps) + "\n" + render_models(steps)
+
+
+def render_steps(steps):
     columns = ("model_s", "session_s", "calls", "peak", *TOKENS, "total")
     header = ("Step", "Model", "Session", "Calls", "Peak context", "Input", "Output", "Cache write", "Cache read", "Total")
     rows = []
@@ -175,6 +208,32 @@ def render(steps):
         known = [s[c] for s in steps.values() if c in s]
         sums[c] = (max(known) if c == "peak" else sum(known)) if known else None
     rows.append(("**Total**", *cells(sums, columns)))
+    return table(header, rows)
+
+
+def render_models(steps):
+    columns = ("calls", *MODEL_TOKENS, "total")
+    header = ("Model ID", "Calls", "Input", "Output", "Cache write 5 min", "Cache write 1 h", "Cache read", "Total")
+    models = {}
+    for step in steps.values():
+        for name, counts in step.get("models", {}).items():
+            row = models.setdefault(name, dict.fromkeys(counts, 0))
+            for key, n in counts.items():
+                row[key] += n
+    for row in models.values():
+        row["total"] = sum(row[k] for k in MODEL_TOKENS)
+    # Steps recorded before the model split: the rest keeps both tables at the same total.
+    total = {k: sum(r[k] for r in models.values()) for k in columns}
+    rest = {k: sum(s.get(k, 0) for s in steps.values()) - total[k] for k in ("calls", "input", "output", "cache_read", "total")}
+    rows = [(name, *cells(models[name], columns)) for name in sorted(models, key=lambda n: -models[n]["total"])]
+    if rest["total"]:
+        rows.append(("Unsplit", *cells(rest, columns)))
+        total = {k: total[k] + rest[k] for k in rest}
+    rows.append(("**Total**", *cells(total, columns)))
+    return table(header, rows)
+
+
+def table(header, rows):
     widths = [max(len(row[i]) for row in (header, *rows)) for i in range(len(header))]
     line = lambda row: "| " + " | ".join(c.ljust(w) for c, w in zip(row, widths)) + " |"
     divider = "|" + "|".join("-" * (w + 2) for w in widths) + "|"
@@ -245,11 +304,15 @@ def main():
     entry = data.setdefault("steps", {}).setdefault(
         step, dict.fromkeys(("model_s", "session_s", *TOKENS, "total"), 0)
     )
-    main_usage = usage_by_id(main_entries)
-    usage = {**usage_by_id(sub_entries), **main_usage}
-    tokens = count_tokens(usage)
-    entry["calls"] = entry.get("calls", 0) + len(usage)
-    entry["peak"] = max(entry.get("peak", 0), peak_context(main_usage))
+    main_messages = messages_by_id(main_entries)
+    messages = {**messages_by_id(sub_entries), **main_messages}
+    tokens = count_tokens(messages)
+    entry["calls"] = entry.get("calls", 0) + len(messages)
+    entry["peak"] = max(entry.get("peak", 0), peak_context(main_messages))
+    for name, counts in count_by_model(messages).items():
+        row = entry.setdefault("models", {}).setdefault(name, dict.fromkeys(counts, 0))
+        for key, n in counts.items():
+            row[key] += n
     entry["model_s"] = round(entry["model_s"] + model_s, 1)
     entry["session_s"] = round(entry["session_s"] + session_s, 1)
     for key in TOKENS:

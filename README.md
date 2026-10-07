@@ -38,7 +38,7 @@ Private agent marketplace hosting personal skills.
 | Event  | Effect                                                                                    |
 |--------|-------------------------------------------------------------------------------------------|
 | `Stop` | On a ticket branch with a plan, shows the step roadmap after each reply; silent otherwise |
-| `Stop` | On a ticket branch with a plan, adds time and tokens per step to `metrics/summary.md` in the ticket folder; needs `python3`, silent |
+| `Stop` | On a ticket branch with a plan, adds time and tokens per step, and tokens per model, to `metrics/summary.md` in the ticket folder; needs `python3`, silent |
 
 
 ## Installation with claude code
