@@ -61,7 +61,7 @@ Only skip it for untracked work (internal chores, exploratory spikes).
 2. Check whether the diff holds more than one concern. If it does, run a *Commit series* (below) instead of steps 3-6.
 3. Pick the Type that matches the change's nature, as shown in the diff.
 4. Check if the branch name carries a ticket ID (`feature/1234-...`); if so, include `#1234`.
-5. Compose one line following the rules above and present it to the user as a suggestion.
+5. Compose one line following the rules above and present it to the user as a suggestion, with each file explained as in *One commit per approval* (below).
 6. Only run `git commit` if the user confirms that exact suggestion. If they ask for changes, revise and present again, do not commit until they explicitly approve.
 
 ## Commit series
@@ -93,7 +93,7 @@ Show the summary table once in the chat, then start the loop. Done when every fi
 
 ### 2. One commit per approval
 
-For commit N, present its Code and Tests sections, the exact message, a one-line why and any `⚠️` line, then wait. On the user's approval of that commit: stage exactly its files, commit, report the hash, present commit N+1. On a requested change: revise, re-present, wait again. Done when the working tree holds nothing the series planned.
+For commit N, expand each file's one-line why into plain language, so the user learns from the review: what the file did before, what it does now, the problem this solves, the trap it avoids, and for a test, what it checks; a short list per file, grouped when files share one why. Never paste the diff: the user reads it in their IDE. Then give the exact message and any `⚠️` line, and wait. On the user's approval of that commit: stage exactly its files, commit, report the hash, present commit N+1. On a requested change: revise, re-present, wait again. Done when the working tree holds nothing the series planned.
 
 ### Commit checks
 
