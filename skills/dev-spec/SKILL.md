@@ -15,9 +15,18 @@ request came in.
 
 ## Method: comment spécifier en tant que dev
 
-Before writing anything, run this loop **at least 3 times**, each pass sharpening the
-one before it. Do not skip straight to a report after one pass: the first read of a
-ticket is always the client's framing, not the technical shape of the fix.
+Before writing anything, send three `Explore` agents in one turn, each with the request
+and its own subject; each returns facts with the `path:line` it read, no prose:
+
+| Subject                                                                | Steps | Model   |
+|------------------------------------------------------------------------|-------|---------|
+| Check each claim of the request against the code; list the edge cases  | 1, 5  | default |
+| Trace the runtime flow to the root cause                               | 3     | `opus`  |
+| List the files involved and an existing pattern solving a sibling case | 4     | default |
+
+Then run steps 2, 6 and 7 on the merged facts. A request already pinned to one file skips
+the agents and runs the steps itself. Do not write the report from the first merge: the
+first read of a ticket is always the client's framing, not the technical shape of the fix.
 
 1. **Comprendre la demande fonctionnelle**: not the wording, the actual gap. Read the
    ticket/request literally, then verify each factual claim in it against the code
@@ -38,25 +47,22 @@ ticket is always the client's framing, not the technical shape of the fix.
    "non applicable ici".
 6. **Lister les étapes en détail**: once the mechanism is understood, the technical
    solution should be nameable as concrete file-level changes, not vague intentions.
-7. **Itérer**: after drafting 1 to 6 once, re-run the loop. Does step 3's flow contradict
-   an assumption from step 1? Does step 4 reveal an existing pattern that changes the
-   step 6 solution (e.g. a sibling case already solved the same way, reuse its
-   mechanism instead of inventing a new one)? Stop iterating only when a fresh pass
+7. **Itérer**: confront the agents' facts. Does step 3's flow contradict a claim from
+   step 1? Does step 4 reveal an existing pattern that changes the step 6 solution (e.g.
+   a sibling case already solved the same way, reuse its mechanism instead of inventing
+   a new one)? Re-investigate only what a contradiction reopens; stop when a pass
    changes nothing.
 
-Each iteration should be visible to the user as a short update if it overturns something
-from the previous pass (e.g. "j'avais supposé X, le code montre Y"); don't silently
-discard a wrong earlier read without saying so.
+Say it in a short update when a pass overturns an earlier read (e.g. "j'avais supposé X,
+le code montre Y"); don't silently discard it.
 
 ## Investigation
 
 - Read the actual files, don't infer from names. Grep broadly first (French and English
   terms, ticket vocabulary and code vocabulary rarely match), then read full files, not
-  excerpts, for anything that will be cited in the report.
-- Prefer delegating pure-investigation legwork (multi-file grep, tracing a flow across
-  a plugin) to a research agent/fork when it would otherwise fill context with output
-  you won't need verbatim, but verify its concrete file/line claims yourself before
-  citing them in the report, the same way any claim from the ticket gets verified.
+  excerpts, for anything the proposed solution rests on.
+- A fact an agent cites with its `path:line` counts as read; re-read it only when the
+  proposed solution rests on it, so the merge does not redo the agents' work.
 - When the investigation surfaces an existing pattern solving an analogous case
   elsewhere in the code (a sibling hook, a similar guard), that pattern wins over a
   novel solution; name it explicitly in the report ("même mécanisme que X").
@@ -134,8 +140,8 @@ into two sentences instead.
 
 - **Writing the report from the ticket's own framing** without re-verifying its claims:
   the reported symptom is often narrower or wider than reality (see method step 1).
-- **Stopping after one pass of the method**: the report before iteration usually
-  proposes a locally-correct but architecturally inconsistent fix (duplicating a
+- **Writing the report from the agents' first facts, skipping step 7**: the report
+  before iteration usually proposes a locally-correct but architecturally inconsistent fix (duplicating a
   wiring entry per page instead of finding the shared hook meant for exactly this case).
 - **Producing implementation code**: this skill's output is the spec report only; it
   does not touch application code, and does not write to Notion.
