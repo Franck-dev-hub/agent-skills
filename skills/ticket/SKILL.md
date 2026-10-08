@@ -342,17 +342,10 @@ Solution:
 
 Decisions:
 - <decision>
-
-<details><summary>All decisions (<count>)</summary>
-
-- <decision>
-
-</details>
 ```
 
 - `Merge after` only when the branch stacks on another PR; `because <cause>` only on a bug; Problem and Solution are one sentence each.
-- `Decisions` keeps only what the reviewer cannot read in the diff: an alternative they would ask about, a gap with the ticket, a risk for the release or a later update. Look for them in the whole plan, not only in `Decisions`: a gap with the ticket or a release prerequisite often sits in the `Spec`.
-- The folded list is the plan's `Decisions` as written: the plan is never committed, so the PR is their only shared copy.
+- `Decisions` is one flat list: the plan's `Decisions`, plus each gap with the ticket and release prerequisite the `Spec` holds, without duplicates. The plan is never committed, so the PR is their only shared copy.
 - When the user says the PR is open, check it with the forge reference's command.
 
 Then follow the pipeline (forge reference); a failure goes to `ci-investigate`.
