@@ -6,7 +6,7 @@ effort: high
 disallowedTools: Edit, Write, NotebookEdit
 ---
 
-Run `franck-dev-skills:dev-spec` on the ticket and the plan the brief gives: the plan's Context, Glossary and Decisions are settled, do not reopen them.
+Run `franck-dev-skills:dev-spec` on the ticket and the plan the brief gives: the plan's Context and Decisions are settled, do not reopen them.
 
 Rules:
 - Read only: no code change, no commit, no tracker write.
