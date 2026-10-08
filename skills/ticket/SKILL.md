@@ -28,13 +28,14 @@ Without write access, it goes in a **To report in the ticket** block for the use
 Every ticket gets a folder, `<plan folder>/<buckets>/<ticket-id>-<slug>/`, the slug being the branch's, holding `plan.md`.
 A visual ticket, one that changes what a page shows, adds `before/` and `after/`.
 
-The buckets come from the id alone, so a folder never moves: one `<start>-<end>` folder per power of ten, from the id's own magnitude down to 100; an id under 100 goes in `0-99`; an id that is not a number goes in `other`.
+The buckets come from the id alone, so a folder never moves: one `<start>-<end>` folder per power of ten, from the id's own magnitude down to 100; an id under 100 goes in `0-99`; a prefixed id (`NOR-31`) takes the number after its prefix, as `local-7` does; an id with no number goes in `other`.
 
 | Id | Folder |
 |---|---|
 | 42 | `0-99/42-<slug>/` |
 | 675 | `600-699/675-<slug>/` |
 | 1234 | `1000-1999/1200-1299/1234-<slug>/` |
+| NOR-31 | `0-99/NOR-31-<slug>/` |
 | none, local 7 | `local/0-99/local-7-<slug>/` |
 
 Two trackers number their tickets alike: `667` can name two tickets.
