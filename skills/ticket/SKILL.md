@@ -329,23 +329,23 @@ When `<base>` moved and conflicts with the branch, show the user the conflicts, 
 Give the user the PR title and description to copy, never a command: they push and open the PR their own way.
 
 - The title follows the `franck-dev-skills:commit-message` format and sums up the whole branch: `[Type] #<ticket-id> Description`, without `#<ticket-id>` for a local id; with a single commit, it is that commit's message.
-- The description is in the user's language, with nothing else, such as a test section:
+- The description is in the user's language, with nothing else, such as a test section or how it was tested:
 
 ```markdown
 Merge after !<n>
 
-Problem:
+**Problem:**
 <symptom>, because <cause>.
 
-Solution:
+**Solution:**
 <what the branch does>
 
-Decisions:
+**Decisions:**
 - <decision>
 ```
 
 - `Merge after` only when the branch stacks on another PR; `because <cause>` only on a bug; Problem and Solution are one sentence each.
-- `Decisions` is one flat list: the plan's `Decisions`, plus each gap with the ticket and release prerequisite the `Spec` holds, without duplicates. The plan is never committed, so the PR is their only shared copy.
+- `Decisions` is one flat list: the plan's `Decisions`, plus each gap with the ticket and release prerequisite the `Spec` holds, without duplicates. Its items join clauses with commas, never semicolons. The plan is never committed, so the PR is their only shared copy.
 - When the user says the PR is open, check it with the forge reference's command.
 
 Then follow the pipeline (forge reference); a failure goes to `ci-investigate`.
