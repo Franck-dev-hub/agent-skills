@@ -202,7 +202,8 @@ Step <n+1>: <name>, once step <n> is done
 ### 1. Read the ticket
 
 From the tracker: the ticket, its status, its blockers; name the tracker used in the report, so a wrong pick shows.
-Done when the status is Ready and every blocker is closed; otherwise stop and give the reason.
+Done when the status is Ready or In progress and every blocker is closed; otherwise stop and give the reason.
+In progress with no plan only means the ticket was moved before its start: never stop on it.
 
 A pasted ticket with no readable tracker is ready: never ask; name in one line any blocker the text lists, then go straight to step 2.
 An id or URL whose tracker this session cannot read: ask the user to paste the ticket.
@@ -215,7 +216,7 @@ An id or URL whose tracker this session cannot read: ask the user to paste the t
 - Tell the user the session name to set: `/rename <branch>`.
 
 Done when the branch is checked out and the plan exists.
-Tracker: status to In progress, applied without asking.
+Tracker: status to In progress, applied without asking; nothing when it is already there.
 
 ### 3. Read the context
 
