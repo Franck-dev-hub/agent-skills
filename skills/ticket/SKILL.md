@@ -244,12 +244,12 @@ With no such tool, say so in one line and go on.
 Start the step 4 background agents (*Delegation*), then run the Grill slot, then the Domain slot, on the ticket.
 A bug skips both slots: once the `debug-investigate` report is in, ask one round of three questions: the expected result, the cause confirmed, the scope of the fix (this case, or every place sharing the cause).
 It runs the Domain slot only when the cause is a misread business term.
-Give the Domain slot the plan path: it writes no file in the repo, its glossary goes in the plan's `Glossary` section, its ADRs in `Decisions`.
+Give the Domain slot the plan path: it writes no file in the repo and no glossary, its ADRs go in `Decisions`.
 
 Wait for the background reports before asking the user to confirm the shared understanding: a report that contradicts a decision reopens it in the Grill slot.
 Once the user confirms, merge the reports into the plan, then run the Spec slot on the ticket; its report goes in the plan's `Spec` section.
 Whatever skill fills the slot, the `Spec` lists the edge cases, or `none` with the reason.
-Then fill the plan: context, glossary, decisions, spec, files touched, tasks, `Current step`.
+Then fill the plan: context, decisions, spec, files touched, tasks, `Current step`.
 Tasks are a `- [ ]` list in execution order, never numbered: the order is the numbering. Each one is small enough to review alone.
 A Method skill that asks the user, such as the seams to test, asks now: each answer goes in its task, so step 5 never stops on it.
 
@@ -262,7 +262,7 @@ Rewrite its body only when it breaks the tracker's standard outright (`create-is
 Run every plan task in order, one at a time, without stopping between them: tasks share the working tree and the dev database.
 A task that matches the Task skills slot runs that skill instead of writing the code by hand.
 Every other task runs in a fresh `ticket-implement` agent, which follows the Method slot.
-Its brief: the task and its answers, the `Spec` edge cases it covers, the plan's `Decisions` and `Glossary` in place of the glossary and ADR files the skill would read, `Files touched`, the test command, and the comment rule, as for the comment pass of step 6.
+Its brief: the task and its answers, the `Spec` edge cases it covers, the plan's `Decisions` in place of the ADR files the skill would read, `Files touched`, the test command, and the comment rule, as for the comment pass of step 6.
 Check each report against its task, on the diff of its `Files changed` only: nothing is committed before step 8, so the branch diff holds every earlier task. A gap goes back to the same agent, with what is missing.
 After each task, tick it in the plan and set `Current step` to `5, task <i>/<total>`.
 Each edge case of the `Spec` gets its test.

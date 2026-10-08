@@ -10,7 +10,7 @@ Actively build and sharpen the project's domain model as you design. This is the
 ## Where it writes
 
 Standalone, it writes the files below.
-Called by the ticket skill with a plan path, it writes nothing in the repo: the glossary goes in the plan's `Glossary` section, each ADR in its `Decisions` section; `CONTEXT.md`, `CONTEXT-MAP.md` and `docs/adr/` are read, never written.
+Called by the ticket skill with a plan path, it writes nothing in the repo and keeps no glossary: it only challenges terms, and each ADR goes in the plan's `Decisions` section; `CONTEXT.md`, `CONTEXT-MAP.md` and `docs/adr/` are read, never written.
 
 ## File structure
 
@@ -64,7 +64,7 @@ When the user states how something works, check whether the code agrees. If you 
 
 ### Update the glossary inline
 
-When a term is resolved, update `CONTEXT.md` right there, or the plan's `Glossary` section. Don't batch these up: capture them as they happen. Use the format in [CONTEXT-FORMAT.md](./CONTEXT-FORMAT.md).
+When a term is resolved, update `CONTEXT.md` right there. Don't batch these up: capture them as they happen. Use the format in [CONTEXT-FORMAT.md](./CONTEXT-FORMAT.md).
 
 `CONTEXT.md` should be totally devoid of implementation details. Do not treat `CONTEXT.md` as a spec, a scratch pad, or a repository for implementation decisions. It is a glossary and nothing else.
 
