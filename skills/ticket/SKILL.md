@@ -326,9 +326,33 @@ Done when the working tree holds nothing the series planned, and the plan lists 
 
 When `<base>` moved and conflicts with the branch, show the user the conflicts, merge `<base>` into the branch (a rebase only on the user's yes), resolve each hunk keeping both intents, never abort, then rerun the test command; the merge commit waits for the user's yes like any commit.
 
-Give the user the PR title to copy, never a command: they push and open the PR their own way.
+Give the user the PR title and description to copy, never a command: they push and open the PR their own way.
 
 - The title follows the `franck-dev-skills:commit-message` format and sums up the whole branch: `[Type] #<ticket-id> Description`, without `#<ticket-id>` for a local id; with a single commit, it is that commit's message.
+- The description is in the user's language, with nothing else, such as a test section:
+
+```markdown
+Merge after !<n>
+
+Problem:
+<symptom>, because <cause>.
+
+Solution:
+<what the branch does>
+
+Decisions:
+- <decision>
+
+<details><summary>All decisions (<count>)</summary>
+
+- <decision>
+
+</details>
+```
+
+- `Merge after` only when the branch stacks on another PR; `because <cause>` only on a bug; Problem and Solution are one sentence each.
+- `Decisions` keeps only what the reviewer cannot read in the diff: an alternative they would ask about, a gap with the ticket, a risk for the release or a later update. Look for them in the whole plan, not only in `Decisions`: a gap with the ticket or a release prerequisite often sits in the `Spec`.
+- The folded list is the plan's `Decisions` as written: the plan is never committed, so the PR is their only shared copy.
 - When the user says the PR is open, check it with the forge reference's command.
 
 Then follow the pipeline (forge reference); a failure goes to `ci-investigate`.

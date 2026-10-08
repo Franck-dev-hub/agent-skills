@@ -511,16 +511,17 @@
           <button class="node" data-id="step9" aria-pressed="false">
             <span class="num"><b>9</b></span>
             <span class="t">Ouvrir la PR<span class="tag">PR</span><span class="who">Utilisateur</span></span>
-            <span class="s">Titre, push et CI</span>
+            <span class="s">Titre, description, push et CI</span>
             <span class="chips"><span class="chip bg">ci-investigate</span></span>
           </button>
           <template>
             <span class="label">Step</span>
             <h2>Ouvrir la PR</h2>
-            <p class="sub">Titre, push et CI</p>
+            <p class="sub">Titre, description, push et CI</p>
             <h3>Exécute</h3>
             <ul>
               <li>Fournit le titre : <code>[Type] #&lt;id&gt; Description</code>, sans <code>#&lt;id&gt;</code> pour un id local.</li>
+              <li>Fournit la description : Problème, Solution, les décisions qui ne se lisent pas dans le diff, puis toutes les décisions du plan, repliées.</li>
               <li>L'utilisateur pousse et ouvre la PR.</li>
               <li>Vérifie la PR et suit la CI.</li>
               <li>Commentaires de review : chacun vérifié contre le code, le Spec et les Decisions ; verdict proposé, jamais appliqué tel quel.</li>
