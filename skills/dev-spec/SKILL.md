@@ -24,6 +24,21 @@ and its own subject; each returns facts with the `path:line` it read, no prose:
 | Trace the runtime flow to the root cause                               | 3     | `opus`  |
 | List the files involved and an existing pattern solving a sibling case | 4     | default |
 
+Called with a route by the `ticket-investigate` agent, send only the agents it names:
+
+| Route   | Agents                                                                  |
+|---------|-------------------------------------------------------------------------|
+| bug     | the first and the third; the flow only when the plan holds no cause     |
+| feature | the first and the third; the flow, on the default model, see below      |
+| tooling | the first and the third, plus one on the external facts the plan lacks  |
+
+A feature sends the flow agent only when the plan's `Files touched` or `Decisions` name
+an existing runtime flow it extends. The external-facts agent returns docs, versions and
+tool options, each with its source URL and the date read. When the flow agent is skipped,
+step 3 uses the plan's cause for a bug and does not apply otherwise; feature and tooling
+have no cause line in the report. A fact the plan already holds with its `path:line`, or
+its source URL and date, is not sent again.
+
 Then run steps 2, 6 and 7 on the merged facts. A request already pinned to one file skips
 the agents and runs the steps itself. Do not write the report from the first merge: the
 first read of a ticket is always the client's framing, not the technical shape of the fix.
@@ -70,8 +85,8 @@ le code montre Y"); don't silently discard it.
 ## Report format
 
 French, no emojis, no em dashes, telegraphic where the original ticket trame is
-telegraphic. Exactly these sections, in this order (this mirrors the ticket trame the
-user pastes in, so the report can be copy-pasted straight into it):
+telegraphic. Outside plan mode, exactly these sections, in this order (this mirrors the
+ticket trame the user pastes in, so the report can be copy-pasted straight into it):
 
 ```
 ## Contexte
@@ -111,6 +126,32 @@ En tant que …, je veux …, afin de …
 Tag each claim with a confidence marker only where it is genuinely uncertain (a hook not
 directly verified, a route not traced end to end); don't hedge things already confirmed
 by reading the file.
+
+### Plan mode
+
+Called with a plan path by the `ticket-investigate` agent, the plan already holds the
+context, the user story and the criteria: return only these sections, in this order.
+
+```
+### Critères ajoutés
+
+- [ ] <un critère que le plan n'énonce pas encore, ou « aucun »>
+
+### Détails / Notes
+
+- **Mécanisme actuel** : …
+- **Cause racine** : <bug seulement>
+- **Solution proposée** : <tableau Fichier | Action | Rôle>
+- **Points restant à trancher** : …
+
+### Cas limites
+
+- <cas : comportement attendu, ou « non applicable » avec la raison>
+
+### Dépendances / tickets liés
+
+- <si l'investigation en a révélé, sinon ligne omise>
+```
 
 ### Contexte and AC stay condensed, not solution-shaped
 
