@@ -10,6 +10,7 @@ argument-hint: <ticket-id-url-or-pasted-text>
 Ticket: `$ARGUMENTS`.
 
 First read `~/.claude/ticket.local.md`, when it exists: its first profile whose remote pattern matches `origin` gives project values and slots (format: `references/local-profile.md`).
+With none matching, set up the profile in this very turn, before step 0, with or without a ticket and even on a resume: the slots (*Tooling*) and the tracker when no source names it; ask for a missing ticket id in the same turn.
 
 ## Forge and tracker
 
@@ -107,7 +108,7 @@ Review and Lint take several skills, run in the listed order (`a`, then `b`); ev
 | Lint | 6 | the project's lint commands |
 | E2E | 6 | none |
 
-With no profile matching `origin`, before step 1, propose each slot once, in as few questions as possible: the installed skills that fit it, the `franck-dev-skills:` ones first and marked recommended. Review and Lint are a multi-select; with two or more picked, propose an order, the skills that fix code first, and let the user confirm or retype it. Save the answers as a new profile on the user's yes.
+With no profile matching `origin`, propose each slot once, in as few questions as possible: the installed skills that fit it, the `franck-dev-skills:` ones first and marked recommended. Review and Lint are a multi-select; with two or more picked, propose an order, the skills that fix code first, and let the user confirm or retype it. Save the answers as a new profile on the user's yes.
 A slot skill from another plugin keeps to its step: what it would write elsewhere (a design doc, a plan) goes in the plan section its slot fills, and it never chains to another skill; the ticket goes on with its own steps.
 
 ## Delegation
