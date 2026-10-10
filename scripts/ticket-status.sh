@@ -6,7 +6,7 @@ cwd=$(printf '%s' "$input" | grep -o '"cwd" *: *"[^"]*"' | head -1 | sed -E 's/^
 [ -n "$cwd" ] || cwd=$PWD
 
 branch=$(git -C "$cwd" --no-optional-locks branch --show-current 2>/dev/null) || exit 0
-id=$(printf '%s' "$branch" | sed -nE 's#^[^/]+/(([A-Za-z][A-Za-z0-9_]*-)?[0-9]+)-.*#\1#p')
+id=$(printf '%s' "$branch" | sed -nE 's#^[^/]+/(([A-Za-z][A-Za-z0-9_]*-?)?[0-9]+)-.*#\1#p')
 [ -n "$id" ] || exit 0
 root=$(git -C "$cwd" rev-parse --show-toplevel 2>/dev/null) || exit 0
 
