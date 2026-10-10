@@ -117,7 +117,7 @@ A skill that never asks the user runs in a sub-agent, so its output stays out of
 
 | Agent | Runs |
 |---|---|
-| `franck-dev-skills:ticket-investigate` | the Spec slot when it is `dev-spec` |
+| `franck-dev-skills:ticket-investigate` | the Spec slot when it is `dev-spec`, with its route (step 4) in the brief: a bug on its default model and effort; a feature with the `effort: medium` override; tooling with the `sonnet` model and `effort: medium` overrides |
 | `franck-dev-skills:ticket-review` | each Review skill in its own agent, the E2E slot, the conformance check, and the comment pass |
 | `franck-dev-skills:ticket-implement` | each hand-written task of step 5, one agent per task |
 | `franck-dev-skills:ticket-check` | a Lint skill, on its Haiku default; a Task skill that asks nothing, with the `sonnet` model override |
@@ -135,6 +135,7 @@ While the session waits on the user, agents prepare the next work in the backgro
 |---|---|---|
 | Step 4, during the grilling | `franck-dev-skills:debug-investigate` | a bug's root cause, from the `Reproduction` section |
 | Step 4, during the grilling | `Explore` | the files and flows the ticket touches, for `Files touched`, each fact with its `path:line` so the Spec slot does not re-read it |
+| Step 4, during the grilling | `Explore` | the external facts the ticket rests on (versions, APIs, tool options), each with its source URL and the date read, so the Spec slot does not re-check them; send it, through SendMessage, each grilling decision that changes the stack or the tooling |
 | Step 4, during the grilling | `franck-dev-skills:ticket-review` | a visual ticket's `before/` captures |
 | Step 6, after the review | `franck-dev-skills:ticket-review` | the skill's recette and the `after/` captures, while lint and tests run |
 | Step 6, during the final recette | `Explore` | the passages of `docs/` and `README.md` the diff changes, for step 7 |
@@ -224,6 +225,7 @@ Tracker: status to In progress, applied without asking; nothing when it is alrea
 
 The linked tickets (blocking, blocked, parent, children), `AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md`, `CONTEXT.md`, `docs/adr/`.
 Run the Standards slot: it loads the standards the ticket touches; never ask which ones.
+Read whole every file the ticket leans on, these and any other: a read that comes back condensed or cut is read again raw.
 
 Not a gate: once the standards are loaded, list them in one line and go straight to step 4.
 
@@ -249,6 +251,8 @@ Give the Domain slot the plan path: it writes no file in the repo and no glossar
 
 Wait for the background reports before asking the user to confirm the shared understanding: a report that contradicts a decision reopens it in the Grill slot.
 Once the user confirms, merge the reports into the plan, then run the Spec slot on the ticket; its report goes in the plan's `Spec` section.
+Its route follows the branch type: `fix` and `hotfix` give bug, `chore` gives tooling, any other type, `refactor` and `doc` included, gives feature; a bug ticket on another branch type still takes bug.
+Its added criteria join the plan's acceptance criteria.
 Whatever skill fills the slot, the `Spec` lists the edge cases, or `none` with the reason.
 Then fill the plan: context, decisions, spec, files touched, tasks, `Current step`.
 Tasks are a `- [ ]` list in execution order, never numbered: the order is the numbering. Each one is small enough to review alone.
