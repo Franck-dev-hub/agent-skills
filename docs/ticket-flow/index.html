@@ -64,7 +64,7 @@
                 <table class="dec">
                   <tr><td>un <code>Remote:</code> correspond à <code>origin</code></td><td>le premier profil trouvé fournit valeurs et slots</td></tr>
                   <tr><td>une ligne <code>per repo</code> correspond</td><td>elle remplace la valeur du profil</td></tr>
-                  <tr><td>aucun profil</td><td>slots proposés avant le step 1</td></tr>
+                  <tr><td>aucun profil</td><td>slots et tracker proposés tout de suite, avec ou sans ticket, reprise comprise</td></tr>
                 </table>
                 <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/skills/ticket/references/local-profile.md">local-profile.md</a></p>
               </template>
@@ -180,7 +180,7 @@
                 <table class="dec">
                   <tr><td>slot vide</td><td>valeur par défaut</td></tr>
                   <tr><td>défaut <code>none</code></td><td>action sautée et signalée</td></tr>
-                  <tr><td>aucun profil</td><td>chaque slot proposé une fois, puis enregistré</td></tr>
+                  <tr><td>aucun profil</td><td>chaque slot proposé une fois, avant le step 0, puis enregistré</td></tr>
                   <tr><td>Review, Lint</td><td>choix multiple, exécutés dans l'ordre choisi ; ceux qui corrigent d'abord</td></tr>
                 </table>
                 <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/skills/ticket/SKILL.md#tooling">SKILL.md › Tooling</a></p>
