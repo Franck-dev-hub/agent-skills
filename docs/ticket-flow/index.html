@@ -332,6 +332,7 @@
             <ul>
               <li>Lit tickets liés, <code>AGENTS.md</code>, <code>CLAUDE.md</code>, <code>CONTRIBUTING.md</code>, <code>CONTEXT.md</code>, <code>docs/adr/</code>.</li>
               <li>Lance le slot Standards.</li>
+              <li>Lit en entier chaque fichier sur lequel le ticket s'appuie ; une lecture condensée ou tronquée est relue brute.</li>
               <li>Passe directement au step 4.</li>
             </ul>
             <h3>Résultat</h3>
@@ -360,7 +361,8 @@
               <li>Slot Grill, puis slot Domain.</li>
               <li>Bug : ni Grill ni Domain ; trois questions après la cause : résultat attendu, cause confirmée, portée du correctif.</li>
               <li>Rapports d'arrière-plan confrontés aux décisions avant validation.</li>
-              <li>Après validation : slot Spec, avec les edge cases.</li>
+              <li>Pendant le grilling : faits externes (versions, API, options) cherchés en arrière-plan, avec URL et date ; chaque décision du grilling qui change la stack lui est transmise.</li>
+              <li>Après validation : slot Spec selon la route du type de branche, avec les edge cases ; ses critères ajoutés rejoignent ceux du plan.</li>
               <li>Découpe en tâches ordonnées ; les questions du slot Method, comme les seams à tester, posées ici.</li>
             </ul>
             <h3>Utilisateur</h3>
@@ -374,6 +376,9 @@
               <tr><td>le ticket nomme un environnement, ou bug non reproductible en local</td><td>demande l'environnement</td></tr>
               <tr><td>pas d'outil navigateur</td><td>captures sautées et signalées</td></tr>
               <tr><td>rapport ou réponse qui contredit une décision réglée</td><td>décision reposée dans le Grill</td></tr>
+              <tr><td>branche <code>fix</code> ou <code>hotfix</code>, ou ticket de bug</td><td>route bug : modèle et effort par défaut ; agent de flux seulement sans cause dans le plan</td></tr>
+              <tr><td>branche <code>chore</code></td><td>route outillage : faits externes et fichiers, <code>sonnet</code>, effort medium</td></tr>
+              <tr><td>autre type de branche</td><td>route feature : agent de flux seulement sur un flux existant, effort medium</td></tr>
             </table>
             <h3>Résultat</h3>
             <dl class="kv">
