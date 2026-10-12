@@ -12,7 +12,7 @@ Private agent marketplace hosting personal skills.
 | Skill             | Purpose                                                                                       |
 |-------------------|-----------------------------------------------------------------------------------------------|
 | `commit-message`  | Suggest a `[Type] Description` commit message from the staged diff                            |
-| `condense`        | Shorten a Markdown file, or a code file's comments, without losing information                |
+| `condense`        | Shorten Markdown or code comments for agents and humans, without losing information           |
 | `create-issue`    | Create single-layer tracked issues on GitHub or GitLab                                        |
 | `dev-spec`        | Turn a bug or feature request into a technical spec                                           |
 | `domain-modeling` | Build the domain glossary and ADRs; copied from mattpocock-skills                             |

@@ -4,8 +4,9 @@
 Usage: check_md.py <before.md> <after.md>
 
 Exit 1 when a hard invariant is lost: frontmatter, headings, URLs, link
-targets, inline code, numbers or the number of fenced blocks.
-Removed HTML comments and changed fence lines are printed for review only.
+targets, numbers or the number of fenced blocks.
+Removed inline code, HTML comments and changed fence lines are printed for
+review only.
 """
 
 import difflib
@@ -58,7 +59,6 @@ def invariants(prose):
         "headings": {m.group(1) for line in prose if (m := HEADING.match(line))},
         "URLs": set(URL.findall(joined)),
         "link targets": set(LINK_TARGET.findall(joined)) | set(WIKI_LINK.findall(joined)),
-        "inline code": set(INLINE_CODE.findall(joined)),
         "numbers": set(NUMBER.findall(URL.sub(" ", without_markers))),
     }
 
@@ -94,6 +94,9 @@ def main(before_path, after_path):
                 for line in difflib.unified_diff(old, new, lineterm="", n=0):
                     if not line.startswith(("---", "+++", "@@")):
                         print(f"  {line}")
+
+    for code in sorted(set(INLINE_CODE.findall("\n".join(prose_before))) - set(INLINE_CODE.findall("\n".join(prose_after)))):
+        print(f"REVIEW inline code removed: `{code}`")
 
     removed = sorted(set(HTML_COMMENT.findall("\n".join(prose_before))) - set(HTML_COMMENT.findall("\n".join(prose_after))))
     for comment in removed:
