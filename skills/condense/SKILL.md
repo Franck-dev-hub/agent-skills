@@ -42,6 +42,7 @@ For each file:
 - Machine-read comments: shebang, encoding line, licence header, typed tags (`@var`, `@param`, `@return`, `@throws`, `@phpstan-*`, `@psalm-*`), annotations and attributes, `phpstan-ignore`, `phpcs:`, `eslint-`, `@ts-`, `noqa`, `type: ignore`, `prettier-ignore`, `#region`, `go:build`, `shellcheck`, TOC or markdownlint markers.
 - `TODO` and `FIXME` with a ticket: shorten the text, keep the reference.
 - Commented-out code: not deleted, listed in the report.
+- A comment that contradicts the code: not changed, listed in the report; either side may be wrong.
 
 ## 3. Code references
 
@@ -87,6 +88,7 @@ Applies to code files and to fenced blocks in Markdown.
 The comment rule of the project's `AGENTS.md` or `CLAUDE.md` wins over this section.
 
 - Delete a comment that restates the code below it.
+- Delete edit narration ("changed to a set", "now uses X"); a warning still true inside it is rewritten in the present tense.
 - Keep a comment that gives a why: constraint, trade-off, trap, link to an issue.
   Rewrite it to one line when it fits.
 - A tag-less one-line docblock in PHP or JS becomes `//`; keep `/** */` when it carries a tag.
@@ -125,6 +127,7 @@ Then check each information unit from step 1 against the new file.
 
 ### Kept for review
 - <file>:<line> commented-out code
+- <file>:<line> contradicts the code: <what differs>
 ```
 
 Removed content lists every cut that dropped meaning, not wording.
