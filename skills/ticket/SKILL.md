@@ -345,12 +345,12 @@ Merge after !<n>
 **Solution:**
 <what the branch does>
 
+**Decisions:**
+- <decision>
+
 **To verify:**
 - Prerequisites: <URL, account, data>
 - <action>: <expected result>
-
-**Decisions:**
-- <decision>
 ```
 
 - `Merge after` only when the branch stacks on another PR; `because <cause>` only on a bug; Problem and Solution are one sentence each.
