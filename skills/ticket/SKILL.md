@@ -51,7 +51,7 @@ Find the plan folder before anything else, and never propose a new one while an 
 
 1. The folder `AGENTS.md` or `CLAUDE.md` names.
 2. Else the git-ignored `plans` or `.plans` folders of the repo:
-   `find . -type d \( -name node_modules -o -name vendor -o -name .git -o -name var \) -prune -o -type d \( -name plans -o -name .plans \) -print`, kept when `git check-ignore -q` passes.
+   `find -L . -type d \( -name node_modules -o -name vendor -o -name .git -o -name var \) -prune -o -type d \( -name plans -o -name .plans \) -print`, kept when `git check-ignore -q` passes.
    One found: use it without asking. Several: ask once which one.
 3. Else propose `docs/plans/`, or `.plans/` when `git ls-files docs/plans` lists tracked files; add it to `.git/info/exclude` on the user's yes, never to the team's `.gitignore`.
 
