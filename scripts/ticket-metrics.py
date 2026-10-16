@@ -29,7 +29,7 @@ def find_plan(root, ticket_id, branch):
     pattern = re.compile(rf"/{ticket_id}-[^/]*/plan\.md$")
     depth = root.count(os.sep)
     found = []
-    for base, dirs, files in os.walk(root):
+    for base, dirs, files in os.walk(root, followlinks=True):
         dirs[:] = [d for d in dirs if d not in PRUNED]
         if base.count(os.sep) - depth >= 10:
             dirs[:] = []
