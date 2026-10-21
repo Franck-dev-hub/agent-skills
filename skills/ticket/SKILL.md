@@ -301,9 +301,12 @@ The skill runs and fixes everything first, so the user runs a single final recet
    It never touches a comment the branch did not write, nor one that carries function: linter or analyzer directive, docblock type, annotation, license, shebang.
    Its changes go in `Evidence`, one line per file.
 4. Meanwhile, write the plan's `Recette` section.
-5. Once both are done, in parallel: the Lint slot, in its order, and the full test command in the background, and `ticket-review` running the recette box by box, with the E2E slot or a real-browser tool, and replaying every `Captures` entry into `after/` under the same file name.
+5. Once both are done, in parallel: the Lint slot, in its order, and the full test command in the background, and `ticket-review` running the recette box by box, with the E2E slot or a real-browser tool, classing each box (see below), and replaying every `Captures` entry into `after/` under the same file name.
 6. A failing check or box: fix it, as a new task in the plan, then rerun what it touches, the comment pass included.
-7. Once everything passes, hand the recette to the user for the final run, with the `before/` and `after/` pairs; meanwhile, the docs scan for step 7 runs in the background.
+7. Once everything passes, hand the recette to the user; meanwhile, the docs scan for step 7 runs in the background:
+   - the Proven boxes with their evidence, in a multi-select question asking which to tick, split when they outnumber its options;
+   - then the To judge boxes, each with its `after/` capture, beside its `before/` one when there is one;
+   - the user runs only the Out of reach boxes.
 
 The recette holds one block per acceptance criterion, in the ticket's order, then the non-regressions and the `Spec`'s edge cases; for a bug, the plan's `Reproduction` comes first, now expecting the fixed result:
 
@@ -316,8 +319,17 @@ The recette holds one block per acceptance criterion, in the ticket's order, the
 
 - Steps are what a tester without the code can do and see: URL, button, field, message; never a class or a command.
 - Post-merge criteria go in a `Post-merge` subsection, run at step 10.
-- The skill's own run goes in the plan's `Evidence`, one line per box; a box it cannot check (no browser tool, a real email, a third-party service) is marked for the user.
-- Only the user ticks the boxes; a box they report failing gets fixed, then the skill reruns its recette before handing it back.
+- The skill's own run goes in the plan's `Evidence`, one line per box, classing it:
+
+| Class | When | Evidence |
+|---|---|---|
+| Proven | the run saw the expected result | HTTP status, SQL row, message shown, or capture path |
+| To judge | the result is visual or UX: the user looks at it | the `after/` capture |
+| Out of reach | a real third party, a real email, another environment | none: the user runs it |
+
+- Proven requires its evidence on the line; a box without evidence is To judge.
+- Every evidence line names what the app served at that moment: branch and commit, from a version endpoint, the footer, or `git rev-parse HEAD` in the mounted tree. Evidence from another tree counts as none.
+- A box is ticked only from the user's answer, never from the skill's run; a box they report failing gets fixed, then the skill reruns its recette before handing it back.
 
 Skip a skill that is not installed or does not fit the stack, and say so.
 Keep each check's evidence in the plan: command, output line.
