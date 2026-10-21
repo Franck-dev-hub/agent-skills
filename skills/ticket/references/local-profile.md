@@ -32,6 +32,10 @@ Run `<plugin>:load-standards`, and load the standards the ticket touches.
 
 `<plugin>:tdd`
 
+## Runner
+
+`docker compose run --rm -e APP_CACHE_DIR=var/cache-runner <service>`
+
 ## Grill, Domain
 
 | Slot | Skill |

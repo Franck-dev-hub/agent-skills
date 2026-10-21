@@ -104,9 +104,13 @@ Review and Lint take several skills, run in the listed order (`a`, then `b`); ev
 | Spec | 4 | `franck-dev-skills:dev-spec` |
 | Task skills | 5 | none |
 | Method | 5 | none |
+| Runner | 5 | none: no project command runs in parallel |
 | Review | 6 | none |
 | Lint | 6 | the project's lint commands |
 | E2E | 6 | none |
+
+Runner is a command prefix: it runs the project's tooling (tests, lint, the package manager) on the main checkout in its own container and cache namespace, leaving the live app untouched.
+To set it up, propose none, or a prefix built from the project's container setup.
 
 With no profile matching `origin`, propose each slot once, in as few questions as possible: the installed skills that fit it, the `franck-dev-skills:` ones first and marked recommended. Review and Lint are a multi-select; with two or more picked, propose an order, the skills that fix code first, and let the user confirm or retype it. Save the answers as a new profile on the user's yes.
 A slot skill from another plugin keeps to its step: what it would write elsewhere (a design doc, a plan) goes in the plan section its slot fills, and it never chains to another skill; the ticket goes on with its own steps.
@@ -123,6 +127,7 @@ A skill that never asks the user runs in a sub-agent, so its output stays out of
 | `franck-dev-skills:ticket-check` | a Lint skill, on its Haiku default; a Task skill that asks nothing, with the `sonnet` model override |
 
 The brief is self-contained: skill, plan path, ticket id, branch, the diff, and what the step needs.
+Every brief keeps git read-only (`status`, `diff`, `log`, `show`) and forbids `stash`, `reset`, `checkout`, `switch`, `restore` and `clean`: agents share the working tree and the index, and one `git stash` sweeps every other task's uncommitted work.
 The diff is `git diff --merge-base <base>` plus `git ls-files --others --exclude-standard`: nothing is committed before step 8, so `<base>..HEAD` would be empty.
 Write the report's evidence and findings in the plan, and bring its questions to the user.
 Every other skill runs in the session: it talks to the user.
@@ -172,13 +177,13 @@ Give a summary of five lines at most: ticket, status, branch, commits, PR.
 Propose the next step, then wait for the user.
 An open PR means step 9; with unresolved review threads, its review comments.
 A merged PR means step 10.
-Step 5 resumes at the first unticked task of the plan.
+Step 5 resumes with the wave of unticked tasks whose dependencies are ticked.
 Step 6 resumes at the first failing check, then the comment pass when `Evidence` lacks it, then the skill's recette, then the first box the user has not ticked.
 
 ## Steps
 
 Every step but step 3, and step 1 for a pasted ticket, is a **gate**: once its criterion is met, stop.
-Keep the plan's `Current step` row true at all times, once the plan exists: `<n>` when a step starts, `<n>, <progress>` while it runs (`5, task 2/4`, `8, commit 1/3`), `<n>, done` at its gate, once its tracker changes are applied; while one waits for the user's yes, `<n>, tracker pending`.
+Keep the plan's `Current step` row true at all times, once the plan exists: `<n>` when a step starts, `<n>, <progress>` while it runs (`5, tasks 3+6/7`, `8, commit 1/3`), `<n>, done` at its gate, once its tracker changes are applied; while one waits for the user's yes, `<n>, tracker pending`.
 Before stopping, report in five lines at most, commands and status lines excluded: what was done, its evidence, then the tracker changes to apply.
 Start the next step only on the user's explicit go; a go covers one step, never the rest of the list.
 
@@ -256,6 +261,7 @@ Its added criteria join the plan's acceptance criteria.
 Whatever skill fills the slot, the `Spec` lists the edge cases, or `none` with the reason.
 Then fill the plan: context, decisions, spec, files touched, tasks, `Current step`.
 Tasks are a `- [ ]` list in execution order, never numbered: the order is the numbering. Each one is small enough to review alone.
+Each task states its dependencies and the resources it uses: files, the running app (container, dev database, cache), the browser; `- [ ] <task> (after 2, 4; uses <files>, dev database)`, the numbers being positions in the list.
 A Method skill that asks the user, such as the seams to test, asks now: each answer goes in its task, so step 5 never stops on it.
 
 Done when the plan holds its tasks.
@@ -264,15 +270,21 @@ Rewrite its body only when it breaks the tracker's standard outright (`create-is
 
 ### 5. Write the code
 
-Run every plan task in order, one at a time, without stopping between them: tasks share the working tree and the dev database.
+Run the plan's tasks in waves, without stopping between them.
+A wave is every unticked task whose dependencies are ticked and whose resources overlap no running task's: launch it in one batch of parallel tool calls.
+Two ready tasks that overlap each other never share a wave: the earlier one in the list goes first.
+The running app, the dev database, the browser and any rebuild of a shared cache take one task at a time.
+A task that runs project commands (tests, lint, the package manager) runs beside others only through the Runner slot; with none, it counts as using the running app.
 A task that matches the Task skills slot runs that skill instead of writing the code by hand.
-Every other task runs in a fresh `ticket-implement` agent, which follows the Method slot.
-Its brief: the task and its answers, the `Spec` edge cases it covers, the plan's `Decisions` in place of the ADR files the skill would read, `Files touched`, the test command, and the comment rule, as for the comment pass of step 6.
-Check each report against its task, on the diff of its `Files changed` only: nothing is committed before step 8, so the branch diff holds every earlier task. A gap goes back to the same agent, with what is missing.
-After each task, tick it in the plan and set `Current step` to `5, task <i>/<total>`.
+Every other task runs in its own fresh `ticket-implement` agent, which follows the Method slot.
+Its brief: the task and its answers, the `Spec` edge cases it covers, the plan's `Decisions` in place of the ADR files the skill would read, `Files touched`, the test command (behind the Runner when the task shares its wave), and the comment rule, as for the comment pass of step 6.
+As each agent returns, check its report against its task, on the diff of its `Files changed` only: nothing is committed before step 8, so the branch diff holds every other task. A gap goes back to the same agent, with what is missing.
+Once a report checks out, tick its task, then launch every task that became ready.
+`Current step` shows the running wave: `5, tasks 3+6/7`.
 Each edge case of the `Spec` gets its test.
 
 Stop before the end only when the user must decide: a task contradicts a plan decision, a test fails for a reason the plan did not foresee, or a skill or an agent asks a question.
+Launch no new task until the user answers; the running ones finish.
 
 Done when every acceptance criterion that can be met before merge is implemented.
 Report the files touched and what they now do, in short sentences.

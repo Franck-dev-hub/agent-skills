@@ -13,7 +13,7 @@
 <body>
 <div class="wrap">
   <header>
-    <span class="label">franck-dev-skills 3.18.2 - skills/ticket</span>
+    <span class="label">franck-dev-skills 3.18.3 - skills/ticket</span>
     <h1>Flux du skill ticket</h1>
     <p class="lede">Ce que fait <code>/ticket &lt;arg&gt;</code>, du lancement au merge.</p>
     <div class="legend">
@@ -174,6 +174,7 @@
                 <h3>Exécute</h3>
                 <ul>
                   <li>Défauts : Grill <code>grilling</code>, Domain <code>domain-modeling</code>, Spec <code>dev-spec</code>, Lint commandes du projet, autres <code>none</code>.</li>
+                  <li>Runner : préfixe qui lance l'outillage du projet dans son propre conteneur et son propre cache, sans toucher l'app lancée.</li>
                   <li>Un skill de slot écrit dans le plan et ne lance aucun autre skill.</li>
                 </ul>
                 <h3>Décisions</h3>
@@ -257,7 +258,7 @@
                 <ul>
                   <li><button class="jump" data-id="step9">PR ouverte, ou ses commentaires de review</button></li>
                   <li><button class="jump" data-id="step10">PR mergée</button></li>
-                  <li><button class="jump" data-id="step5">Step 5 : première tâche non cochée</button></li>
+                  <li><button class="jump" data-id="step5">Step 5 : vague des tâches non cochées prêtes</button></li>
                   <li><button class="jump" data-id="step6">Step 6 : premier check en échec, puis recette</button></li>
                 </ul>
                 <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/skills/ticket/SKILL.md#resume">SKILL.md › Resume</a></p>
@@ -363,7 +364,7 @@
               <li>Rapports d'arrière-plan confrontés aux décisions avant validation.</li>
               <li>Pendant le grilling : faits externes (versions, API, options) cherchés en arrière-plan, avec URL et date ; chaque décision du grilling qui change la stack lui est transmise.</li>
               <li>Après validation : slot Spec selon la route du type de branche, avec les edge cases ; ses critères ajoutés rejoignent ceux du plan.</li>
-              <li>Découpe en tâches ordonnées ; les questions du slot Method, comme les seams à tester, posées ici.</li>
+              <li>Découpe en tâches ordonnées, chacune avec ses dépendances et ses ressources (fichiers, app lancée, navigateur) ; les questions du slot Method, comme les seams à tester, posées ici.</li>
             </ul>
             <h3>Utilisateur</h3>
             <ul>
@@ -405,11 +406,13 @@
             <p class="sub">Tâches du plan</p>
             <h3>Exécute</h3>
             <ul>
-              <li>Exécute les tâches dans l'ordre, une à la fois, sans pause.</li>
+              <li>Exécute les tâches par vagues, sans pause : chaque tâche prête dont les ressources ne croisent aucune tâche en cours part en parallèle.</li>
+              <li>App lancée, base de dev, navigateur et cache partagé : une tâche à la fois ; commandes du projet en parallèle seulement via le slot Runner.</li>
+              <li>Git en lecture seule dans chaque agent : ni <code>stash</code>, ni <code>reset</code>, ni <code>checkout</code>.</li>
               <li>Chaque tâche écrite à la main : un agent <code>ticket-implement</code> neuf, puis son diff vérifié contre la tâche.</li>
               <li>Slot Task skills pour les tâches concernées, slot Method pour les autres.</li>
               <li>Un test par edge case du Spec.</li>
-              <li>Coche chaque tâche.</li>
+              <li>Coche chaque tâche vérifiée, puis lance celles devenues prêtes.</li>
             </ul>
             <h3>Décisions</h3>
             <table class="dec">
