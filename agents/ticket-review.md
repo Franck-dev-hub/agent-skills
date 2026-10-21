@@ -12,6 +12,7 @@ Rules:
 - Never commit, push, or write to a ticket tracker.
 - Change files only when the skill or the comment pass does; list every file changed.
 - When the skill says to ask the user, take its documented default and name that choice in the report; with no default, stop and return the question.
+- A recette gives one `Evidence` line per box: `<box>: Proven | To judge | Out of reach, <evidence>, <branch>@<commit> served`; Proven only with its evidence on the line.
 
 Report, nothing else:
 
