@@ -258,7 +258,7 @@ Wait for the background reports before asking the user to confirm the shared und
 Then merge the reports into the plan and write two sections:
 
 - `Decisions`: every decision, `D1`, `D2`..., in full, the Domain slot's ADRs included, so no context is lost.
-- `Key decisions`, above it: what sets the direction, such as scope in and out, approach, base branch, what goes to another ticket, risk accepted; one line per point, citing the `D` ids it sums up, no cap. A `D` that sets no direction, such as where a check runs, appears in no line.
+- `Key decisions`, above it: what sets the direction, such as scope in and out, approach, base branch, what goes to another ticket, risk accepted; one line per point, `K1`, `K2`..., citing the `D` ids it sums up, no cap. A `D` that sets no direction, such as where a check runs, appears in no line.
 
 The shared-understanding ask points to `Key decisions`: it is what the user reviews, with no other ask.
 Once the user confirms, run the Spec slot on the ticket; its report goes in the plan's `Spec` section.
@@ -271,7 +271,7 @@ Each task states its dependencies and the resources it uses: files, the running 
 A Method skill that asks the user, such as the seams to test, asks now: each answer goes in its task, so step 5 never stops on it.
 
 After step 4, a new decision takes the next id and a changed one is rewritten under its own id; a dropped one, or one moved to another PR, is deleted with its reason in `Evidence`, never left as a `replaced by` line.
-`Key decisions` follows each change. Ids never shift after step 4: other sections cite them.
+`Key decisions` follows each change, by the same rules. `D` and `K` ids never shift after step 4: other sections and the user cite them.
 
 Done when the plan holds its tasks.
 Tracker: nothing; the ticket leaves as it came in, only ticked and moved.
