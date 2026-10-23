@@ -312,10 +312,11 @@ The skill runs and fixes everything first, so the user runs a single final recet
 4. Meanwhile, write the plan's `Recette` section.
 5. Once both are done, in parallel: the Lint slot, in its order, and the full test command in the background, and `ticket-review` running the recette box by box, with the E2E slot or a real-browser tool, classing each box (see below), and replaying every `Captures` entry into `after/` under the same file name.
 6. A failing check or box: fix it, as a new task in the plan, then rerun what it touches, the comment pass included.
-7. Once everything passes, hand the recette to the user; meanwhile, the docs scan for step 7 runs in the background:
-   - the Proven boxes with their evidence, in a multi-select question asking which to tick, split when they outnumber its options;
+7. Once everything passes, hand the recette to the user as plain text; meanwhile, the docs scan for step 7 runs in the background:
+   - the Proven boxes with their evidence;
    - then the To judge boxes, each with its `after/` capture, beside its `before/` one when there is one;
-   - the user runs only the Out of reach boxes.
+   - then the Out of reach boxes, which the user runs;
+   - last, one plain question in the reply, never the question tool: tick every box? Any approval ticks them all; otherwise the user names the boxes to leave unticked.
 
 The recette holds one block per acceptance criterion, in the ticket's order, then the non-regressions and the `Spec`'s edge cases; for a bug, the plan's `Reproduction` comes first, now expecting the fixed result:
 
