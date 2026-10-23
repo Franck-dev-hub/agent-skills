@@ -362,6 +362,7 @@
               <li>Slot Grill, puis slot Domain.</li>
               <li>Bug : ni Grill ni Domain ; trois questions après la cause : résultat attendu, cause confirmée, portée du correctif.</li>
               <li>Rapports d'arrière-plan confrontés aux décisions avant validation.</li>
+              <li>Avant validation : <code>Decisions</code> complètes, et <code>Key decisions</code> au-dessus, une ligne par décision qui fixe la direction, avec ses ids ; après l'étape 4, modifiées en place, jamais de ligne « remplacé par ».</li>
               <li>Pendant le grilling : faits externes (versions, API, options) cherchés en arrière-plan, avec URL et date ; chaque décision du grilling qui change la stack lui est transmise.</li>
               <li>Après validation : slot Spec selon la route du type de branche, avec les edge cases ; ses critères ajoutés rejoignent ceux du plan.</li>
               <li>Découpe en tâches ordonnées, chacune avec ses dépendances et ses ressources (fichiers, app lancée, navigateur) ; les questions du slot Method, comme les seams à tester, posées ici.</li>
@@ -370,7 +371,7 @@
             <ul>
               <li>Fournit la reproduction si le ticket ne la donne pas.</li>
               <li>Répond au grilling, ou aux trois questions d'un bug.</li>
-              <li>Valide la compréhension partagée avant le Spec.</li>
+              <li>Valide la compréhension partagée sur <code>Key decisions</code>, avant le Spec.</li>
             </ul>
             <h3>Décisions</h3>
             <table class="dec">
@@ -387,7 +388,7 @@
               <dt>Délégué</dt><dd>ticket-investigate</dd>
               <dt>Gate</dt><dd>Tâches écrites, puis <code>/compact</code></dd>
               <dt>Tracker</dt><dd>aucun changement</dd>
-              <dt>Plan</dt><dd><code>Reproduction</code>, <code>Captures</code>, <code>Decisions</code>, <code>Spec</code>, <code>Files touched</code>, tâches.</dd>
+              <dt>Plan</dt><dd><code>Reproduction</code>, <code>Captures</code>, <code>Key decisions</code>, <code>Decisions</code>, <code>Spec</code>, <code>Files touched</code>, tâches.</dd>
             </dl>
             <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/skills/ticket/SKILL.md#4-grill-and-spec">SKILL.md › 4. Grill and spec</a></p>
           </template>
