@@ -11,6 +11,8 @@ Ticket: `$ARGUMENTS`.
 
 First read `~/.claude/ticket.local.md`, when it exists: its first profile whose remote pattern matches `origin` gives project values and slots (format: `references/local-profile.md`).
 With none matching, set up the profile in this very turn, before step 0, with or without a ticket and even on a resume: the slots (*Tooling*) and the tracker when no source names it; ask for a missing ticket id in the same turn.
+A matching profile is checked against the repo at every run, a broad pattern matching repos of other stacks: its test and lint commands exist there (`Makefile`, `package.json`), its tracker and E2E fit the stack.
+A value that does not fit gets a profile of its own for this repo, placed before the broad one, on the user's yes.
 
 ## Forge and tracker
 
