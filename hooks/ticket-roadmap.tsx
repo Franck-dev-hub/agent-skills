@@ -31,7 +31,7 @@ function parse(message: string): Roadmap {
 }
 
 // ticket-status.sh stays the single source of the roadmap; this only redraws its Stop message.
-async function refresh($: EngineInterface): Promise<void> {
+export async function refreshRoadmap($: EngineInterface): Promise<void> {
   const cwd = await $.session.cwd()
   const { stdout } = await $.process.run([`${$.plugin.root}/scripts/ticket-status.sh`], {
     stdin: JSON.stringify({ cwd }),
@@ -41,20 +41,6 @@ async function refresh($: EngineInterface): Promise<void> {
 }
 
 export const register: Register = on => {
-  on('session.start', async ($, e, next) => {
-    const started = await next(e)
-    await refresh($)
-
-    return started
-  })
-
-  on('turn.complete', async ($, e, next) => {
-    const done = await next(e)
-    await refresh($)
-
-    return done
-  })
-
   // The desktop app hides Stop hook messages; the terminal already prints them.
   on('ui.render', { component: 'AbovePrompt' }, async ($, e, next) => {
     const current = await read($, roadmap)

@@ -40,7 +40,7 @@ Private agent marketplace hosting personal skills.
 |-----------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `Stop`          | On a ticket branch with a plan, shows the step roadmap after each reply; silent otherwise                                                                  |
 | `Stop`          | On a ticket branch with a plan, adds time and tokens per step, and tokens per model, to `metrics/summary.md` in the ticket folder; needs `python3`, silent |
-| `turn.complete` | Desktop app only, where `Stop` messages are hidden: shows the same roadmap above the prompt (hooks module `ticket-roadmap.tsx`)                            |
+| `turn.complete` | Desktop app only, where `Stop` messages are hidden: shows the same roadmap above the prompt                                                                |
 
 
 ## Installation with claude code
