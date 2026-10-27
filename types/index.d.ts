@@ -12,12 +12,28 @@ export type MergeRequest = {
 }
 export type MergeRequests = { mrs: MergeRequest[]; error: string | null; fetchedAt: number } | null
 
+export type Worktree = {
+  branch: string
+  path: string
+  isMain: boolean
+  isCurrent: boolean
+  marker: string
+  changes: string[]
+  added: number
+  deleted: number
+  ahead: number | null
+  behind: number | null
+  subject: string
+}
+export type Worktrees = { worktrees: Worktree[]; error: string | null } | null
+
 declare module 'claude-code' {
   interface PluginState {
     'franck-dev-skills': {
       roadmap: Roadmap
       mergeRequests: MergeRequests
       mergeRequestAuthor: string
+      worktrees: Worktrees
     }
   }
 }
