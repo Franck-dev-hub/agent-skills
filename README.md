@@ -47,10 +47,11 @@ Private agent marketplace hosting personal skills.
 
 Hooks module `hooks/index.tsx`; each feature is one file in `hooks/`.
 
-| Command      | Effect                                                                                                           |
-|--------------|------------------------------------------------------------------------------------------------------------------|
-| `/mrs`       | Pane of the open GitLab MRs, filtered by author; opens itself on a GitLab repository; needs `glab`               |
-| `/worktrees` | Pane indexing the worktrunk worktrees and their local state; opens itself with two worktrees or more; needs `wt` |
+| Command      | Effect                                                                                                                    |
+|--------------|---------------------------------------------------------------------------------------------------------------------------|
+| `/mrs`       | Pane of the open GitLab MRs, filtered by author; opens itself on a GitLab repository; needs `glab`                        |
+| `/worktrees` | Pane indexing the worktrunk worktrees and their local state; opens itself with two worktrees or more; needs `wt`          |
+| `/fichiers`  | Pane of the changed files, against the base branch or uncommitted; a click opens the file in PhpStorm at its first change |
 
 
 ## Installation with claude code

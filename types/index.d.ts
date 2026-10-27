@@ -27,6 +27,16 @@ export type Worktree = {
 }
 export type Worktrees = { worktrees: Worktree[]; error: string | null } | null
 
+export type FilesMode = 'branch' | 'uncommitted'
+export type ChangedFile = {
+  path: string
+  line: number
+  added: number
+  deleted: number
+  kind: 'modified' | 'new' | 'deleted'
+}
+export type ChangedFiles = { root: string; base: string; files: ChangedFile[]; error: string | null } | null
+
 declare module 'claude-code' {
   interface PluginState {
     'franck-dev-skills': {
@@ -34,6 +44,8 @@ declare module 'claude-code' {
       mergeRequests: MergeRequests
       mergeRequestAuthor: string
       worktrees: Worktrees
+      filesMode: FilesMode
+      changedFiles: ChangedFiles
     }
   }
 }

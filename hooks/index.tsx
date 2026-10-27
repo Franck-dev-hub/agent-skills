@@ -1,5 +1,6 @@
 import type { Register } from 'claude-code'
 
+import { refreshChangedFiles, register as changedFiles, startChangedFiles } from './changed-files'
 import { register as gitlabMrs, startMergeRequests } from './gitlab-mrs'
 import { refreshRoadmap, register as ticketRoadmap } from './ticket-roadmap'
 import { refreshWorktrees, register as worktrees, startWorktrees } from './worktrees'
@@ -12,6 +13,7 @@ export const register: Register = (on, options) => {
       refreshRoadmap($),
       startMergeRequests($),
       startWorktrees($),
+      startChangedFiles($),
     ])
 
     return started
@@ -21,6 +23,7 @@ export const register: Register = (on, options) => {
     const done = await next(e)
     await refreshRoadmap($)
     void refreshWorktrees($)
+    void refreshChangedFiles($)
 
     return done
   })
@@ -28,4 +31,5 @@ export const register: Register = (on, options) => {
   ticketRoadmap(on, options)
   gitlabMrs(on, options)
   worktrees(on, options)
+  changedFiles(on, options)
 }
