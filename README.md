@@ -43,6 +43,15 @@ Private agent marketplace hosting personal skills.
 | `turn.complete` | Desktop app only, where `Stop` messages are hidden: shows the same roadmap above the prompt                                                                |
 
 
+## Panes
+
+Hooks module `hooks/index.tsx`; each feature is one file in `hooks/`.
+
+| Command | Effect                                                                                             |
+|---------|----------------------------------------------------------------------------------------------------|
+| `/mrs`  | Pane of the open GitLab MRs, filtered by author; opens itself on a GitLab repository; needs `glab` |
+
+
 ## Installation with claude code
 
 ```bash
