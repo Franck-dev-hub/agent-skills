@@ -15,5 +15,8 @@
         ]
       }
     ]
-  }
+  },
+  "modules": [
+    "./ticket-roadmap.tsx"
+  ]
 }
