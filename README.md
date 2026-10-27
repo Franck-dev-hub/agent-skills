@@ -1,6 +1,6 @@
 # franck-dev-skills
 
-Private agent marketplace hosting personal skills.
+Agent marketplace hosting personal skills.
 
 | Object      | Name                  |
 |-------------|-----------------------|
@@ -45,7 +45,7 @@ Private agent marketplace hosting personal skills.
 
 ## Panes
 
-Hooks module `hooks/index.tsx`; each feature is one file in `hooks/`.
+Hooks module `hooks/index.tsx`, each feature is one file in `hooks/`.
 
 | Command      | Effect                                                                                                                    |
 |--------------|---------------------------------------------------------------------------------------------------------------------------|
