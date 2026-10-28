@@ -77,6 +77,11 @@ The plan header is a table under the title; `-` marks a value still unknown, suc
 ```
 
 The roadmap hook reads the `Current step` row: keep its key in English and its value starting with the step number.
+
+The plan's table of contents sits between the header table and the first `##` section, inside two `<!-- TOC -->` markers: a click in PhpStorm jumps to a section.
+Once the plan has a `##` section, run `python3 <skill-dir>/scripts/plan_toc.py <plan path>` after each heading added, renamed or removed; its first run places the table, and before any `##` it fails.
+Headings added in a batch need one run, at the end of the step.
+The table's `*` bullets are a wanted exception to `-` bullets: PhpStorm turns `-` into `*`.
 Take each value from the local profile, the **Ticket workflow** section of `AGENTS.md`, then `CLAUDE.md`, the `Makefile` or the project's config files; ask only for what is still missing, once, and write it in the header.
 Another ticket's plan is no source: its value is at most proposed, and used once the user confirms.
 The app URL found in config (`.env`, compose, `/etc/hosts`) is often a default such as `http://localhost`: propose it, never use it unconfirmed.
@@ -87,6 +92,7 @@ Align every table: pad each cell to the widest of its column, and the divider da
 Name a file, function or command only when it saves a search: files touched, the evidence of a criterion, the reproduction.
 Keep the section names: the resume looks them up.
 Write every page as a full, bare URL on the app URL, followed by a space (`https://example.localhost/products`): a click in the IDE opens it.
+Wrapping at 120 columns never splits a table-of-contents link, as with a code span.
 
 Project values, the same for every ticket, live in the Ticket workflow section or the local profile: tracker, base branch, test command, lint commands, app URL, and the status map.
 The status map gives the tracker's own value for Ready, In progress, In review and Done, plus the ids the tracker reference needs.
