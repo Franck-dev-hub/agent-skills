@@ -187,7 +187,7 @@ Propose the next step, then wait for the user.
 An open PR means step 9; with unresolved review threads, its review comments.
 A merged PR means step 10.
 Step 5 resumes with the wave of unticked tasks whose dependencies are ticked.
-Step 6 resumes at the first failing check, then the comment pass when `Evidence` lacks it, then the skill's recette, then the first box the user has not ticked.
+Step 6 resumes at the Review loop when its last round left a major finding open, then at the first failing check, then the comment pass when `Evidence` lacks it, then the skill's recette, then the first box the user has not ticked.
 
 ## Steps
 
@@ -311,8 +311,13 @@ Report the files touched and what they now do, in short sentences.
 
 The skill runs and fixes everything first, so the user runs a single final recette:
 
-1. The Review slot, one skill after the other in its order: each may fix code, so each runs alone, on the diff the previous one left.
+1. The Review loop, in rounds. A round is the Review slot, one skill after the other in its order: each may fix code, so each runs alone, on the diff the previous one left.
    A finding it reports without fixing is a lead, not an order: check it against the code, the `Spec` and the `Decisions`, then make it a task, run as in step 5, or drop it with the reason in `Evidence`.
+   Its report classes each finding major or minor. A minor one is fixed when it is quick and in the ticket's scope; otherwise it stays, with the reason in `Evidence`.
+   A round that fixed a major finding starts the next one: each skill in a fresh agent, on the whole diff, since a fix can bring a new gap; the brief lists the findings dropped so far with their reasons, so none comes back without new evidence.
+   The loop ends on a round with no major finding left open: none reported, or each dropped with its reason.
+   After 3 rounds with a major finding still open, stop and show it to the user: a gap that keeps coming back is often a design disagreement.
+   `Current step` shows the round: `6, review 2/3`.
 2. Conformance: `ticket-review` compares the diff with each acceptance criterion and the plan's `Spec` and `Decisions`; the brief carries the criteria's text. It reports each criterion as met, partly or not met, with the file and line, then lists the code the ticket did not ask for. A criterion not met or partly met becomes a new task in the plan, run as in step 5, then this check reruns.
 3. Comment pass, in the background: a fresh context, since the comment rule fades over a long step 5. `ticket-review` reads every comment the branch adds or changes, in every file type; it cuts those that restate the code, shortens the rest to a one-line why, and keeps a why in one file only.
    The brief carries the comment rule of the project's `AGENTS.md` or `CLAUDE.md`, else the user's `CLAUDE.md`.
@@ -320,11 +325,12 @@ The skill runs and fixes everything first, so the user runs a single final recet
    Its changes go in `Evidence`, one line per file.
 4. Meanwhile, write the plan's `Recette` section.
 5. Once both are done, in parallel: the Lint slot, in its order, and the full test command in the background, and `ticket-review` running the recette box by box, with the E2E slot or a real-browser tool, classing each box (see below), and replaying every `Captures` entry into `after/` under the same file name.
-6. A failing check or box: fix it, as a new task in the plan, then rerun what it touches, the comment pass included.
+6. A failing check or box: fix it, as a new task in the plan, then rerun what it touches, the Review loop and the comment pass included.
 7. Once everything passes, hand the recette to the user as plain text; meanwhile, the docs scan for step 7 runs in the background:
    - the Proven boxes with their evidence;
    - then the To judge boxes, each with its `after/` capture, beside its `before/` one when there is one;
    - then the Out of reach boxes, which the user runs;
+   - then every minor finding of the Review loop, one line each: fixed, or left and why;
    - last, one plain question in the reply, never the question tool: tick every box? Any approval ticks them all; otherwise the user names the boxes to leave unticked.
 
 The recette holds one block per acceptance criterion, in the ticket's order, then the non-regressions and the `Spec`'s edge cases; for a bug, the plan's `Reproduction` comes first, now expecting the fixed result:
@@ -355,7 +361,7 @@ The recette holds one block per acceptance criterion, in the ticket's order, the
 Skip a skill that is not installed or does not fit the stack, and say so.
 Keep each check's evidence in the plan: command, output line.
 
-Done when every criterion is met, the comment pass is done, every check is green, the skill's recette passes, and the user ticked every pre-merge box.
+Done when every criterion is met, the Review loop left no major finding open, the comment pass is done, every check is green, the skill's recette passes, and the user ticked every pre-merge box.
 
 ### 7. Update the docs
 

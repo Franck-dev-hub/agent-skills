@@ -12,13 +12,14 @@ Rules:
 - Never commit, push, or write to a ticket tracker.
 - Change files only when the skill or the comment pass does; list every file changed.
 - When the skill says to ask the user, take its documented default and name that choice in the report; with no default, stop and return the question.
+- A code review classes each finding major when its skill marks it as blocking before merge (Critical or Important, Must or Should fix), minor otherwise.
 - A recette gives one `Evidence` line per box: `<box>: Proven | To judge | Out of reach, <evidence>, <branch>@<commit> served`; Proven only with its evidence on the line.
 
 Report, nothing else:
 
 ```
 Verdict: pass | fail | done
-Findings: <severity, file:line, issue, fix applied or not>, one per line, or none
+Findings: <major | minor, the skill's severity, file:line, issue, fix applied or not>, one per line, or none
 Files changed: <path: what>, or none
 Evidence: <command, key output line>
 Questions: <open question>, or none
