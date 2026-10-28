@@ -75,7 +75,7 @@ Order the commits so each one leaves the codebase working: dependencies first, c
 Append it to the plan the work came from. With no plan, propose a git-ignored folder of the project (check with `git check-ignore`), or a new `.gitignore` entry for a plans folder; that `.gitignore` edit joins the series' first commit. Structure:
 
 1. A summary table: `#`, message, why (one per commit).
-2. One section per commit, headed `### N/M: <message>`, holding:
+2. One section per commit, headed `### Commit N`, its message in code on the first line, holding:
    - `#### Code`: one `-` item per production file: its full path in code, ending with `\`, then its why on the next line.
    - `#### Tests`: the same for test files, with what each one checks.
    - A `⚠️` line per *commit check* that fails (below), if any.

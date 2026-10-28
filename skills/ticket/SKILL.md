@@ -87,6 +87,7 @@ Another ticket's plan is no source: its value is at most proposed, and used once
 The app URL found in config (`.env`, compose, `/etc/hosts`) is often a default such as `http://localhost`: propose it, never use it unconfirmed.
 
 Write the plan in short sentences that go to the point, in the user's language.
+Every heading, the title included, is a few clear words of letters, digits, spaces, hyphens and apostrophes only: the table of contents lists it; any detail goes in the section's body.
 In French, put a space before and after every colon ( : ) and semi-colon ( ; ).
 Align every table: pad each cell to the widest of its column, and the divider dashes to the column width plus two.
 Name a file, function or command only when it saves a search: files touched, the evidence of a criterion, the reproduction.
@@ -329,7 +330,9 @@ The skill runs and fixes everything first, so the user runs a single final recet
 The recette holds one block per acceptance criterion, in the ticket's order, then the non-regressions and the `Spec`'s edge cases; for a bug, the plan's `Reproduction` comes first, now expecting the fixed result:
 
 ```markdown
-### <criterion, as worded in the ticket>
+### <criterion, in a few words>
+
+<criterion, as worded in the ticket>
 
 - Prerequisites: account, data, environment
 - [ ] <action>: <expected result>
