@@ -367,7 +367,11 @@ Done when every criterion is met, the Review loop left no major finding open, th
 
 Start from the passages the step 6 docs scan found, checked against the final diff; without that scan, read every file under `docs/` but the plan folder, and the `README.md`.
 
-Done when each of them is updated, or the summary states "no doc impact".
+Then check the plan's `Decisions` against the `franck-dev-skills:domain-modeling` ADR criteria.
+Most tickets have none: then say nothing.
+Otherwise propose each one that passes; write it in `docs/adr/`, in that skill's ADR format, only on the user's yes.
+
+Done when each of them is updated, or the summary states "no doc impact", and every accepted ADR is written.
 
 ### 8. Commit
 
@@ -407,6 +411,7 @@ Merge after !<n>
 - `Merge after` only when the branch stacks on another PR; `because <cause>` only on a bug; Problem and Solution are one sentence each.
 - `To verify` lets the reviewer check the change without the plan: for a bug, the `Reproduction` now expecting the fixed result, plus any path that failed in the recette; otherwise the main path of the feature. As many steps as that takes, never the non-regressions, edge cases or per-language checks; steps follow the recette's wording rules.
 - `Decisions` holds only the main decisions, so the reviewer quickly grasps what will be merged: the plan's `Key decisions`, plus a gap with the ticket or a release prerequisite the `Spec` holds; never the full `Decisions` list. Each item states the decision itself, never the plan's id (`K1`, `D3`): the reader has no plan. Its items join clauses with commas, never semicolons.
+  A decision written as an ADR at step 7 ends with its path, so the reviewer reads it.
 - When the user says the PR is open, check it with the forge reference's command.
 
 Then follow the pipeline (forge reference); a failure goes to `ci-investigate`.
