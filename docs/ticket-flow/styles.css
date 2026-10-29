@@ -104,10 +104,6 @@ section.after { margin-top: 28px; display: grid; gap: 10px; }
 .sections th { text-align: left; font-weight: 600; color: var(--muted); padding: 4px; }
 .sections td { border-top: 1px solid var(--line); padding: 6px 4px; vertical-align: top; }
 .sections td:first-child { font-weight: 500; width: 45%; }
-.dec { width: 100%; border-collapse: collapse; font-size: .88rem; }
-.dec td { border-top: 1px solid var(--line); padding: 6px 4px; vertical-align: top; }
-.dec td:first-child { color: var(--muted); width: 48%; }
-.dec td:first-child::before { content: "si "; font: .72rem var(--mono); color: var(--muted); }
 .kv { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 4px 10px; font-size: .88rem; }
 .kv dt { color: var(--muted); }
 .kv dd { margin: 0; }

@@ -60,12 +60,6 @@
                 <span class="label">Bootstrap</span>
                 <h2>Profil local</h2>
                 <p class="sub">Valeurs et slots du projet</p>
-                <h3>Décisions</h3>
-                <table class="dec">
-                  <tr><td>un <code>Remote:</code> correspond à <code>origin</code></td><td>le premier profil trouvé fournit valeurs et slots</td></tr>
-                  <tr><td>une ligne <code>per repo</code> correspond</td><td>elle remplace la valeur du profil</td></tr>
-                  <tr><td>aucun profil</td><td>slots et tracker proposés tout de suite, avec ou sans ticket, reprise comprise</td></tr>
-                </table>
                 <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/skills/ticket/references/local-profile.md">local-profile.md</a></p>
               </template>
             </article>
@@ -82,11 +76,6 @@
                 <ul>
                   <li>Fournit les commandes de branche, de PR ou MR et de reprise.</li>
                 </ul>
-                <h3>Décisions</h3>
-                <table class="dec">
-                  <tr><td>GitHub</td><td>lit <code>references/github.md</code></td></tr>
-                  <tr><td>GitLab</td><td>lit <code>references/gitlab.md</code></td></tr>
-                </table>
                 <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/skills/ticket/SKILL.md#forge-and-tracker">SKILL.md › Forge and tracker</a></p>
               </template>
             </article>
@@ -103,14 +92,6 @@
                 <ul>
                   <li>Chaque changement est affiché, puis appliqué sur accord, sauf In progress au step 2.</li>
                 </ul>
-                <h3>Décisions</h3>
-                <table class="dec">
-                  <tr><td>URL de tracker en argument</td><td>ce tracker</td></tr>
-                  <tr><td>sinon <code>Tracker</code> du profil ou de la section Ticket workflow</td><td>ce tracker</td></tr>
-                  <tr><td>sinon</td><td>issues de la forge</td></tr>
-                  <tr><td>texte collé sans id</td><td>tracker <code>local</code>, id <code>local-&lt;n&gt;</code></td></tr>
-                  <tr><td>tracker illisible</td><td>changements listés dans « To report in the ticket »</td></tr>
-                </table>
                 <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/skills/ticket/SKILL.md#forge-and-tracker">SKILL.md › Forge and tracker</a></p>
               </template>
             </article>
@@ -130,13 +111,6 @@
                   <li>Id local : <code>local/0-99/local-7-&lt;slug&gt;/</code>.</li>
                   <li>Plusieurs trackers : un sous-dossier par tracker.</li>
                 </ul>
-                <h3>Décisions</h3>
-                <table class="dec">
-                  <tr><td><code>AGENTS.md</code> ou <code>CLAUDE.md</code> en nomme un</td><td>ce dossier</td></tr>
-                  <tr><td>un seul <code>plans</code> ou <code>.plans</code> ignoré par git</td><td>ce dossier</td></tr>
-                  <tr><td>plusieurs</td><td>question</td></tr>
-                  <tr><td>aucun</td><td>propose <code>docs/plans/</code> ou <code>.plans/</code>, exclu via <code>.git/info/exclude</code></td></tr>
-                </table>
                 <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/skills/ticket/SKILL.md#values">SKILL.md › Values</a></p>
               </template>
             </article>
@@ -149,12 +123,6 @@
                 <span class="label">Bootstrap</span>
                 <h2>Valeurs projet</h2>
                 <p class="sub">Base, tests, lint, URL, statuts</p>
-                <h3>Décisions</h3>
-                <table class="dec">
-                  <tr><td>recherche</td><td>profil, Ticket workflow, <code>CLAUDE.md</code>, <code>Makefile</code>, config</td></tr>
-                  <tr><td>valeur d'un autre plan ou URL par défaut</td><td>proposée, jamais utilisée sans confirmation</td></tr>
-                  <tr><td>valeur manquante</td><td>question, puis proposition de l'enregistrer</td></tr>
-                </table>
                 <h3>Résultat</h3>
                 <dl class="kv">
                   <dt>Plan</dt><dd>En-tête : Ticket, Tracker, Base branch, Branch, PR, Test command, App URL, Current step.</dd>
@@ -177,13 +145,6 @@
                   <li>Runner : préfixe qui lance l'outillage du projet dans son propre conteneur et son propre cache, sans toucher l'app lancée.</li>
                   <li>Un skill de slot écrit dans le plan et ne lance aucun autre skill.</li>
                 </ul>
-                <h3>Décisions</h3>
-                <table class="dec">
-                  <tr><td>slot vide</td><td>valeur par défaut</td></tr>
-                  <tr><td>défaut <code>none</code></td><td>action sautée et signalée</td></tr>
-                  <tr><td>aucun profil</td><td>chaque slot proposé une fois, avant le step 0, puis enregistré</td></tr>
-                  <tr><td>Review, Lint</td><td>choix multiple, exécutés dans l'ordre choisi ; ceux qui corrigent d'abord</td></tr>
-                </table>
                 <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/skills/ticket/SKILL.md#tooling">SKILL.md › Tooling</a></p>
               </template>
             </article>
@@ -224,13 +185,6 @@
                 <span class="label">Décision</span>
                 <h2>Route</h2>
                 <p class="sub">Nouveau ticket ou reprise</p>
-                <h3>Décisions</h3>
-                <table class="dec">
-                  <tr><td>plan, branche <code>*/&lt;id&gt;-*</code> ou PR liée trouvé</td><td>Resume</td></tr>
-                  <tr><td>id présent dans plusieurs trackers</td><td>plan dont <code>Branch</code> est la branche courante</td></tr>
-                  <tr><td>aucun ou plusieurs plans pour la branche</td><td>question</td></tr>
-                  <tr><td>rien</td><td>step 1</td></tr>
-                </table>
                 <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/skills/ticket/SKILL.md#0-route">SKILL.md › 0. Route</a></p>
               </template>
             </article>
@@ -277,13 +231,6 @@
             <span class="label">Step</span>
             <h2>Lire le ticket</h2>
             <p class="sub">Statut et blockers</p>
-            <h3>Décisions</h3>
-            <table class="dec">
-              <tr><td>statut Ready, blockers fermés</td><td>step 2</td></tr>
-              <tr><td>sinon</td><td>arrêt, raison affichée</td></tr>
-              <tr><td>texte collé</td><td>pas de vérification, step 2</td></tr>
-              <tr><td>tracker illisible</td><td>demande le texte du ticket</td></tr>
-            </table>
             <h3>Résultat</h3>
             <dl class="kv">
               <dt>Gate</dt><dd>Ticket Ready, blockers fermés</dd>
@@ -373,15 +320,6 @@
               <li>Répond au grilling, ou aux trois questions d'un bug.</li>
               <li>Valide la compréhension partagée sur <code>Key decisions</code>, avant le Spec.</li>
             </ul>
-            <h3>Décisions</h3>
-            <table class="dec">
-              <tr><td>le ticket nomme un environnement, ou bug non reproductible en local</td><td>demande l'environnement</td></tr>
-              <tr><td>pas d'outil navigateur</td><td>captures sautées et signalées</td></tr>
-              <tr><td>rapport ou réponse qui contredit une décision réglée</td><td>décision reposée dans le Grill</td></tr>
-              <tr><td>branche <code>fix</code> ou <code>hotfix</code>, ou ticket de bug</td><td>route bug : modèle et effort par défaut ; agent de flux seulement sans cause dans le plan</td></tr>
-              <tr><td>branche <code>chore</code></td><td>route outillage : faits externes et fichiers, <code>sonnet</code>, effort medium</td></tr>
-              <tr><td>autre type de branche</td><td>route feature : agent de flux seulement sur un flux existant, effort medium</td></tr>
-            </table>
             <h3>Résultat</h3>
             <dl class="kv">
               <dt>Arrière-plan</dt><dd>debug-investigate, Explore, ticket-review</dd>
@@ -415,10 +353,6 @@
               <li>Un test par edge case du Spec.</li>
               <li>Coche chaque tâche vérifiée, puis lance celles devenues prêtes.</li>
             </ul>
-            <h3>Décisions</h3>
-            <table class="dec">
-              <tr><td>tâche contraire à une décision, échec de test imprévu ou question d'un skill ou d'un agent</td><td>arrêt, question</td></tr>
-            </table>
             <h3>Résultat</h3>
             <dl class="kv">
               <dt>Délégué</dt><dd>ticket-implement, ticket-check</dd>
@@ -475,11 +409,6 @@
             <span class="label">Step</span>
             <h2>Mettre à jour les docs</h2>
             <p class="sub">Docs touchées par le diff</p>
-            <h3>Décisions</h3>
-            <table class="dec">
-              <tr><td>scan du step 6 disponible</td><td>passages trouvés</td></tr>
-              <tr><td>sinon</td><td><code>docs/</code> et <code>README.md</code></td></tr>
-            </table>
             <h3>Résultat</h3>
             <dl class="kv">
               <dt>Gate</dt><dd>Docs à jour, ou « no doc impact »</dd>
@@ -542,12 +471,6 @@
               <li>Tranche chaque commentaire de review et poste les réponses.</li>
               <li>Merge la PR.</li>
             </ul>
-            <h3>Décisions</h3>
-            <table class="dec">
-              <tr><td><code>&lt;base&gt;</code> en conflit</td><td>merge de <code>&lt;base&gt;</code> (rebase sur accord), puis tests</td></tr>
-              <tr><td>CI en échec</td><td>cause cherchée par <code>ci-investigate</code></td></tr>
-              <tr><td>commentaire de review</td><td>d'accord : nouvelle tâche ; pas d'accord : réponse rédigée ; flou : question</td></tr>
-            </table>
             <h3>Résultat</h3>
             <dl class="kv">
               <dt>Arrière-plan</dt><dd>ci-investigate</dd>
@@ -606,11 +529,6 @@
               <ul>
                 <li>Affiche les steps 1 à 10 et le step courant.</li>
               </ul>
-              <h3>Décisions</h3>
-              <table class="dec">
-                <tr><td>branche sans id <code><tr><td>branche sans id <code>&lt;n&gt;</code> ou <code>local-&lt;n&gt;</code></td>lt;n<tr><td>branche sans id <code>&lt;n&gt;</code> ou <code>local-&lt;n&gt;</code></td>gt;</code> ou <code><tr><td>branche sans id <code>&lt;n&gt;</code> ou <code>local-&lt;n&gt;</code></td>lt;CLÉ<tr><td>branche sans id <code>&lt;n&gt;</code> ou <code>local-&lt;n&gt;</code></td>gt;-<tr><td>branche sans id <code>&lt;n&gt;</code> ou <code>local-&lt;n&gt;</code></td>lt;n<tr><td>branche sans id <code>&lt;n&gt;</code> ou <code>local-&lt;n&gt;</code></td>gt;</code></td><td>rien</td></tr>
-                <tr><td>plusieurs plans pour la branche</td><td>avertissement : lancer <code>/ticket</code></td></tr>
-              </table>
               <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/scripts/ticket-status.sh">ticket-status.sh</a></p>
             </template>
           </article>
@@ -629,11 +547,6 @@
                 <li>Ajoute le temps et les tokens au step courant, tokens découpés par modèle.</li>
                 <li>Écrit <code>metrics/summary.md</code> et <code>metrics/state.json</code>.</li>
               </ul>
-              <h3>Décisions</h3>
-              <table class="dec">
-                <tr><td>branche sans id ou plan sans <code>Current step</code></td><td>rien</td></tr>
-                <tr><td>plusieurs plans pour la branche</td><td>rien</td></tr>
-              </table>
               <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/scripts/ticket-metrics.py">ticket-metrics.py</a></p>
             </template>
           </article>
