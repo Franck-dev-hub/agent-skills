@@ -12,6 +12,15 @@ Read this when `origin` is on GitLab.
 | Pipeline state | `glab ci get -b <branch>` |
 | Review threads | `glab api "projects/:fullpath/merge_requests/<iid>/discussions"`, those with `resolvable` and not `resolved` |
 
+Open the MR, step 9, with the title and description filled in:
+
+```bash
+git push --set-upstream origin HEAD -o merge_request.create -o merge_request.draft -o merge_request.assign="$(git config gitlab.user)" -o merge_request.title='<title>' && glab mr update "$(git branch --show-current)" --description "$(cat <<'EOF'
+<description>
+EOF
+)"
+```
+
 The MR never carries `Closes #<n>`: merging would close the issue without the user's yes.
 
 ## GitLab issue as tracker

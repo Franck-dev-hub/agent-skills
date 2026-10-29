@@ -532,13 +532,13 @@
             <ul>
               <li>Fournit le titre : <code>[Type] #&lt;id&gt; Description</code>, sans <code>#&lt;id&gt;</code> pour un id local.</li>
               <li>Fournit la description : Problème, Solution, toutes les décisions du plan, avec les écarts au ticket et les prérequis de mise en prod, puis comment valider (reproduction du bug corrigé ou parcours principal).</li>
-              <li>L'utilisateur pousse et ouvre la PR.</li>
+              <li>Fournit la commande complète qui pousse et ouvre la PR en draft avec ce titre et cette description, jamais un alias.</li>
               <li>Vérifie la PR et suit la CI.</li>
               <li>Commentaires de review : chacun vérifié contre le code, le Spec et les Decisions ; verdict proposé, jamais appliqué tel quel.</li>
             </ul>
             <h3>Utilisateur</h3>
             <ul>
-              <li>Pousse la branche et ouvre la PR.</li>
+              <li>Lance la commande qui pousse la branche et ouvre la PR.</li>
               <li>Tranche chaque commentaire de review et poste les réponses.</li>
               <li>Merge la PR.</li>
             </ul>

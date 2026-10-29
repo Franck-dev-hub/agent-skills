@@ -386,7 +386,7 @@ Done when the working tree holds nothing the series planned, and the plan lists 
 
 When `<base>` moved and conflicts with the branch, show the user the conflicts, merge `<base>` into the branch (a rebase only on the user's yes), resolve each hunk keeping both intents, never abort, then rerun the test command; the merge commit waits for the user's yes like any commit.
 
-Give the user the PR title and description to copy, never a command: they push and open the PR their own way.
+Give the user the PR title and description, then the forge reference's open command filled with both, ready to copy: they run it themselves, the full command and never a shell alias.
 
 - The title follows the `franck-dev-skills:commit-message` format and sums up the whole branch: `[Type] #<ticket-id> Description`, without `#<ticket-id>` for a local id; with a single commit, it is that commit's message.
 - The description is in the user's language, with nothing else:
