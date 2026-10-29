@@ -3,8 +3,7 @@ import type { EngineInterface, Register } from 'claude-code'
 
 import type { Worktree, Worktrees } from '../types'
 
-const PANE = 'worktrees'
-const TITLE = 'Worktrees'
+export const WORKTREES_PANE = { id: 'worktrees', title: 'Worktrees' }
 const REFRESH_MS = 30_000
 
 const worktrees = atom({ plugin: 'franck-dev-skills', key: 'worktrees' } as const, null as Worktrees)
@@ -87,22 +86,24 @@ export async function startWorktrees($: EngineInterface): Promise<void> {
   await $.command.register({ name: 'worktrees', description: 'Show the worktrunk worktrees in a pane' })
 
   await refreshWorktrees($)
-  const found = await read($, worktrees)
-  if (null !== found && found.worktrees.length > 1) {
-    void $.ui.open({ id: PANE, title: TITLE })
-  }
   $.clock.every(REFRESH_MS, () => void refreshWorktrees($))
+}
+
+export async function hasWorktrees($: EngineInterface): Promise<boolean> {
+  const found = await read($, worktrees)
+
+  return null !== found && null === found.error
 }
 
 export const register: Register = on => {
   on('command.run', { command: 'worktrees' }, async $ => {
-    await $.ui.open({ id: PANE, title: TITLE })
+    await $.ui.open(WORKTREES_PANE)
     await refreshWorktrees($)
 
     return { text: 'Worktrees pane opened.' }
   })
 
-  on('ui.render', { component: 'Pane', requestId: PANE }, async ($, e) => {
+  on('ui.render', { component: 'Pane', requestId: WORKTREES_PANE.id }, async ($, e) => {
     const { Box, Text, Button } = $.ui.resolve(e)
     const data = await read($, worktrees)
 

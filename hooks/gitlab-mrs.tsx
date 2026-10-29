@@ -3,8 +3,7 @@ import type { EngineInterface, Register } from 'claude-code'
 
 import type { MergeRequest, MergeRequests } from '../types'
 
-const PANE = 'gitlab-mrs'
-const TITLE = 'MR'
+export const MR_PANE = { id: 'gitlab-mrs', title: 'MR' }
 const ALL = '*'
 const AUTHOR_KEY = 'gitlab-mrs.author'
 const REFRESH_MS = 120_000
@@ -90,20 +89,24 @@ export async function startMergeRequests($: EngineInterface): Promise<void> {
   const remote = await $.process.run(['git', 'remote', 'get-url', 'origin'], { cwd: await $.session.cwd() })
   if (0 === remote.exitCode && remote.stdout.includes('gitlab')) {
     void refresh($)
-    void $.ui.open({ id: PANE, title: TITLE })
     $.clock.every(REFRESH_MS, () => void refresh($))
   }
 }
 
+// The list is fetched on a GitLab remote only: its presence tells the forge.
+export async function isGitLab($: EngineInterface): Promise<boolean> {
+  return null !== (await read($, mergeRequests))
+}
+
 export const register: Register = on => {
   on('command.run', { command: 'mrs' }, async $ => {
-    await $.ui.open({ id: PANE, title: TITLE })
+    await $.ui.open(MR_PANE)
     await refresh($)
 
     return { text: 'MR pane opened.' }
   })
 
-  on('ui.render', { component: 'Pane', requestId: PANE }, async ($, e) => {
+  on('ui.render', { component: 'Pane', requestId: MR_PANE.id }, async ($, e) => {
     const ui = $.ui.resolve(e)
     const { Box, Text, Button, Link } = ui
     const data = await read($, mergeRequests)

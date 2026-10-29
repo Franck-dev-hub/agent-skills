@@ -46,11 +46,12 @@ Agent marketplace hosting personal skills.
 ## Panes
 
 Hooks module `hooks/index.tsx`, each feature is one file in `hooks/`.
+In the desktop app, a button above the prompt opens each pane whose tool is available.
 
 | Command      | Effect                                                                                                                    |
 |--------------|---------------------------------------------------------------------------------------------------------------------------|
-| `/mrs`       | Pane of the open GitLab MRs, filtered by author; opens itself on a GitLab repository; needs `glab`                        |
-| `/worktrees` | Pane indexing the worktrunk worktrees and their local state; opens itself with two worktrees or more; needs `wt`          |
+| `/mrs`       | Pane of the open GitLab MRs, filtered by author; on a GitLab repository; needs `glab`                                     |
+| `/worktrees` | Pane indexing the worktrunk worktrees and their local state; needs `wt`                                                   |
 | `/fichiers`  | Pane of the changed files, against the base branch or uncommitted; a click opens the file in PhpStorm at its first change |
 
 

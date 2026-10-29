@@ -1,5 +1,5 @@
 import { atom, read, update } from 'claude-code'
-import type { EngineInterface, Register } from 'claude-code'
+import type { EngineInterface } from 'claude-code'
 
 import type { Roadmap, Step } from '../types'
 
@@ -40,33 +40,31 @@ export async function refreshRoadmap($: EngineInterface): Promise<void> {
   await update($, roadmap, () => (message ? parse(message) : null))
 }
 
-export const register: Register = on => {
-  // The desktop app hides Stop hook messages; the terminal already prints them.
-  on('ui.render', { component: 'AbovePrompt' }, async ($, e, next) => {
-    const current = await read($, roadmap)
+// read() is scanned per file: the atom stays here, readers go through this.
+export async function readRoadmap($: EngineInterface): Promise<Roadmap> {
+  return read($, roadmap)
+}
 
-    if ('desktop' !== e.surface || e.props.hasSurvey || null === current) {
-      return next(e)
-    }
+type Resolved = ReturnType<EngineInterface['ui']['resolve']>
 
-    const { Box, Text } = $.ui.resolve(e)
+export function RoadmapRow({ ui, roadmap: current }: { ui: Resolved; roadmap: NonNullable<Roadmap> }) {
+  const { Box, Text } = ui
 
-    return (
-      <Box flexWrap="wrap" gap={2}>
-        {current.steps.map(step =>
-          step.isCurrent ? (
-            <Text key={String(step.num)} color={ACCENT} weight="bold">
-              {step.num} {step.name}
-              {step.detail ? `: ${step.detail}` : ''}
-            </Text>
-          ) : (
-            <Text key={String(step.num)} dimColor>
-              {step.num} {step.name}
-            </Text>
-          ),
-        )}
-        {current.note ? <Text color="warning">{current.note}</Text> : null}
-      </Box>
-    )
-  })
+  return (
+    <Box flexWrap="wrap" gap={2}>
+      {current.steps.map(step =>
+        step.isCurrent ? (
+          <Text key={String(step.num)} color={ACCENT} weight="bold">
+            {step.num} {step.name}
+            {step.detail ? `: ${step.detail}` : ''}
+          </Text>
+        ) : (
+          <Text key={String(step.num)} dimColor>
+            {step.num} {step.name}
+          </Text>
+        ),
+      )}
+      {current.note ? <Text color="warning">{current.note}</Text> : null}
+    </Box>
+  )
 }
