@@ -50,7 +50,7 @@ In the desktop app, a button above the prompt opens each pane whose tool is avai
 
 | Command      | Effect                                                                                                                    |
 |--------------|---------------------------------------------------------------------------------------------------------------------------|
-| `/mrs`       | Pane of the open GitLab MRs, filtered by author; on a GitLab repository; needs `glab`                                     |
+| `/prs`, `/mrs` | Pane of the open GitHub PRs or GitLab MRs, filtered by author; needs `gh` or `glab`                                     |
 | `/worktrees` | Pane indexing the worktrunk worktrees and their local state; needs `wt`                                                   |
 | `/fichiers`  | Pane of the changed files, against the base branch or uncommitted; a click opens the file in PhpStorm at its first change |
 

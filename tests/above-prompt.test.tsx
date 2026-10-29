@@ -19,7 +19,7 @@ function run(argv: string[], gitlab: boolean, wt: boolean) {
   if ('git' === argv[0]) {
     return { ...OK, exitCode: 0, stdout: gitlab ? 'git@gitlab.com:acme/shop.git\n' : 'git@github.com:acme/shop.git\n', stderr: '' }
   }
-  if ('glab' === argv[0]) {
+  if ('glab' === argv[0] || 'gh' === argv[0]) {
     return { ...OK, exitCode: 0, stdout: '[]', stderr: '' }
   }
 
@@ -48,13 +48,13 @@ test('a button opens each available pane from above the prompt', async ($, on) =
   const ui = await $.ui.mount({ ...ABOVE, surface: 'desktop' })
   expect(await ui.find({ type: 'Button', text: /MR/ })).toBeDefined()
   expect(await ui.find({ type: 'Button', text: /Worktrees/ })).toBeDefined()
-  await ui.press({ key: 'gitlab-mrs' })
+  await ui.press({ key: 'pull-requests' })
   await ui.press({ key: 'worktrees' })
-  expect(opened).toEqual(['gitlab-mrs', 'worktrees'])
+  expect(opened).toEqual(['pull-requests', 'worktrees'])
   await ui.unmount()
 })
 
-test('a GitHub repository gets the Worktrees button alone', async ($, on) => {
+test('a GitHub repository gets a PR button', async ($, on) => {
   on('command.register', (_, e) => ({ value: { command: e.name } }))
   on('ui.open', () => ({ value: { isPlaced: true } }))
   mock.store(on)
@@ -66,7 +66,8 @@ test('a GitHub repository gets the Worktrees button alone', async ($, on) => {
   await $.session.start({ cwd: '/repo', surface: 'desktop', isInteractive: true })
 
   const ui = await $.ui.mount({ ...ABOVE, surface: 'desktop' })
-  expect(await ui.find({ type: 'Button', text: /MR/ })).toBeUndefined()
+  expect(await ui.find({ type: 'Button', text: /^MR$/ })).toBeUndefined()
+  expect(await ui.find({ type: 'Button', text: /^PR$/ })).toBeDefined()
   expect(await ui.find({ type: 'Button', text: /Worktrees/ })).toBeDefined()
   await ui.unmount()
 })

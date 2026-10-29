@@ -2,7 +2,7 @@ import type { Register } from 'claude-code'
 
 import { register as abovePrompt } from './above-prompt'
 import { refreshChangedFiles, register as changedFiles, startChangedFiles } from './changed-files'
-import { register as gitlabMrs, startMergeRequests } from './gitlab-mrs'
+import { register as pullRequests, startPullRequests } from './pull-requests'
 import { refreshRoadmap } from './ticket-roadmap'
 import { refreshWorktrees, register as worktrees, startWorktrees } from './worktrees'
 
@@ -12,7 +12,7 @@ export const register: Register = (on, options) => {
     const started = await next(e)
     await Promise.allSettled([
       refreshRoadmap($),
-      startMergeRequests($),
+      startPullRequests($),
       startWorktrees($),
       startChangedFiles($),
     ])
@@ -30,7 +30,7 @@ export const register: Register = (on, options) => {
   })
 
   abovePrompt(on, options)
-  gitlabMrs(on, options)
+  pullRequests(on, options)
   worktrees(on, options)
   changedFiles(on, options)
 }

@@ -1,15 +1,15 @@
 import type { EngineInterface, Register } from 'claude-code'
 
-import { MR_PANE, isGitLab } from './gitlab-mrs'
+import { pullRequestsPane } from './pull-requests'
 import { RoadmapRow, readRoadmap } from './ticket-roadmap'
 import { WORKTREES_PANE, hasWorktrees } from './worktrees'
 
 type Pane = { id: string; title: string }
 
 async function panes($: EngineInterface): Promise<Pane[]> {
-  const [mrs, trees] = await Promise.all([isGitLab($), hasWorktrees($)])
+  const [prs, trees] = await Promise.all([pullRequestsPane($), hasWorktrees($)])
 
-  return [...(mrs ? [MR_PANE] : []), ...(trees ? [WORKTREES_PANE] : [])]
+  return [...(null === prs ? [] : [prs]), ...(trees ? [WORKTREES_PANE] : [])]
 }
 
 // One plugin draws one site above the prompt: the pane buttons and the roadmap share it.
