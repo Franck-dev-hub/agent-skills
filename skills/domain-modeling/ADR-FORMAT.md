@@ -1,6 +1,6 @@
 # ADR Format
 
-ADRs live in `docs/adr/` and use sequential numbering: `0001-slug.md`, `0002-slug.md`, etc.
+ADRs live in `docs/adr/`, named by the decision date: `2026-10-29-slug.md`.
 
 Create the `docs/adr/` directory lazily: only when the first ADR is needed.
 In a plan, an ADR is a `D<n>` entry in its `Decisions` section, title then template text: no file.
@@ -14,18 +14,24 @@ In a plan, an ADR is a `D<n>` entry in its `Decisions` section, title then templ
 ```
 
 That's it. An ADR can be a single paragraph. The value is in recording *that* a decision was made and *why*, not in filling out sections.
+Keep the title on line 1 and the paragraph on line 3: `head -n 3 docs/adr/*.md` is the index, so no index file is kept.
 
 ## Optional sections
 
 Only include these when they add genuine value. Most ADRs won't need them.
 
-- **Status** frontmatter (`proposed | accepted | deprecated | superseded by ADR-NNNN`): useful when decisions are revisited
 - **Considered Options**: only when the rejected alternatives are worth remembering
 - **Consequences**: only when non-obvious downstream effects need to be called out
 
-## Numbering
+## Naming
 
-Scan `docs/adr/` for the highest existing number and increment by one.
+Use the decision date and a short English slug.
+No sequence number: two branches would pick the same one.
+
+## Changing a decision
+
+Rewrite the ADR in place and add one line: `Previously: {old choice}, dropped because {reason}.`
+Never add a second ADR that supersedes the first: an agent reading the old one would follow it.
 
 ## When to offer an ADR
 
