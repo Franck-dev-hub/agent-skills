@@ -38,6 +38,30 @@ export type ChangedFile = {
 }
 export type ChangedFiles = { root: string; base: string; files: ChangedFile[]; error: string | null } | null
 
+export type TokenStep = {
+  num: number
+  name: string
+  seconds: number
+  input: number
+  output: number
+  cacheCreation: number
+  cacheRead: number
+  total: number
+}
+export type TicketTokens = {
+  id: string
+  name: string
+  seconds: number
+  input: number
+  output: number
+  cacheCreation: number
+  cacheRead: number
+  total: number
+  steps: TokenStep[]
+  models: { model: string; total: number }[]
+}
+export type Tokens = { tickets: TicketTokens[]; error: string | null } | null
+
 declare module 'claude-code' {
   interface PluginState {
     'franck-dev-skills': {
@@ -48,6 +72,8 @@ declare module 'claude-code' {
       worktrees: Worktrees
       filesMode: FilesMode
       changedFiles: ChangedFiles
+      tokens: Tokens
+      tokensTicket: string | null
     }
   }
 }

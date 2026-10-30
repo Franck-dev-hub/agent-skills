@@ -54,6 +54,7 @@ In the desktop app, a button above the prompt opens each pane whose tool is avai
 | `/prs`, `/mrs` | Pane of the open GitHub PRs or GitLab MRs, filtered by author; needs `gh` or `glab`                                     |
 | `/worktrees` | Pane indexing the worktrunk worktrees and their local state; needs `wt`                                                   |
 | `/fichiers`  | Pane of the changed files, against the base branch or uncommitted; a click opens the file in PhpStorm at its first change |
+| `/tokens`    | Pane of the tokens spent per ticket, from each ticket's `metrics/state.json`; a click shows its steps and models          |
 
 
 ## Installation with claude code
