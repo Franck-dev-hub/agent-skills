@@ -31,7 +31,8 @@ export const register: Register = on => {
     return (
       <Box flexDirection="column" gap={1}>
         {buttons.length > 0 && (
-          <Box flexDirection="row" gap={1}>
+          // Other plugins drawing in this band find the row by its key to add their buttons
+          <Box key="pane-buttons" flexDirection="row" gap={1}>
             {buttons.map(pane => (
               <Button key={pane.id} label={pane.title} onPress={() => $.ui.open(pane)} />
             ))}
