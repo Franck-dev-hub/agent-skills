@@ -68,6 +68,7 @@ The plan header is a table under the title; `-` marks a value still unknown, suc
 |--------------|-----------------------------|
 | Ticket       | <ticket URL>                |
 | Tracker      | <tracker>                   |
+| Level        | <level>                     |
 | Base branch  | `<base>`                    |
 | Branch       | `<type>/<ticket-id>-<slug>` |
 | PR           | <PR URL>                    |
@@ -77,6 +78,7 @@ The plan header is a table under the title; `-` marks a value still unknown, suc
 ```
 
 The roadmap hook reads the `Current step` row: keep its key in English and its value starting with the step number.
+The metrics hook reads the `Level` row: keep its key and value in English (*Levels*).
 
 The plan's table of contents sits between the header table and the first `##` section, inside two `<!-- TOC -->` markers: a click in PhpStorm jumps to a section.
 Once the plan has a `##` section, run `python3 <skill-dir>/scripts/plan_toc.py <plan path>` after each heading added, renamed or removed; its first run places the table, and before any `##` it fails.
@@ -160,6 +162,54 @@ While the session waits on the user, agents prepare the next work in the backgro
 - Read only, except the captures, written in `before/` and `after/`.
 - One agent at a time drives the browser: they share it, and the dev database.
 
+## Levels
+
+Each ticket runs at one level, `light`, `standard`, `full` or `complex`: it sets the gates and the parts of each step that run.
+The steps describe `full`; the second table gives what the other levels change, and wins over a step's text.
+
+At step 1 the skill scores two axes from the ticket, then picks one level from them:
+
+- Kind of code touched: wording or translation, config value, CSS, Twig template, PHP business logic, migration.
+- Size: files, screens, design choices.
+
+| Level | When |
+|---|---|
+| `light` | wording, translation, a config value or CSS with no layout effect; 1 or 2 files; no design choice |
+| `standard` | anything between `light` and `full` |
+| `full` | a design choice, PHP business logic, a migration, or several screens |
+| `complex` | a `full` ticket that also touches security or access rights, payment, production data, or 3 business modules or more; or the user asks for it |
+
+In doubt, take the level above.
+A bug is `light` only when the ticket gives its cause: it keeps its `Reproduction`, without `debug-investigate` nor the three questions of step 4. Otherwise a bug is `standard` at least.
+
+| | `light` | `standard` | `complex` |
+|---|---|---|---|
+| Gates | 1, 6, 8, 9, 10 | 1, 4, 6, 7, 8, 9, 10 | as `full`; step 5's gate shows the user the diff to review before step 6 |
+| Step 3 | `AGENTS.md`, `CLAUDE.md` and the Standards slot only | as `full` | as `full` |
+| Grill slot | only on a doubt about the wording, the scope or the place: one round of 3 questions at most, asked at the step 1 gate | one round, up to 3 on a doubt | as `full` |
+| Domain slot | no | only on an ambiguous business term | always |
+| Spec slot | no; the plan holds the header, the criteria, the tasks, and `Decisions` only after a grill | no: the `Explore` report fills `Files touched`, the session writes the tasks and the `Spec` edge cases | `ticket-investigate` with the `effort: max` override, on every route |
+| Step 4 background agents | the `before/` captures of a visual ticket only | as `full` | as `full` |
+| Step 5 | the session writes the code, no `ticket-implement` | as `full` | as `full` |
+| Review loop | 1 round; a round that fixed a major finding reruns once, without telling the user; one still open after it goes to the user | 1 round; a major finding still open goes to the user | up to 5 rounds; the conformance check reruns after each round that fixed a finding |
+| Conformance | the session checks the diff against each criterion, no agent | as `full` | as `full` |
+| Recette | the session runs the boxes; `ticket-review` only replays `Captures` into `after/`; no docs scan | as `full` | as `full` |
+| Step 7 | folded into the step 6 report as "no doc impact", without ADR check; when the diff touches `docs/` or `README.md`, step 7 runs, without its gate | as `full` | as `full` |
+| `/compact` | never: the context stays small | as `full` | as `full` |
+
+Step 2 writes the level in the `Level` row and its reason, one line, in the plan's `Level` section.
+
+At any gate, when the code or a report shows the ticket heavier or lighter than its level, propose the new level with its reason.
+A step that is not a gate at its level stops on a design choice its level does not allow: that stop is a gate for the level change.
+On the user's yes, change the `Level` row and add a line to the `Level` section: old level, new level, step, reason.
+The new level applies to the steps still to come; what is done stays.
+Raised before step 5, step 4 runs again at the new level for what it lacks.
+Raised from step 5 on, no grill comes after the fact: step 6 runs at the new level, and the choices made without a grill join `Decisions`, for the user to validate at the step 6 gate.
+
+A batch runs several `light` or `standard` tickets at once, one agent per ticket in its own worktree, launched by the user, who gives each ticket's level in the brief; never a `full` or `complex` one.
+A batch agent follows its level with no gate: it stops only on a technical question, and commits without waiting; the user reviews after.
+No level adds an exception to the user's approval of a commit or a tracker change, other than a batch agent's commits.
+
 ## 0. Route
 
 Take the ticket id from the argument: an id, a URL, or the pasted text; with none, ask the user for one.
@@ -171,8 +221,9 @@ Take the ticket id from the argument: an id, a URL, or the pasted text; with non
 
 ## Resume
 
-Derive the state from the environment, then read the plan's `Current step` row.
+Derive the state from the environment, then read the plan's `Current step` and `Level` rows.
 When they disagree, the environment wins: fix the row.
+A plan with no `Level` row runs at `full`.
 
 | Signal | Where |
 |---|---|
@@ -192,7 +243,8 @@ Step 6 resumes at the Review loop when its last round left a major finding open,
 
 ## Steps
 
-Every step but step 3, and step 1 for a pasted ticket, is a **gate**: once its criterion is met, stop.
+At the `full` level, every step but step 3 is a **gate**: once its criterion is met, stop; *Levels* gives the other levels' gates.
+A step that is not a gate at its level goes straight on to the next one, its report joined to the next gate's.
 Keep the plan's `Current step` row true at all times, once the plan exists: `<n>` when a step starts, `<n>, <progress>` while it runs (`5, tasks 3+6/7`, `8, commit 1/3`), `<n>, done` at its gate, once its tracker changes are applied; while one waits for the user's yes, `<n>, tracker pending`.
 Before stopping, report in five lines at most, commands and status lines excluded: what was done, its evidence, then the tracker changes to apply.
 Start the next step only on the user's explicit go; a go covers one step, never the rest of the list.
@@ -220,16 +272,17 @@ Step <n+1>: <name>, once step <n> is done
 ### 1. Read the ticket
 
 From the tracker: the ticket, its status, its blockers; name the tracker used in the report, so a wrong pick shows.
-Done when the status is Ready or In progress and every blocker is closed; otherwise stop and give the reason.
 In progress with no plan only means the ticket was moved before its start: never stop on it.
+A pasted ticket with no readable tracker is ready: never ask about its status; name in one line any blocker the text lists.
 
-A pasted ticket with no readable tracker is ready: never ask; name in one line any blocker the text lists, then go straight to step 2.
+Then score the level (*Levels*) and report it: the level, the kind of code and the size, its reason in one line; a `light` ticket with a doubt adds its short grill.
+Done when the status is Ready or In progress, every blocker is closed, and the user validated the level; otherwise stop and give the reason.
 An id or URL whose tracker this session cannot read: ask the user to paste the ticket.
 
 ### 2. Create the branch
 
 - Name: `<type>/<ticket-id>-<slug>`, type from the ticket's nature or title prefix in lowercase (`[Fix]` gives `fix`), slug from its title in short kebab case.
-- Create the ticket folder at its bucket path and its plan with the header; a visual ticket also gets `before/` and `after/`.
+- Create the ticket folder at its bucket path and its plan with the header and the `Level` section; a visual ticket also gets `before/` and `after/`.
 - Create the branch from `<base>` with the forge reference's command.
 - Tell the user the session name to set: `/rename <branch>`.
 
@@ -317,7 +370,7 @@ The skill runs and fixes everything first, so the user runs a single final recet
    Its report classes each finding major or minor. A minor one is fixed when it is quick and in the ticket's scope; otherwise it stays, with the reason in `Evidence`.
    A round that fixed a major finding starts the next one: each skill in a fresh agent, on the whole diff, since a fix can bring a new gap; the brief lists the findings dropped so far with their reasons, so none comes back without new evidence.
    The loop ends on a round with no major finding left open: none reported, or each dropped with its reason.
-   After 3 rounds with a major finding still open, stop and show it to the user: a gap that keeps coming back is often a design disagreement.
+   After 3 rounds, the `full` level's cap (*Levels*), with a major finding still open, stop and show it to the user: a gap that keeps coming back is often a design disagreement.
    `Current step` shows the round: `6, review 2/3`.
 2. Conformance: `ticket-review` compares the diff with each acceptance criterion and the plan's `Spec` and `Decisions`; the brief carries the criteria's text. It reports each criterion as met, partly or not met, with the file and line, then lists the code the ticket did not ask for. A criterion not met or partly met becomes a new task in the plan, run as in step 5, then this check reruns.
 3. Comment pass, in the background: a fresh context, since the comment rule fades over a long step 5. `ticket-review` reads every comment the branch adds or changes, in every file type; it cuts those that restate the code, shortens the rest to a one-line why, and keeps a why in one file only.

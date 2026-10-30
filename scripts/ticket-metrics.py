@@ -52,6 +52,15 @@ def current_step(plan):
     return None
 
 
+def plan_level(plan):
+    with open(plan, encoding="utf-8") as f:
+        for line in f:
+            m = re.match(r"^[-*| ]*\**Level\**[ |:]+`?(light|standard|full|complex)\b", line)
+            if m:
+                return m.group(1)
+    return None
+
+
 def read_new(path, offset, since=None):
     entries = []
     with open(path, "rb") as f:
@@ -191,8 +200,9 @@ def fmt_count(n):
     return f"{n:,}".replace(",", " ")
 
 
-def render(steps):
-    return render_steps(steps) + "\n" + render_models(steps)
+def render(steps, level=None):
+    head = f"Level: {level}\n\n" if level else ""
+    return head + render_steps(steps) + "\n" + render_models(steps)
 
 
 def render_steps(steps):
@@ -318,8 +328,12 @@ def main():
     for key in TOKENS:
         entry[key] += tokens[key]
     entry["total"] = sum(entry[key] for key in TOKENS)
+    level = plan_level(plan)
+    if level:
+        # A level can change mid-ticket: each step keeps the one it ran at.
+        data["level"] = entry["level"] = level
     write(state, json.dumps(data, indent=2) + "\n")
-    write(os.path.join(folder, "summary.md"), render(data["steps"]))
+    write(os.path.join(folder, "summary.md"), render(data["steps"], data.get("level")))
 
 
 if __name__ == "__main__":

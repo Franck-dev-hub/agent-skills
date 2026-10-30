@@ -161,7 +161,7 @@
               <p class="sub">Communes à tous les steps</p>
               <h3>Exécute</h3>
               <ul>
-                <li>Chaque step finit sur une gate, sauf le step 3 et le step 1 d'un ticket collé.</li>
+                <li>Au niveau complet, chaque step finit sur une gate, sauf le step 3 ; les autres niveaux en ont d'autres.</li>
                 <li>Une validation couvre un seul step.</li>
                 <li><code>Current step</code> du plan toujours à jour.</li>
                 <li>Chaque message finit par deux lignes de statut.</li>
@@ -169,6 +169,28 @@
                 <li>Skill sans question : exécuté dans un sous-agent, rapport dans le plan.</li>
               </ul>
               <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/skills/ticket/SKILL.md#steps">SKILL.md › Steps</a></p>
+            </template>
+          </article>
+          <article id="levels">
+            <button class="node" data-id="levels" aria-pressed="false">
+              <span class="num"><b>≡</b></span>
+              <span class="t">Niveaux</span>
+              <span class="s">Léger, standard, complet, complexe</span>
+            </button>
+            <template>
+              <span class="label">Règles communes</span>
+              <h2>Niveaux</h2>
+              <p class="sub">Léger, standard, complet, complexe</p>
+              <h3>Exécute</h3>
+              <ul>
+                <li>Proposé au step 1 d'après la nature du code et la taille, validé par l'utilisateur ; dans le doute, le niveau au-dessus.</li>
+                <li>Léger : texte, traduction, config ou CSS sans effet de mise en page, 1 ou 2 fichiers, aucun choix. Gates 1, 6, 8, 9, 10 ; grill court seulement sur un doute ; ni spec ni agent d'implémentation ; une revue.</li>
+                <li>Standard : entre léger et complet. Gates 1, 4, 6 à 10 ; grill d'un tour ; pas de spec en agent ; une revue.</li>
+                <li>Complet : le parcours de cette page.</li>
+                <li>Complexe : complet qui touche aussi la sécurité, le paiement, les données de prod ou 3 modules. Domain toujours, spec en effort max, revue jusqu'à 5 tours, diff montré au step 5.</li>
+                <li>Le niveau change à une gate, sur accord ; seuls les steps suivants en tiennent compte.</li>
+              </ul>
+              <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/skills/ticket/SKILL.md#levels">SKILL.md › Levels</a></p>
             </template>
           </article>
         </div>
@@ -233,12 +255,12 @@
             <p class="sub">Statut et blockers</p>
             <h3>Résultat</h3>
             <dl class="kv">
-              <dt>Gate</dt><dd>Ticket Ready, blockers fermés</dd>
+              <dt>Gate</dt><dd>Ticket Ready, blockers fermés, niveau validé</dd>
             </dl>
             <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/skills/ticket/SKILL.md#1-read-the-ticket">SKILL.md › 1. Read the ticket</a></p>
           </template>
         </article>
-        <div class="conn"><span class="pill gate">Gate, sauf ticket collé</span></div>
+        <div class="conn"><span class="pill gate">Gate</span></div>
         <article id="step2">
           <button class="node" data-id="step2" aria-pressed="false">
             <span class="num"><b>2</b></span>

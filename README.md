@@ -36,12 +36,12 @@ Agent marketplace hosting personal skills.
 
 ## Hooks
 
-| Event           | Effect                                                                                                                                                     |
-|-----------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `Stop`          | On a ticket branch with a plan, shows the step roadmap after each reply; silent otherwise                                                                  |
-| `Stop`          | On a ticket branch with a plan, adds time and tokens per step, and tokens per model, to `metrics/summary.md` in the ticket folder; needs `python3`, silent |
-| `turn.complete` | Desktop app only, where `Stop` messages are hidden: shows the same roadmap above the prompt                                                                |
-| `tool.call`     | Desktop app only: before a question, refreshes the roadmap and shows it on the question card                                                               |
+| Event           | Effect                                                                                                                                                                       |
+|-----------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `Stop`          | On a ticket branch with a plan, shows the step roadmap after each reply; silent otherwise                                                                                    |
+| `Stop`          | On a ticket branch with a plan, adds time and tokens per step, tokens per model and the ticket's level to `metrics/summary.md` in the ticket folder; needs `python3`, silent |
+| `turn.complete` | Desktop app only, where `Stop` messages are hidden: shows the same roadmap above the prompt                                                                                  |
+| `tool.call`     | Desktop app only: before a question, refreshes the roadmap and shows it on the question card                                                                                 |
 
 
 ## Panes
