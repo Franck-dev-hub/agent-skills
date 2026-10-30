@@ -148,14 +148,15 @@ While the session waits on the user, agents prepare the next work in the backgro
 | When | Agent | Prepares |
 |---|---|---|
 | Step 4, during the grilling | `franck-dev-skills:debug-investigate` | a bug's root cause, from the `Reproduction` section |
-| Step 4, during the grilling | `Explore` | the files and flows the ticket touches, for `Files touched`, each fact with its `path:line` so the Spec slot does not re-read it |
-| Step 4, during the grilling | `Explore` | the external facts the ticket rests on (versions, APIs, tool options), each with its source URL and the date read, so the Spec slot does not re-check them; send it, through SendMessage, each grilling decision that changes the stack or the tooling |
+| Step 4, during the grilling | `Explore` on `haiku` | the files and flows the ticket touches, for `Files touched`, each fact with its `path:line` so the Spec slot does not re-read it |
+| Step 4, during the grilling | `Explore` on `sonnet` | the external facts the ticket rests on (versions, APIs, tool options), each with its source URL and the date read, so the Spec slot does not re-check them; send it, through SendMessage, each grilling decision that changes the stack or the tooling |
 | Step 4, during the grilling | `franck-dev-skills:ticket-review` | a visual ticket's `before/` captures |
 | Step 6, after the review | `franck-dev-skills:ticket-review` | the skill's recette and the `after/` captures, while lint and tests run |
-| Step 6, during the final recette | `Explore` | the passages of `docs/` and `README.md` the diff changes, for step 7 |
+| Step 6, during the final recette | `Explore` on `haiku` | the passages of `docs/` and `README.md` the diff changes, for step 7 |
 | Step 9, after the PR is open | `franck-dev-skills:ci-investigate` | the cause of a failed pipeline |
 
 - A background agent only prepares: it never advances a step, and its report waits for the step that uses it.
+- An `Explore` agent gets the model the table names: without one, it runs on the session's model.
 - Read only, except the captures, written in `before/` and `after/`.
 - One agent at a time drives the browser: they share it, and the dev database.
 

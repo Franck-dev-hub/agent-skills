@@ -18,26 +18,28 @@ request came in.
 Before writing anything, send three `Explore` agents in one turn, each with the request
 and its own subject; each returns facts with the `path:line` it read, no prose:
 
-| Subject                                                                | Steps | Model   |
-|------------------------------------------------------------------------|-------|---------|
-| Check each claim of the request against the code; list the edge cases  | 1, 5  | default |
-| Trace the runtime flow to the root cause                               | 3     | `opus`  |
-| List the files involved and an existing pattern solving a sibling case | 4     | default |
+| Subject                                                                | Steps | Model    |
+|------------------------------------------------------------------------|-------|----------|
+| Check each claim of the request against the code; list the edge cases  | 1, 5  | `sonnet` |
+| Trace the runtime flow to the root cause                               | 3     | `opus`   |
+| List the files involved and an existing pattern solving a sibling case | 4     | `haiku`  |
+
+Always pass the model: an `Explore` agent without one runs on the session's model.
 
 Called with a route by the `ticket-investigate` agent, send only the agents it names:
 
 | Route   | Agents                                                                  |
 |---------|-------------------------------------------------------------------------|
 | bug     | the first and the third; the flow only when the plan holds no cause     |
-| feature | the first and the third; the flow, on the default model, see below      |
+| feature | the first and the third; the flow, on `sonnet`, see below               |
 | tooling | the first and the third, plus one on the external facts the plan lacks  |
 
 A feature sends the flow agent only when the plan's `Files touched` or `Decisions` name
-an existing runtime flow it extends. The external-facts agent returns docs, versions and
-tool options, each with its source URL and the date read. When the flow agent is skipped,
-step 3 uses the plan's cause for a bug and does not apply otherwise; feature and tooling
-have no cause line in the report. A fact the plan already holds with its `path:line`, or
-its source URL and date, is not sent again.
+an existing runtime flow it extends. The external-facts agent runs on `sonnet` and returns
+docs, versions and tool options, each with its source URL and the date read. When the flow
+agent is skipped, step 3 uses the plan's cause for a bug and does not apply otherwise;
+feature and tooling have no cause line in the report. A fact the plan already holds with
+its `path:line`, or its source URL and date, is not sent again.
 
 Then run steps 2, 6 and 7 on the merged facts. A request already pinned to one file skips
 the agents and runs the steps itself. Do not write the report from the first merge: the
