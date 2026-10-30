@@ -1,5 +1,5 @@
 import { atom, read, update } from 'claude-code'
-import type { EngineInterface } from 'claude-code'
+import type { EngineInterface, Register } from 'claude-code'
 
 import type { Roadmap, Step } from '../types'
 
@@ -67,4 +67,34 @@ export function RoadmapRow({ ui, roadmap: current }: { ui: Resolved; roadmap: No
       {current.note ? <Text color="warning">{current.note}</Text> : null}
     </Box>
   )
+}
+
+// A question pauses the turn before turn.complete refreshes the band: the card shows its own copy.
+export const register: Register = on => {
+  on('tool.call', { tool: 'AskUserQuestion' }, async ($, e, next) => {
+    await refreshRoadmap($)
+
+    return next(e)
+  })
+
+  on('ui.render', { component: 'AskUserQuestion' }, async ($, e, next) => {
+    if ('desktop' !== e.surface) {
+      return next(e)
+    }
+
+    const current = await readRoadmap($)
+    if (null === current) {
+      return next(e)
+    }
+
+    const ui = $.ui.resolve(e)
+    const { Box } = ui
+
+    return (
+      <Box flexDirection="column" gap={1}>
+        <RoadmapRow ui={ui} roadmap={current} />
+        {await next(e)}
+      </Box>
+    )
+  })
 }
