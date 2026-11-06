@@ -135,7 +135,7 @@ A skill that never asks the user runs in a sub-agent, so its output stays out of
 | `franck-dev-skills:ticket-investigate` | the Spec slot when it is `dev-spec`, with its route (step 4) in the brief: a bug on its default model and effort; a feature with the `effort: medium` override; tooling with the `sonnet` model and `effort: medium` overrides |
 | `franck-dev-skills:ticket-review` | each Review skill in its own agent, the E2E slot, the conformance check, and the comment pass |
 | `franck-dev-skills:ticket-implement` | each hand-written task of step 5, one agent per task |
-| `franck-dev-skills:ticket-check` | a Lint skill, on its Haiku default; a Task skill that asks nothing, with the `sonnet` model override |
+| `franck-dev-skills:ticket-check` | a Lint skill, on its Haiku default; a Task skill that asks nothing, with the `sonnet` model override; `condense` at step 7, with the `sonnet` model override |
 
 The brief is self-contained: skill, plan path, ticket id, branch, the diff, and what the step needs.
 Every brief keeps git read-only (`status`, `diff`, `log`, `show`) and forbids `stash`, `reset`, `checkout`, `switch`, `restore` and `clean`: agents share the working tree and the index, and one `git stash` sweeps every other task's uncommitted work.
@@ -425,7 +425,9 @@ Then check the plan's `Decisions` against the `franck-dev-skills:domain-modeling
 Most tickets have none: then say nothing.
 Otherwise propose each one that passes; write it in `docs/adr/`, in that skill's ADR format, only on the user's yes.
 
-Done when each of them is updated, or the summary states "no doc impact", and every accepted ADR is written.
+Last, run `franck-dev-skills:condense` on every Markdown file this step changed, ADRs included; its removed content and kept-for-review items go in the step's report.
+
+Done when each of them is updated, or the summary states "no doc impact", every accepted ADR is written, and the changed files went through `condense`.
 
 ### 8. Commit
 
