@@ -29,7 +29,14 @@ def find_plan(root, ticket_id, branch):
     pattern = re.compile(rf"/{ticket_id}-[^/]*/plan\.md$")
     depth = root.count(os.sep)
     found = []
+    seen = set()
     for base, dirs, files in os.walk(root, followlinks=True):
+        # A symlink to the repo root would list each plan twice, and the second copy reads as another ticket.
+        real = os.path.realpath(base)
+        if real in seen:
+            dirs[:] = []
+            continue
+        seen.add(real)
         dirs[:] = [d for d in dirs if d not in PRUNED]
         if base.count(os.sep) - depth >= 10:
             dirs[:] = []
