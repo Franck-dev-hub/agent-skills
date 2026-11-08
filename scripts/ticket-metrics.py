@@ -10,7 +10,7 @@ import sys
 from datetime import datetime
 
 PRUNED = {"node_modules", "vendor", ".git", "var"}
-STEP_NAMES = ("Read", "Branch", "Context", "Grill", "Code", "Recette", "Docs", "Commit", "PR", "Merge")
+STEP_NAMES = ("Start", "Grill", "Code", "Recette", "Docs", "Commit", "PR", "Merge")
 TOKENS = ("input", "output", "cache_creation", "cache_read")
 USAGE_KEYS = {
     "input": "input_tokens",

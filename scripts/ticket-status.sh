@@ -32,7 +32,7 @@ current=$(grep -m1 -E '^[-*| ]*\**Current step\**[ |:]+' "$plan" | sed -E 's/^[-
 num=$(printf '%s' "$current" | sed -nE 's/^([0-9]+).*/\1/p')
 detail=$(printf '%s' "$current" | sed -E 's/^[0-9]+[.,:]? *//' | tr -d '"\\')
 
-names=(Read Branch Context Grill Code Recette Docs Commit PR Merge)
+names=(Start Grill Code Recette Docs Commit PR Merge)
 # Claude Code greys the message: the reset after the current step leaves the next steps in full colour.
 cur='\u001b[1;32m' off='\u001b[0m'
 line=""

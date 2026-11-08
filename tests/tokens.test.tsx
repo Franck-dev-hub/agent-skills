@@ -30,9 +30,9 @@ const step = (seconds: number, cacheRead: number, model: string) => ({
 })
 
 const STATES: Record<string, unknown> = {
-  '/repo/plans/42-cart/metrics/state.json': { steps: { '5': step(3_600, 2_000_000, 'claude-opus-5-5') } },
+  '/repo/plans/42-cart/metrics/state.json': { steps: { '3': step(3_600, 2_000_000, 'claude-opus-5-5') } },
   '/repo/plans/PROJ-7-login/metrics/state.json': {
-    steps: { '4': step(600, 89_990, 'claude-opus-5-5'), '6': step(120, 0, 'claude-sonnet-5-5') },
+    steps: { '2': step(600, 89_990, 'claude-opus-5-5'), '4': step(120, 0, 'claude-sonnet-5-5') },
   },
 }
 
@@ -56,10 +56,10 @@ test('the pane lists the tickets by tokens spent and opens one on a click', asyn
     const login = await ui.find({ type: 'Button', key: 'ticket-PROJ-7' })
     expect(cart?.text).toBe('▸ 42 cart 2.0 M 1 h 00')
     expect(login?.text).toBe('▸ PROJ-7 login 110 k 12 min')
-    expect(await ui.find({ type: 'Text', text: /^4 Grill/ })).toBeUndefined()
+    expect(await ui.find({ type: 'Text', text: /^2 Grill/ })).toBeUndefined()
 
     await ui.press({ key: 'ticket-PROJ-7' })
-    expect((await ui.find({ type: 'Text', text: /^4 Grill/ }))?.text).toBe('4 Grill : 100 k 10 min')
+    expect((await ui.find({ type: 'Text', text: /^2 Grill/ }))?.text).toBe('2 Grill : 100 k 10 min')
     expect((await ui.find({ type: 'Text', text: /^claude-sonnet/ }))?.text).toBe('claude-sonnet-5-5 : 10 k')
     await ui.press({ key: 'ticket-PROJ-7' })
     await ui.unmount()

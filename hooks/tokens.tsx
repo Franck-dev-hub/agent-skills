@@ -5,7 +5,7 @@ import type { TicketTokens, TokenStep, Tokens } from '../types'
 
 export const TOKENS_PANE = { id: 'tokens', title: 'Tokens' }
 
-const STEP_NAMES = ['Read', 'Branch', 'Context', 'Grill', 'Code', 'Recette', 'Docs', 'Commit', 'PR', 'Merge']
+const STEP_NAMES = ['Start', 'Grill', 'Code', 'Recette', 'Docs', 'Commit', 'PR', 'Merge']
 const PRUNED = ['node_modules', 'vendor', '.git', 'var']
 const TYPES = [
   { key: 'cacheRead', label: 'cache read', color: '#E5B700' },

@@ -23,7 +23,7 @@ The tracker holds the ticket: a GitHub or GitLab issue (the forge reference), No
 Pick it in this order: a tracker URL in the argument; else the `Tracker` value of the local profile, then of the Ticket workflow section; else the forge's issues.
 Read a tracker only through a tool this session has: `gh`, `glab`, the Notion or Redmine MCP.
 
-Every tracker change (status, tick, body) is first shown as the exact change, then applied only on the user's yes; the one exception is the move to In progress at step 2, applied at once: running the skill is the user's go.
+Every tracker change (status, tick, body) is first shown as the exact change, then applied only on the user's yes; the one exception is the move to In progress at step 1, applied at once: running the skill is the user's go.
 Without write access, it goes in a **To report in the ticket** block for the user to apply.
 
 ## Values
@@ -61,7 +61,7 @@ The ticket folder holds the ticket's only working files: the plan, a visual tick
 What the steps or their skills would write elsewhere goes in a section of the plan.
 The metrics hook writes `metrics/summary.md` and `metrics/state.json`, time and tokens per step and tokens per model: never edit them, never commit them.
 
-The plan header is a table under the title; `-` marks a value still unknown, such as the PR before step 9; the `PR` key is `MR` on GitLab:
+The plan header is a table under the title; `-` marks a value still unknown, such as the PR before step 7; the `PR` key is `MR` on GitLab:
 
 ```markdown
 | Key          | Value                       |
@@ -109,16 +109,16 @@ Review and Lint take several skills, run in the listed order (`a`, then `b`); ev
 
 | Slot | Step | Default |
 |---|---|---|
-| Standards | 3 | none |
-| Grill | 4 | `franck-dev-skills:grilling` |
-| Domain | 4 | `franck-dev-skills:domain-modeling` |
-| Spec | 4 | `franck-dev-skills:dev-spec` |
-| Task skills | 5 | none |
-| Method | 5 | none |
-| Runner | 5 | none: no project command runs in parallel |
-| Review | 6 | none |
-| Lint | 6 | the project's lint commands |
-| E2E | 6 | none |
+| Standards | 1 | none |
+| Grill | 2 | `franck-dev-skills:grilling` |
+| Domain | 2 | `franck-dev-skills:domain-modeling` |
+| Spec | 2 | `franck-dev-skills:dev-spec` |
+| Task skills | 3 | none |
+| Method | 3 | none |
+| Runner | 3 | none: no project command runs in parallel |
+| Review | 4 | none |
+| Lint | 4 | the project's lint commands |
+| E2E | 4 | none |
 
 Runner is a command prefix: it runs the project's tooling (tests, lint, the package manager) on the main checkout in its own container and cache namespace, leaving the live app untouched.
 To set it up, propose none, or a prefix built from the project's container setup.
@@ -132,14 +132,14 @@ A skill that never asks the user runs in a sub-agent, so its output stays out of
 
 | Agent | Runs |
 |---|---|
-| `franck-dev-skills:ticket-investigate` | the Spec slot when it is `dev-spec`, with its route (step 4) in the brief: a bug on its default model and effort; a feature with the `effort: medium` override; tooling with the `sonnet` model and `effort: medium` overrides |
+| `franck-dev-skills:ticket-investigate` | the Spec slot when it is `dev-spec`, with its route (step 2) in the brief: a bug on its default model and effort; a feature with the `effort: medium` override; tooling with the `sonnet` model and `effort: medium` overrides |
 | `franck-dev-skills:ticket-review` | each Review skill in its own agent, the E2E slot, the conformance check, and the comment pass |
-| `franck-dev-skills:ticket-implement` | each hand-written task of step 5, one agent per task |
-| `franck-dev-skills:ticket-check` | a Lint skill, on its Haiku default; a Task skill that asks nothing, with the `sonnet` model override; `condense` at step 7, with the `sonnet` model override |
+| `franck-dev-skills:ticket-implement` | each hand-written task of step 3, one agent per task |
+| `franck-dev-skills:ticket-check` | a Lint skill, on its Haiku default; a Task skill that asks nothing, with the `sonnet` model override; `condense` at step 5, with the `sonnet` model override |
 
 The brief is self-contained: skill, plan path, ticket id, branch, the diff, and what the step needs.
 Every brief keeps git read-only (`status`, `diff`, `log`, `show`) and forbids `stash`, `reset`, `checkout`, `switch`, `restore` and `clean`: agents share the working tree and the index, and one `git stash` sweeps every other task's uncommitted work.
-The diff is `git diff --merge-base <base>` plus `git ls-files --others --exclude-standard`: nothing is committed before step 8, so `<base>..HEAD` would be empty.
+The diff is `git diff --merge-base <base>` plus `git ls-files --others --exclude-standard`: nothing is committed before step 6, so `<base>..HEAD` would be empty.
 Write the report's evidence and findings in the plan, and bring its questions to the user.
 Every other skill runs in the session: it talks to the user.
 Plain commands, such as lint commands, run in the background with Bash, not in an agent.
@@ -149,13 +149,13 @@ While the session waits on the user, agents prepare the next work in the backgro
 
 | When | Agent | Prepares |
 |---|---|---|
-| Step 4, during the grilling | `franck-dev-skills:debug-investigate` | a bug's root cause, from the `Reproduction` section |
-| Step 4, during the grilling | `Explore` on `haiku` | the files and flows the ticket touches, for `Files touched`, each fact with its `path:line` so the Spec slot does not re-read it |
-| Step 4, during the grilling | `Explore` on `sonnet` | the external facts the ticket rests on (versions, APIs, tool options), each with its source URL and the date read, so the Spec slot does not re-check them; send it, through SendMessage, each grilling decision that changes the stack or the tooling |
-| Step 4, during the grilling | `franck-dev-skills:ticket-review` | a visual ticket's `before/` captures |
-| Step 6, after the review | `franck-dev-skills:ticket-review` | the skill's recette and the `after/` captures, while lint and tests run |
-| Step 6, during the final recette | `Explore` on `haiku` | the passages of `docs/` and `README.md` the diff changes, for step 7 |
-| Step 9, after the PR is open | `franck-dev-skills:ci-investigate` | the cause of a failed pipeline |
+| Step 2, during the grilling | `franck-dev-skills:debug-investigate` | a bug's root cause, from the `Reproduction` section |
+| Step 2, during the grilling | `Explore` on `haiku` | the files and flows the ticket touches, for `Files touched`, each fact with its `path:line` so the Spec slot does not re-read it |
+| Step 2, during the grilling | `Explore` on `sonnet` | the external facts the ticket rests on (versions, APIs, tool options), each with its source URL and the date read, so the Spec slot does not re-check them; send it, through SendMessage, each grilling decision that changes the stack or the tooling |
+| Step 2, during the grilling | `franck-dev-skills:ticket-review` | a visual ticket's `before/` captures |
+| Step 4, after the review | `franck-dev-skills:ticket-review` | the skill's recette and the `after/` captures, while lint and tests run |
+| Step 4, during the final recette | `Explore` on `haiku` | the passages of `docs/` and `README.md` the diff changes, for step 5 |
+| Step 7, after the PR is open | `franck-dev-skills:ci-investigate` | the cause of a failed pipeline |
 
 - A background agent only prepares: it never advances a step, and its report waits for the step that uses it.
 - An `Explore` agent gets the model the table names: without one, it runs on the session's model.
@@ -180,31 +180,31 @@ At step 1 the skill scores two axes from the ticket, then picks one level from t
 | `complex` | a `full` ticket that also touches security or access rights, payment, production data, or 3 business modules or more; or the user asks for it |
 
 In doubt, take the level above.
-A bug is `light` only when the ticket gives its cause: it keeps its `Reproduction`, without `debug-investigate` nor the three questions of step 4. Otherwise a bug is `standard` at least.
+A bug is `light` only when the ticket gives its cause: it keeps its `Reproduction`, without `debug-investigate` nor the three questions of step 2. Otherwise a bug is `standard` at least.
 
 | | `light` | `standard` | `complex` |
 |---|---|---|---|
-| Gates | 1, 6, 8, 9, 10 | 1, 4, 6, 7, 8, 9, 10 | as `full`; step 5's gate shows the user the diff to review before step 6 |
-| Step 3 | `AGENTS.md`, `CLAUDE.md` and the Standards slot only | as `full` | as `full` |
+| Gates | 1, 4, 6, 7, 8 | 1, 2, 4, 5, 6, 7, 8 | as `full`; step 3's gate shows the user the diff to review before step 4 |
+| Step 1 context | `AGENTS.md`, `CLAUDE.md` and the Standards slot only | as `full` | as `full` |
 | Grill slot | only on a doubt about the wording, the scope or the place: one round of 3 questions at most, asked at the step 1 gate | one round, up to 3 on a doubt | as `full` |
 | Domain slot | no | only on an ambiguous business term | always |
 | Spec slot | no; the plan holds the header, the criteria, the tasks, and `Decisions` only after a grill | no: the `Explore` report fills `Files touched`, the session writes the tasks and the `Spec` edge cases | `ticket-investigate` with the `effort: max` override, on every route |
-| Step 4 background agents | the `before/` captures of a visual ticket only | as `full` | as `full` |
-| Step 5 | the session writes the code, no `ticket-implement` | as `full` | as `full` |
+| Step 2 background agents | the `before/` captures of a visual ticket only | as `full` | as `full` |
+| Step 3 | the session writes the code, no `ticket-implement` | as `full` | as `full` |
 | Review loop | 1 round; a round that fixed a major finding reruns once, without telling the user; one still open after it goes to the user | 1 round; a major finding still open goes to the user | up to 5 rounds; the conformance check reruns after each round that fixed a finding |
 | Conformance | the session checks the diff against each criterion, no agent | as `full` | as `full` |
 | Recette | the session runs the boxes; `ticket-review` only replays `Captures` into `after/`; no docs scan | as `full` | as `full` |
-| Step 7 | folded into the step 6 report as "no doc impact", without ADR check; when the diff touches `docs/` or `README.md`, step 7 runs, without its gate | as `full` | as `full` |
+| Step 5 | folded into the step 4 report as "no doc impact", without ADR check; when the diff touches `docs/` or `README.md`, step 5 runs, without its gate | as `full` | as `full` |
 | `/compact` | never: the context stays small | as `full` | as `full` |
 
-Step 2 writes the level in the `Level` row and its reason, one line, in the plan's `Level` section.
+Step 1 writes the level in the `Level` row and its reason, one line, in the plan's `Level` section.
 
 At any gate, when the code or a report shows the ticket heavier or lighter than its level, propose the new level with its reason.
 A step that is not a gate at its level stops on a design choice its level does not allow: that stop is a gate for the level change.
 On the user's yes, change the `Level` row and add a line to the `Level` section: old level, new level, step, reason.
 The new level applies to the steps still to come; what is done stays.
-Raised before step 5, step 4 runs again at the new level for what it lacks.
-Raised from step 5 on, no grill comes after the fact: step 6 runs at the new level, and the choices made without a grill join `Decisions`, for the user to validate at the step 6 gate.
+Raised before step 3, step 2 runs again at the new level for what it lacks.
+Raised from step 3 on, no grill comes after the fact: step 4 runs at the new level, and the choices made without a grill join `Decisions`, for the user to validate at the step 4 gate.
 
 A batch runs several `light` or `standard` tickets at once, one agent per ticket in its own worktree, launched by the user, who gives each ticket's level in the brief; never a `full` or `complex` one.
 A batch agent follows its level with no gate: it stops only on a technical question, and commits without waiting; the user reviews after.
@@ -236,22 +236,22 @@ A plan with no `Level` row runs at `full`.
 Set `Current step` to `<next step>, resuming` first, so the cost of the resume lands on the step it prepares.
 Give a summary of five lines at most: ticket, status, branch, commits, PR.
 Propose the next step, then wait for the user.
-An open PR means step 9; with unresolved review threads, its review comments.
-A merged PR means step 10.
-Step 5 resumes with the wave of unticked tasks whose dependencies are ticked.
-Step 6 resumes at the Review loop when its last round left a major finding open, then at the first failing check, then the comment pass when `Evidence` lacks it, then the skill's recette, then the first box the user has not ticked.
+An open PR means step 7; with unresolved review threads, its review comments.
+A merged PR means step 8.
+Step 3 resumes with the wave of unticked tasks whose dependencies are ticked.
+Step 4 resumes at the Review loop when its last round left a major finding open, then at the first failing check, then the comment pass when `Evidence` lacks it, then the skill's recette, then the first box the user has not ticked.
 
 ## Steps
 
-At the `full` level, every step but step 3 is a **gate**: once its criterion is met, stop; *Levels* gives the other levels' gates.
+At the `full` level, every step is a **gate**: once its criterion is met, stop; *Levels* gives the other levels' gates.
 A step that is not a gate at its level goes straight on to the next one, its report joined to the next gate's.
-Keep the plan's `Current step` row true at all times, once the plan exists: `<n>` when a step starts, `<n>, <progress>` while it runs (`5, tasks 3+6/7`, `8, commit 1/3`), `<n>, done` at its gate, once its tracker changes are applied; while one waits for the user's yes, `<n>, tracker pending`.
+Keep the plan's `Current step` row true at all times, once the plan exists: `<n>` when a step starts, `<n>, <progress>` while it runs (`3, tasks 3+6/7`, `6, commit 1/3`), `<n>, done` at its gate, once its tracker changes are applied; while one waits for the user's yes, `<n>, tracker pending`.
 Before stopping, report in five lines at most, commands and status lines excluded: what was done, its evidence, then the tracker changes to apply.
 Start the next step only on the user's explicit go; a go covers one step, never the rest of the list.
 
 Keep the context small: each token in it is read again at every call.
 
-- At the gate of step 4, 5 or 6, once the step is done and nothing waits on the user, give one command to run right away, with the real ticket URL, branch, plan path and `Current step`: `/compact Keep ticket <ticket URL>, branch <branch>, plan <plan path>, Current step <n>; the plan holds the rest.` The summary replaces the conversation: the next step starts light, in the same session. Never give it while the user still has work in the step, such as the final recette of step 6.
+- At the gate of step 2, 3 or 4, once the step is done and nothing waits on the user, give one command to run right away, with the real ticket URL, branch, plan path and `Current step`: `/compact Keep ticket <ticket URL>, branch <branch>, plan <plan path>, Current step <n>; the plan holds the rest.` The summary replaces the conversation: the next step starts light, in the same session. Never give it while the user still has work in the step, such as the final recette of step 4.
 - Advise it too after a pause of an hour or more: the cache has expired, the whole context would be paid again.
 - Never switch the model inside a step: the cache belongs to one model. Switch right after a gate's `/compact`, when the context is small.
 
@@ -269,35 +269,32 @@ Step <n>: in progress, <what the user must do>
 Step <n+1>: <name>, once step <n> is done
 ```
 
-### 1. Read the ticket
+### 1. Start
 
-From the tracker: the ticket, its status, its blockers; name the tracker used in the report, so a wrong pick shows.
+In one batch of parallel calls: the ticket from the tracker, its status and blockers, `AGENTS.md` and `CLAUDE.md`.
 In progress with no plan only means the ticket was moved before its start: never stop on it.
 A pasted ticket with no readable tracker is ready: never ask about its status; name in one line any blocker the text lists.
-
-Then score the level (*Levels*) and report it: the level, the kind of code and the size, its reason in one line; a `light` ticket with a doubt adds its short grill.
-Done when the status is Ready or In progress, every blocker is closed, and the user validated the level; otherwise stop and give the reason.
 An id or URL whose tracker this session cannot read: ask the user to paste the ticket.
+A status other than Ready or In progress, or an open blocker: stop and give the reason, before creating anything.
 
-### 2. Create the branch
+Then score the level (*Levels*) and read the rest of the context: the linked tickets (blocking, blocked, parent, children), `CONTRIBUTING.md`, `CONTEXT.md`, `docs/adr/`.
+Run the Standards slot: it loads the standards the ticket touches; never ask which ones.
+Read whole every file the ticket leans on: a read that comes back condensed or cut is read again raw.
 
-- Name: `<type>/<ticket-id>-<slug>`, type from the ticket's nature or title prefix in lowercase (`[Fix]` gives `fix`), slug from its title in short kebab case.
+Report in one message: the tracker used, so a wrong pick shows; the level, with the kind of code, the size and its reason in one line; the branch name; the standards loaded, in one line. A `light` ticket with a doubt adds its short grill.
+The branch name is `<type>/<ticket-id>-<slug>`: type from the ticket's nature or title prefix in lowercase (`[Fix]` gives `fix`), slug from its title in short kebab case.
+
+On the user's go, which validates the level and the branch name:
+
 - Create the ticket folder at its bucket path and its plan with the header and the `Level` section; a visual ticket also gets `before/` and `after/`.
 - Create the branch from `<base>` with the forge reference's command.
 - Tell the user the session name to set: `/rename <branch>`.
+- Go straight on to step 2: this go covers it.
 
 Done when the branch is checked out and the plan exists.
 Tracker: status to In progress, applied without asking; nothing when it is already there.
 
-### 3. Read the context
-
-The linked tickets (blocking, blocked, parent, children), `AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md`, `CONTEXT.md`, `docs/adr/`.
-Run the Standards slot: it loads the standards the ticket touches; never ask which ones.
-Read whole every file the ticket leans on, these and any other: a read that comes back condensed or cut is read again raw.
-
-Not a gate: once the standards are loaded, list them in one line and go straight to step 4.
-
-### 4. Grill and spec
+### 2. Grill and spec
 
 For a bug, get the reproduction first: URL, account and data, steps, observed versus expected result.
 Reproduce on the local app (`App URL`) without asking which environment; ask for it only when the ticket names one, such as a bug on preprod that develop does not show, or when the bug does not reproduce locally.
@@ -308,11 +305,11 @@ For a visual ticket, when a real-browser tool is available (Playwright MCP or CL
 
 - A bug: its reproduction, showing the fault. A feature: the page as it is today.
 - One file per page and viewport, `<nn>-<page>-<viewport>.png`; desktop and mobile unless the ticket names one.
-- List each capture, with its URL, account and viewport, in the plan's `Captures` section, so step 6 can replay it.
+- List each capture, with its URL, account and viewport, in the plan's `Captures` section, so step 4 can replay it.
 
 With no such tool, say so in one line and go on.
 
-Start the step 4 background agents (*Delegation*), then run the Grill slot, then the Domain slot, on the ticket.
+Start the step 2 background agents (*Delegation*), then run the Grill slot, then the Domain slot, on the ticket.
 A bug skips both slots: once the `debug-investigate` report is in, ask one round of three questions: the expected result, the cause confirmed, the scope of the fix (this case, or every place sharing the cause).
 It runs the Domain slot only when the cause is a misread business term.
 Give the Domain slot the plan path: it writes no file in the repo and no glossary, its ADRs go in `Decisions`.
@@ -331,16 +328,16 @@ Whatever skill fills the slot, the `Spec` lists the edge cases, or `none` with t
 Then fill the plan: context, spec, files touched, tasks, `Current step`.
 Tasks are a `- [ ]` list in execution order, never numbered: the order is the numbering. Each one is small enough to review alone.
 Each task states its dependencies and the resources it uses: files, the running app (container, dev database, cache), the browser; `- [ ] <task> (after 2, 4; uses <files>, dev database)`, the numbers being positions in the list.
-A Method skill that asks the user, such as the seams to test, asks now: each answer goes in its task, so step 5 never stops on it.
+A Method skill that asks the user, such as the seams to test, asks now: each answer goes in its task, so step 3 never stops on it.
 
-After step 4, a new decision takes the next id and a changed one is rewritten under its own id; a dropped one, or one moved to another PR, is deleted with its reason in `Evidence`, never left as a `replaced by` line.
-`Key decisions` follows each change, by the same rules. `D` and `K` ids never shift after step 4: other sections and the user cite them.
+After step 2, a new decision takes the next id and a changed one is rewritten under its own id; a dropped one, or one moved to another PR, is deleted with its reason in `Evidence`, never left as a `replaced by` line.
+`Key decisions` follows each change, by the same rules. `D` and `K` ids never shift after step 2: other sections and the user cite them.
 
 Done when the plan holds its tasks.
 Tracker: nothing; the ticket leaves as it came in, only ticked and moved.
 Rewrite its body only when it breaks the tracker's standard outright (`create-issue`'s format for a GitHub or GitLab issue, the ticket format `dev-spec` reads for Notion); small gaps stay.
 
-### 5. Write the code
+### 3. Write the code
 
 Run the plan's tasks in waves, without stopping between them.
 A wave is every unticked task whose dependencies are ticked and whose resources overlap no running task's: launch it in one batch of parallel tool calls.
@@ -349,10 +346,10 @@ The running app, the dev database, the browser and any rebuild of a shared cache
 A task that runs project commands (tests, lint, the package manager) runs beside others only through the Runner slot; with none, it counts as using the running app.
 A task that matches the Task skills slot runs that skill instead of writing the code by hand.
 Every other task runs in its own fresh `ticket-implement` agent, which follows the Method slot.
-Its brief: the task and its answers, the `Spec` edge cases it covers, the plan's `Decisions` in place of the ADR files the skill would read, `Files touched`, the test command (behind the Runner when the task shares its wave), and the comment rule, as for the comment pass of step 6.
-As each agent returns, check its report against its task, on the diff of its `Files changed` only: nothing is committed before step 8, so the branch diff holds every other task. A gap goes back to the same agent, with what is missing.
+Its brief: the task and its answers, the `Spec` edge cases it covers, the plan's `Decisions` in place of the ADR files the skill would read, `Files touched`, the test command (behind the Runner when the task shares its wave), and the comment rule, as for the comment pass of step 4.
+As each agent returns, check its report against its task, on the diff of its `Files changed` only: nothing is committed before step 6, so the branch diff holds every other task. A gap goes back to the same agent, with what is missing.
 Once a report checks out, tick its task, then launch every task that became ready.
-`Current step` shows the running wave: `5, tasks 3+6/7`.
+`Current step` shows the running wave: `3, tasks 3+6/7`.
 Each edge case of the `Spec` gets its test.
 
 Stop before the end only when the user must decide: a task contradicts a plan decision, a test fails for a reason the plan did not foresee, or a skill or an agent asks a question.
@@ -361,26 +358,26 @@ Launch no new task until the user answers; the running ones finish.
 Done when every acceptance criterion that can be met before merge is implemented.
 Report the files touched and what they now do, in short sentences.
 
-### 6. Recette and test
+### 4. Recette and test
 
 The skill runs and fixes everything first, so the user runs a single final recette:
 
 1. The Review loop, in rounds. A round is the Review slot, one skill after the other in its order: each may fix code, so each runs alone, on the diff the previous one left.
-   A finding it reports without fixing is a lead, not an order: check it against the code, the `Spec` and the `Decisions`, then make it a task, run as in step 5, or drop it with the reason in `Evidence`.
+   A finding it reports without fixing is a lead, not an order: check it against the code, the `Spec` and the `Decisions`, then make it a task, run as in step 3, or drop it with the reason in `Evidence`.
    Its report classes each finding major or minor. A minor one is fixed when it is quick and in the ticket's scope; otherwise it stays, with the reason in `Evidence`.
    A round that fixed a major finding starts the next one: each skill in a fresh agent, on the whole diff, since a fix can bring a new gap; the brief lists the findings dropped so far with their reasons, so none comes back without new evidence.
    The loop ends on a round with no major finding left open: none reported, or each dropped with its reason.
    After 3 rounds, the `full` level's cap (*Levels*), with a major finding still open, stop and show it to the user: a gap that keeps coming back is often a design disagreement.
-   `Current step` shows the round: `6, review 2/3`.
-2. Conformance: `ticket-review` compares the diff with each acceptance criterion and the plan's `Spec` and `Decisions`; the brief carries the criteria's text. It reports each criterion as met, partly or not met, with the file and line, then lists the code the ticket did not ask for. A criterion not met or partly met becomes a new task in the plan, run as in step 5, then this check reruns.
-3. Comment pass, in the background: a fresh context, since the comment rule fades over a long step 5. `ticket-review` reads every comment the branch adds or changes, in every file type; it cuts those that restate the code, shortens the rest to a one-line why, and keeps a why in one file only.
+   `Current step` shows the round: `4, review 2/3`.
+2. Conformance: `ticket-review` compares the diff with each acceptance criterion and the plan's `Spec` and `Decisions`; the brief carries the criteria's text. It reports each criterion as met, partly or not met, with the file and line, then lists the code the ticket did not ask for. A criterion not met or partly met becomes a new task in the plan, run as in step 3, then this check reruns.
+3. Comment pass, in the background: a fresh context, since the comment rule fades over a long step 3. `ticket-review` reads every comment the branch adds or changes, in every file type; it cuts those that restate the code, shortens the rest to a one-line why, and keeps a why in one file only.
    The brief carries the comment rule of the project's `AGENTS.md` or `CLAUDE.md`, else the user's `CLAUDE.md`.
    It never touches a comment the branch did not write, nor one that carries function: linter or analyzer directive, docblock type, annotation, license, shebang.
    Its changes go in `Evidence`, one line per file.
 4. Meanwhile, write the plan's `Recette` section.
 5. Once both are done, in parallel: the Lint slot, in its order, and the full test command in the background, and `ticket-review` running the recette box by box, with the E2E slot or a real-browser tool, classing each box (see below), and replaying every `Captures` entry into `after/` under the same file name.
 6. A failing check or box: fix it, as a new task in the plan, then rerun what it touches, the Review loop and the comment pass included.
-7. Once everything passes, hand the recette to the user as plain text; meanwhile, the docs scan for step 7 runs in the background:
+7. Once everything passes, hand the recette to the user as plain text; meanwhile, the docs scan for step 5 runs in the background:
    - the Proven boxes with their evidence;
    - then the To judge boxes, each with its `after/` capture, beside its `before/` one when there is one;
    - then the Out of reach boxes, which the user runs;
@@ -399,7 +396,7 @@ The recette holds one block per acceptance criterion, in the ticket's order, the
 ```
 
 - Steps are what a tester without the code can do and see: URL, button, field, message; never a class or a command.
-- Post-merge criteria go in a `Post-merge` subsection, run at step 10.
+- Post-merge criteria go in a `Post-merge` subsection, run at step 8.
 - The skill's own run goes in the plan's `Evidence`, one line per box, classing it:
 
 | Class | When | Evidence |
@@ -417,9 +414,9 @@ Keep each check's evidence in the plan: command, output line.
 
 Done when every criterion is met, the Review loop left no major finding open, the comment pass is done, every check is green, the skill's recette passes, and the user ticked every pre-merge box.
 
-### 7. Update the docs
+### 5. Update the docs
 
-Start from the passages the step 6 docs scan found, checked against the final diff; without that scan, read every file under `docs/` but the plan folder, and the `README.md`.
+Start from the passages the step 4 docs scan found, checked against the final diff; without that scan, read every file under `docs/` but the plan folder, and the `README.md`.
 
 Then check the plan's `Decisions` against the `franck-dev-skills:domain-modeling` ADR criteria.
 Most tickets have none: then say nothing.
@@ -429,7 +426,7 @@ Last, run `franck-dev-skills:condense` on every Markdown file this step changed,
 
 Done when each of them is updated, or the summary states "no doc impact", every accepted ADR is written, and the changed files went through `condense`.
 
-### 8. Commit
+### 6. Commit
 
 Inside this step, each commit also waits for the user's explicit approval of both its code and its message.
 
@@ -438,7 +435,7 @@ Its commit series writes every commit and its why into the plan first, then comm
 
 Done when the working tree holds nothing the series planned, and the plan lists every commit with its why.
 
-### 9. Open the PR
+### 7. Open the PR
 
 When `<base>` moved and conflicts with the branch, show the user the conflicts, merge `<base>` into the branch (a rebase only on the user's yes), resolve each hunk keeping both intents, never abort, then rerun the test command; the merge commit waits for the user's yes like any commit.
 
@@ -467,7 +464,7 @@ Merge after !<n>
 - `Merge after` only when the branch stacks on another PR; `because <cause>` only on a bug; Problem and Solution are one sentence each.
 - `To verify` lets the reviewer check the change without the plan: for a bug, the `Reproduction` now expecting the fixed result, plus any path that failed in the recette; otherwise the main path of the feature. As many steps as that takes, never the non-regressions, edge cases or per-language checks; steps follow the recette's wording rules.
 - `Decisions` holds only the main decisions, so the reviewer quickly grasps what will be merged: the plan's `Key decisions`, plus a gap with the ticket or a release prerequisite the `Spec` holds; never the full `Decisions` list. Each item states the decision itself, never the plan's id (`K1`, `D3`): the reader has no plan. Its items join clauses with commas, never semicolons.
-  A decision written as an ADR at step 7 ends with its path, so the reviewer reads it.
+  A decision written as an ADR at step 5 ends with its path, so the reviewer reads it.
 - When the user says the PR is open, check it with the forge reference's command.
 
 Then follow the pipeline (forge reference); a failure goes to `ci-investigate`.
@@ -481,18 +478,18 @@ A comment is a lead, not an order: check each against the code, the `Spec` and t
 
 | Verdict | Then, on the user's ruling |
 |---|---|
-| Agree | a new task in the plan, run as in step 5, then what it touches in step 6, then a commit as in step 8 |
+| Agree | a new task in the plan, run as in step 3, then what it touches in step 4, then a commit as in step 6 |
 | Disagree | a reply drafted with the reason, for the user to post |
 | Unclear | a question to the user, or to the reviewer through a drafted reply |
 
 Nothing changes before the user rules on every comment; the skill never posts a reply.
-Write each comment, its verdict and the ruling in the plan's `Review` section; set `Current step` to `9, review <i>/<total>`.
+Write each comment, its verdict and the ruling in the plan's `Review` section; set `Current step` to `7, review <i>/<total>`.
 
-### 10. After the merge
+### 8. After the merge
 
 Switch to `<base>` and pull it; offer to delete the local branch, never without the user's yes.
 Run every post-merge acceptance criterion, and give the user the post-merge part of the recette.
-Delete the plan's tasks section, which is of no use once merged, and set `Current step` to `10, done`.
+Delete the plan's tasks section, which is of no use once merged, and set `Current step` to `8, done`.
 
 Done when every post-merge criterion is green, the user ticked the post-merge recette, and the plan holds no tasks.
 Tracker: every post-merge criterion ticked, status to Done.

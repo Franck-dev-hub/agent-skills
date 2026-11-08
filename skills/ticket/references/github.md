@@ -15,7 +15,7 @@ The status map holds the board, the Status field id, and one option id per statu
 | Pipeline state | `gh pr checks <pr>` |
 | Review comments | `gh pr view <pr> --comments`, and inline ones with `gh api repos/{owner}/{repo}/pulls/<pr>/comments` |
 
-Open the PR, step 9, with the title and description filled in:
+Open the PR, step 7, with the title and description filled in:
 
 ```bash
 git push --set-upstream origin HEAD && gh pr create --draft --assignee @me --title '<title>' --body "$(cat <<'EOF'
