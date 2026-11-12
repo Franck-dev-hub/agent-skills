@@ -20,5 +20,11 @@ document.addEventListener("click", e => {
   try { history.replaceState(null, "", "#" + target.dataset.id); } catch (_) {}
 });
 
+document.getElementById("theme-toggle").addEventListener("click", () => {
+  const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+  document.documentElement.dataset.theme = next;
+  try { localStorage.setItem("theme", next); } catch (_) {}
+});
+
 const start = location.hash.slice(1);
 select(document.getElementById(start)?.querySelector("template") ? start : "route", Boolean(start));

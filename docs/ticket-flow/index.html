@@ -8,12 +8,26 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="styles.css">
+<!-- Inline and blocking so the saved theme applies before first paint. -->
+<script>
+{
+  let theme = null;
+  try { theme = localStorage.getItem("theme"); } catch (_) {}
+  document.documentElement.dataset.theme = theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+}
+</script>
 <script src="main.js" defer></script>
 </head>
 <body>
 <div class="wrap">
   <header>
-    <span class="label">franck-dev-skills 2.43.1 - skills/ticket</span>
+    <div class="top">
+      <span class="label">franck-dev-skills 2.43.1 - skills/ticket</span>
+      <button class="theme-toggle" id="theme-toggle" type="button">
+        <span data-for="light">☀ Thème clair</span>
+        <span data-for="dark">☾ Thème sombre</span>
+      </button>
+    </div>
     <h1>Flux du skill ticket</h1>
     <p class="lede">Ce que fait <code>/ticket &lt;arg&gt;</code>, du lancement au merge.</p>
     <div class="legend">
