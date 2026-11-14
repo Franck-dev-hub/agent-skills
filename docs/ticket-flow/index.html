@@ -578,6 +578,46 @@
           </article>
         </div>
       </section>
+      <section class="after">
+        <span class="label">Plusieurs tickets en parallèle</span>
+        <div class="duo">
+          <article id="wave">
+            <button class="node side" data-id="wave" aria-pressed="false">
+              <span class="num"><b>≋</b></span>
+              <span class="t">/ticket-wave &lt;ids|milestone&gt;</span>
+              <span class="s">Une session par ticket</span>
+            </button>
+            <template>
+              <span class="label">Orchestrateur</span>
+              <h2>/ticket-wave &lt;ids|milestone&gt;</h2>
+              <p class="sub">Une session par ticket</p>
+              <h3>Exécute</h3>
+              <ul>
+                <li>Résout l'argument : des ids, une vague (<code>0.2.0 vague 2</code>) ou la prochaine vague pas commencée d'une milestone.</li>
+                <li>Sans colonne de vagues : les calcule depuis les dépendances, trois tickets au plus par vague.</li>
+                <li>Avertit sur les dépendances, les fichiers partagés et les tickets pas Ready, sans jamais bloquer.</li>
+                <li>Crée un worktree par ticket avec <code>wt</code>, sinon <code>git worktree</code>, puis lance le <code>Worktree setup</code> du profil.</li>
+                <li>Lance <code>/ticket &lt;id&gt;</code> dans chaque worktree : <code>start_session</code> dans Claude Desktop, <code>claude --bg</code> en CLI.</li>
+                <li>Croise les fichiers annoncés par les sessions, envoie les consignes de conflit et fixe l'ordre de merge.</li>
+                <li>Seul à écrire le tracker : texte exact montré, relecture du fichier, sauvegarde, puis écriture en une passe.</li>
+                <li>Ne commite, ne merge et ne pousse jamais.</li>
+              </ul>
+              <h3>Utilisateur</h3>
+              <ul>
+                <li>Choisit les tickets à lancer, malgré les avertissements s'il le veut.</li>
+                <li>Valide chaque changement du tracker.</li>
+                <li>Répond aux gates de chaque session.</li>
+              </ul>
+              <h3>Résultat</h3>
+              <dl class="kv">
+                <dt>Tracker</dt><dd>In progress au lancement, puis les demandes des sessions</dd>
+                <dt>Fin</dt><dd>Vague mergée, vague suivante proposée</dd>
+              </dl>
+              <p class="src">Source : <a href="https://github.com/Franck-dev-hub/agent-skills/blob/main/skills/ticket-wave/SKILL.md">ticket-wave/SKILL.md</a></p>
+            </template>
+          </article>
+        </div>
+      </section>
     </div>
     <aside class="panel" id="panel" aria-live="polite"></aside>
   </div>
