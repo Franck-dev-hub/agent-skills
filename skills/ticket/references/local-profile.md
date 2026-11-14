@@ -4,6 +4,7 @@
 A section left out keeps the skill's default.
 Review and Lint list several skills or commands, run in that order.
 A `per repo` line, keyed by the repo path in `origin`, overrides the profile-wide value for that repo.
+Worktree setup, read by `ticket-wave`, runs at the root of each worktree it creates, for what git does not carry: an ignored link, a `.env.local`.
 
 ```markdown
 # Profile: work
@@ -35,6 +36,10 @@ Run `<plugin>:load-standards`, and load the standards the ticket touches.
 ## Runner
 
 `docker compose run --rm -e APP_CACHE_DIR=var/cache-runner <service>`
+
+## Worktree setup
+
+`ln -sfn /path/to/vault docs/agents`
 
 ## Grill, Domain
 

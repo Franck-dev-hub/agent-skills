@@ -20,6 +20,7 @@ Agent marketplace hosting personal skills.
 | `obsidian-note`   | Write or review Obsidian notes following vault conventions                                    |
 | `skill-reviewer`  | Review a skill against the Agent Skills spec and authoring practices                          |
 | `ticket`          | Drive a ticket from branch to merged PR or MR, or resume it                                   |
+| `ticket-wave`     | Run several tickets in parallel, one Claude Code session per ticket in its own worktree       |
 
 
 ## Agents
