@@ -1,6 +1,5 @@
 import type { EngineInterface, Register } from 'claude-code'
 
-import { pullRequestsPane } from './pull-requests'
 import { RoadmapRow, readRoadmap } from './ticket-roadmap'
 import { TOKENS_PANE, hasTokens } from './tokens'
 import { WORKTREES_PANE, hasWorktrees } from './worktrees'
@@ -8,9 +7,9 @@ import { WORKTREES_PANE, hasWorktrees } from './worktrees'
 type Pane = { id: string; title: string }
 
 async function panes($: EngineInterface): Promise<Pane[]> {
-  const [prs, trees, spent] = await Promise.all([pullRequestsPane($), hasWorktrees($), hasTokens($)])
+  const [trees, spent] = await Promise.all([hasWorktrees($), hasTokens($)])
 
-  return [...(null === prs ? [] : [prs]), ...(trees ? [WORKTREES_PANE] : []), ...(spent ? [TOKENS_PANE] : [])]
+  return [...(trees ? [WORKTREES_PANE] : []), ...(spent ? [TOKENS_PANE] : [])]
 }
 
 // One plugin draws one site above the prompt: the pane buttons and the roadmap share it.
