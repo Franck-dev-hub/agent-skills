@@ -1,6 +1,6 @@
 ---
 name: condense
-description: "Use when asked to shorten, condense, compress or tighten files or folders without losing information, for agents and humans to read (\"raccourcis ce fichier\", \"compresse ce md\", \"condense\", \"allège\", \"nettoie les commentaires\"). A Markdown file is rewritten whole; any other file has only its comments cleaned. Not for writing or reviewing Obsidian notes, use obsidian-note."
+description: "Use when asked to shorten, condense, compress or tighten files or folders without losing information, for agents and humans to read (\"raccourcis ce fichier\", \"compresse ce md\", \"condense\", \"allège\", \"nettoie les commentaires\"). A Markdown file is rewritten whole; any other file has only its comments cleaned. Duplicated or obsolete content is reported as proposed cuts, never applied. Not for writing or reviewing Obsidian notes, use obsidian-note."
 ---
 
 # Condense
@@ -64,7 +64,7 @@ Cut:
 
 - Intros, outros, restatements, meta-commentary ("this section explains").
 - Filler and hedges that carry no information.
-- Duplicates: keep the most specific copy, where a reader would look for it.
+- Duplicates inside the file: keep the most specific copy, where a reader would look for it.
 
 Rewrite:
 
@@ -94,7 +94,22 @@ The comment rule of the project's `AGENTS.md` or `CLAUDE.md` wins over this sect
 - A tag-less one-line docblock in PHP or JS becomes `//`; keep `/** */` when it carries a tag.
 - Several files: the same why in two files stays where someone would make the mistake.
 
-## 6. Verify
+## 6. Proposed cuts
+
+Most of a long doc's fat is not wording but content that no longer earns its place.
+These cuts may drop a fact, so they are listed in the report and never applied.
+
+- Duplicate across files: the same fact explained in two of the given files.
+  Name the file that keeps it, where a reader would look, and the copy to replace with a link.
+- Obsolete text: names a file, function, route or command that no longer exists (check with
+  `git ls-files` or a grep), step-by-step recipes and inventories of finished work, a temporary note
+  ("until X is fixed") whose condition is met.
+- An oversized file whose job is done, such as a project skill or plan kept after its work landed:
+  propose keeping the sections still used and removing the rest.
+
+Each item gives `path:line`, the reason and the proposed cut.
+
+## 7. Verify
 
 Markdown, from the directory the paths are relative to:
 
@@ -112,12 +127,12 @@ Code files:
 
 Then check each information unit from step 1 against the new file.
 
-## 7. Report
+## 8. Report
 
 ```
-| File | Lines      | Chars        | Check |
-|------|------------|--------------|-------|
-| <f>  | <n> -> <n> | <n> -> <n>   | ok    |
+| File | Lines      | Chars      | Check             |
+|------|------------|------------|-------------------|
+| <f>  | <n> -> <n> | <n> -> <n> | ok or format only |
 
 ### Removed content
 - <file>:<line before> "<sentence or comment>": <reason>
@@ -128,7 +143,13 @@ Then check each information unit from step 1 against the new file.
 ### Kept for review
 - <file>:<line> commented-out code
 - <file>:<line> contradicts the code: <what differs>
+
+### Proposed cuts, not applied
+- <file>:<line> duplicate of <other>:<line>: keep it in <file>, link from here
+- <file>:<line> obsolete: <reason>, cut <what>
 ```
 
 Removed content lists every cut that dropped meaning, not wording.
 Empty list: say "no content removed, wording only".
+`format only`: the file's only change is layout (one sentence per line, list or table split), so it
+grows or barely shrinks; the user judges whether that diff is worth keeping.

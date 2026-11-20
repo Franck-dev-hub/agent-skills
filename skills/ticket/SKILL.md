@@ -422,7 +422,7 @@ Then check the plan's `Decisions` against the `franck-dev-skills:domain-modeling
 Most tickets have none: then say nothing.
 Otherwise propose each one that passes; write it in `docs/adr/`, in that skill's ADR format, only on the user's yes.
 
-Last, run `franck-dev-skills:condense` on every Markdown file this step changed, ADRs included; its removed content and kept-for-review items go in the step's report.
+Last, run `franck-dev-skills:condense` on every Markdown file this step changed, ADRs included; its removed content, kept-for-review items and proposed cuts go in the step's report.
 
 Done when each of them is updated, or the summary states "no doc impact", every accepted ADR is written, and the changed files went through `condense`.
 
