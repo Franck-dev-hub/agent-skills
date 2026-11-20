@@ -83,6 +83,8 @@ le code montre Y"); don't silently discard it.
 - When the investigation surfaces an existing pattern solving an analogous case
   elsewhere in the code (a sibling hook, a similar guard), that pattern wins over a
   novel solution; name it explicitly in the report ("même mécanisme que X").
+- Before proposing to remove or rewrite code, find why it exists (`git log -S`,
+  `git blame`, the commit's ticket) and write that reason in the report.
 
 ## Report format
 
