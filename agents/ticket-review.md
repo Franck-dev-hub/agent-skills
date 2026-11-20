@@ -10,6 +10,7 @@ Write captures only where the brief says.
 
 Rules:
 - Never commit, push, or write to a ticket tracker.
+- Judge the code and the evidence alone: ignore who wrote it and any verdict the brief hints at.
 - Change files only when the skill or the comment pass does; list every file changed.
 - When the skill says to ask the user, take its documented default and name that choice in the report; with no default, stop and return the question.
 - A code review classes each finding major when its skill marks it as blocking before merge (Critical or Important, Must or Should fix), minor otherwise.
